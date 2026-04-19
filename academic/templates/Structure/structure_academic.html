@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=8" />
+  <link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=15" />
 
   <div class="academic-dashboard">
     <div class="header-section">
@@ -130,7 +130,66 @@
         </table>
       </div>
     </div>
-  </div>
+
+    <div class="card full-width mt-20">
+      <div class="card-header">
+        <h3><i class="fa-solid fa-file-circle-check"></i> Requisitos de Inscripción</h3>
+      </div>
+
+      <div class="card-body">
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+            Define la documentación obligatoria para los nuevos registros.
+        </p>
+
+        <form action="#" method="POST" class="requirement-form-inline">
+            {% csrf_token %}
+            <div class="inline-group">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-file-signature input-icon"></i>
+                    <input type="text" name="nombre_documento" 
+                           placeholder="Nombre del documento (Ej: Certificado de Nacimiento Original)" required>
+                </div>
+                <button type="submit" class="btn-add-requirement">
+                    <i class="fa-solid fa-plus"></i> Añadir Requisito
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-20">
+            <table class="tabla-academica"> 
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Documento Requerido</th>
+                        <th style="text-align: center; width: 120px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requisitos %}
+                    <tr>
+                        <td><span class="badge-id">#{{ req.id }}</span></td>
+                        <td><strong class="text-main">{{ req.nombre_documento }}</strong></td>
+                        <td style="text-align: center;">
+                            <a href="#" class="btn-delete-req alerta-eliminar" data-nombre="{{ req.nombre_documento }}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="empty-state-row">
+                            <div class="empty-info">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <p>No hay requisitos registrados todavía.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
 
   <div id="modalParalelo" class="modal-overlay">
     <div class="modal-content-premium">
