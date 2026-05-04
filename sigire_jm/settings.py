@@ -30,12 +30,14 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [
+    "sigire-jm.onrender.com",
     ".onrender.com",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://sigire-jm.onrender.com",
     "https://*.onrender.com",
 ]
 
