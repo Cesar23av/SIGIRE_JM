@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
-import ssl
 from pathlib import Path
 from dotenv import load_dotenv
-import urllib.parse
 import dj_database_url
 
 
@@ -26,12 +24,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qzt-3vnk81ftg&o_m*g=u))iohmvi-6+e0be2b$3^n)nm#s@jr'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
 
 
 # Application definition
@@ -56,6 +62,7 @@ LOGOUT_REDIRECT_URL = 'home'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,20 +97,11 @@ WSGI_APPLICATION = 'sigire_jm.wsgi.application'
 
 #Configuracion de la base de datos para Supabase
 
-DB_USER = 'postgres'
-DB_PASS = 'ix9N2FwNvb-FfHd' 
-DB_HOST = 'db.lcixvwhnbgyyqckdbzhn.supabase.co'
-DB_PORT = '5432'
-DB_NAME = 'postgres'
-
-PASSWORD_SAFE = urllib.parse.quote_plus(DB_PASS)
-
-SUPABASE_URL = f'postgresql://{DB_USER}:{PASSWORD_SAFE}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default=SUPABASE_URL,
-        conn_max_age=600
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
     )
 }
 
@@ -142,11 +140,17 @@ AUTH_USER_MODEL = 'accounts.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'   
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()  # <--- 2. AÑADE ESTO (¡Súper importante!)
+load_dotenv() 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -156,7 +160,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER') 
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
-if os.name == 'posix':  
-    ssl._create_default_https_context = ssl._create_unverified_context
