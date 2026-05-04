@@ -18,17 +18,17 @@ from .forms import CustomPasswordChangeForm
 
 # 1. Vista Pública
 def home(request):
-    return render(request, 'Registration/home.html') 
+    return render(request, 'registration/home.html') 
 
 # 2. Vista de Login
 def login_view(request):
-    return render(request, 'Registration/login.html')
+    return render(request, 'registration/login.html')
 
 # 3. Dashboard Unificado (RF1)
 @login_required
 @only_administrative
 def dashboard(request):
-    return render(request, 'Registration/dashboard.html')
+    return render(request, 'registration/dashboard.html')
 
 # 4. Listado de Personal (RF1 - Solo Director)
 @login_required
@@ -55,7 +55,7 @@ def list_personal(request):
     if rol_filtro:
         personal = personal.filter(rol=rol_filtro)
     
-    return render(request, 'Registration/list_personal.html', {
+    return render(request, 'registration/list_personal.html', {
         'personal': personal,
         'mostrar_inactivos': mostrar_inactivos,
         'query_busqueda': query_busqueda, 
@@ -123,7 +123,7 @@ def registrar_personal(request):
             return redirect('list_personal')
     else:
         form = RegistroPersonalForm()
-    return render(request, 'Registration/form_personal.html', {'form': form})
+    return render(request, 'registration/form_personal.html', {'form': form})
 
 
 @login_required
@@ -139,7 +139,7 @@ def editar_personal(request, pk):
             return redirect('list_personal')
     else:
         form = RegistroPersonalForm(instance=usuario)
-    return render(request, 'Registration/form_personal.html', {
+    return render(request, 'registration/form_personal.html', {
         'form': form, 
         'edit_mode': True,
         'usuario': usuario
@@ -162,7 +162,7 @@ def eliminar_personal(request, pk):
 
 class UserPasswordChangeView(PasswordChangeView):
     form_class = CustomPasswordChangeForm
-    template_name = 'Registration/change_password.html'
+    template_name = 'registration/change_password.html'
     success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
