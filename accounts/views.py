@@ -3,10 +3,8 @@ import string
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
 from .email_api import enviar_correo_brevo
 from django.utils.crypto import get_random_string
-from django.conf import settings  
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from .forms import RegistroPersonalForm
@@ -118,7 +116,10 @@ def registrar_personal(request):
             except Exception as e:
                 
                 print(f"DEBUG: Error al enviar correo: {e}")
-                messages.warning(request, f"Usuario creado ({username_final}), pero falló el envío del correo. Revise la consola.")
+                messages.warning(
+                    request,
+                    f"Usuario creado ({username_final}), pero falló el envío del correo: {e}"
+                )
 
             return redirect('list_personal')
     else:
@@ -191,18 +192,22 @@ def reactivar_personal(request, pk):
     )
     
     try:
-        
-        send_mail(
-            asunto, 
-            mensaje, 
-            settings.DEFAULT_FROM_EMAIL, 
-            [usuario.email],
-            fail_silently=False,
+        enviar_correo_brevo(
+            destinatario_email=usuario.email,
+            destinatario_nombre=usuario.first_name,
+            asunto=asunto,
+            mensaje=mensaje,
         )
-        messages.success(request, f"El usuario {usuario.username} ha sido reactivado. Se enviaron las nuevas credenciales a {usuario.email}.")
+        messages.success(
+            request,
+            f"El usuario {usuario.username} ha sido reactivado. Se enviaron las nuevas credenciales a {usuario.email}."
+        )
     except Exception as e:
-        print(f"DEBUG: Error al enviar correo de reactivación: {e}")
-        messages.warning(request, f"Usuario reactivado ({usuario.username}), pero falló el envío del correo con la nueva contraseña. Revise la consola.")
+        print(f"DEBUG: Error al enviar correo de reactivación por Brevo: {e}")
+        messages.warning(
+            request,
+            f"Usuario reactivado ({usuario.username}), pero falló el envío del correo con la nueva contraseña."
+        )
     
     return redirect('list_personal')
 
