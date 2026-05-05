@@ -3,9 +3,8 @@ import string
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
+from .email_api import enviar_correo_brevo
 from django.utils.crypto import get_random_string
-from django.conf import settings  
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from .forms import RegistroPersonalForm
@@ -18,17 +17,17 @@ from .forms import CustomPasswordChangeForm
 
 # 1. Vista Pública
 def home(request):
-    return render(request, 'Registration/home.html') 
+    return render(request, 'registration/home.html') 
 
 # 2. Vista de Login
 def login_view(request):
-    return render(request, 'Registration/login.html')
+    return render(request, 'registration/login.html')
 
 # 3. Dashboard Unificado (RF1)
 @login_required
 @only_administrative
 def dashboard(request):
-    return render(request, 'Registration/dashboard.html')
+    return render(request, 'registration/dashboard.html')
 
 # 4. Listado de Personal (RF1 - Solo Director)
 @login_required
@@ -55,7 +54,7 @@ def list_personal(request):
     if rol_filtro:
         personal = personal.filter(rol=rol_filtro)
     
-    return render(request, 'Registration/list_personal.html', {
+    return render(request, 'registration/list_personal.html', {
         'personal': personal,
         'mostrar_inactivos': mostrar_inactivos,
         'query_busqueda': query_busqueda, 
@@ -72,30 +71,25 @@ def registrar_personal(request):
             nuevo_usuario = form.save(commit=False)
 
             nombre_raw = nuevo_usuario.first_name.split()[0] if nuevo_usuario.first_name else "User"
-            nombre = nombre_raw.capitalize() 
-            
+            nombre = nombre_raw.capitalize()
+
             apellidos = nuevo_usuario.last_name.split() if nuevo_usuario.last_name else ["X"]
             iniciales = "".join([a[0].upper() for a in apellidos])
-            
+
             def generar_propuesta():
                 digitos = "".join(random.choices(string.digits, k=3))
                 return f"{nombre}{iniciales}{digitos}"
 
             username_final = generar_propuesta()
-            
+
             while User.objects.filter(username=username_final).exists():
                 username_final = generar_propuesta()
-            
+
             nuevo_usuario.username = username_final
-            
-            # --- GENERACIÓN DE PASSWORD TEMPORAL ---
+
             password_temporal = get_random_string(length=10)
             nuevo_usuario.set_password(password_temporal)
-            
-            # Guardamos el usuario
-            nuevo_usuario.save()
-            
-            # --- ENVÍO DE CREDENCIALES ---
+
             asunto = 'Bienvenido al Sistema - UE Jesús María'
             mensaje = (
                 f"Hola {nuevo_usuario.first_name},\n\n"
@@ -104,26 +98,35 @@ def registrar_personal(request):
                 f"Contraseña temporal: {password_temporal}\n\n"
                 f"Por seguridad, cambia tu contraseña al ingresar por primera vez."
             )
-            
-            try:
-                # Usamos settings.DEFAULT_FROM_EMAIL para que use tu Gmail personal configurado
-                send_mail(
-                    asunto, 
-                    mensaje, 
-                    settings.DEFAULT_FROM_EMAIL, 
-                    [nuevo_usuario.email],
-                    fail_silently=False,
-                )
-                messages.success(request, f"Personal registrado. Credenciales enviadas a {nuevo_usuario.email}")
-            except Exception as e:
-                
-                print(f"DEBUG: Error al enviar correo: {e}")
-                messages.warning(request, f"Usuario creado ({username_final}), pero falló el envío del correo. Revise la consola.")
 
-            return redirect('list_personal')
+            try:
+                enviar_correo_brevo(
+                    destinatario_email=nuevo_usuario.email,
+                    destinatario_nombre=nuevo_usuario.first_name,
+                    asunto=asunto,
+                    mensaje=mensaje,
+                )
+
+                nuevo_usuario.save()
+
+                messages.success(
+                    request,
+                    f"Personal registrado. Credenciales enviadas a {nuevo_usuario.email}"
+                )
+
+                return redirect('list_personal')
+
+            except Exception as e:
+                print(f"DEBUG: Error al enviar correo: {e}")
+                messages.error(
+                    request,
+                    f"No se registró el usuario porque no se pudo enviar el correo: {e}"
+                )
+
     else:
         form = RegistroPersonalForm()
-    return render(request, 'Registration/form_personal.html', {'form': form})
+
+    return render(request, 'registration/form_personal.html', {'form': form})
 
 
 @login_required
@@ -139,7 +142,7 @@ def editar_personal(request, pk):
             return redirect('list_personal')
     else:
         form = RegistroPersonalForm(instance=usuario)
-    return render(request, 'Registration/form_personal.html', {
+    return render(request, 'registration/form_personal.html', {
         'form': form, 
         'edit_mode': True,
         'usuario': usuario
@@ -162,7 +165,7 @@ def eliminar_personal(request, pk):
 
 class UserPasswordChangeView(PasswordChangeView):
     form_class = CustomPasswordChangeForm
-    template_name = 'Registration/change_password.html'
+    template_name = 'registration/change_password.html'
     success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
@@ -173,14 +176,9 @@ class UserPasswordChangeView(PasswordChangeView):
 @only_director
 def reactivar_personal(request, pk):
     usuario = get_object_or_404(User, pk=pk)
-    
-    usuario.is_active = True
-    
-    password_temporal = get_random_string(length=10)
-    usuario.set_password(password_temporal)
 
-    usuario.save()
-    
+    password_temporal = get_random_string(length=10)
+
     asunto = 'Reactivación de Cuenta - UE Jesús María'
     mensaje = (
         f"Hola {usuario.first_name},\n\n"
@@ -189,21 +187,31 @@ def reactivar_personal(request, pk):
         f"Nueva contraseña temporal: {password_temporal}\n\n"
         f"Por seguridad, te pedimos que cambies tu contraseña inmediatamente al ingresar."
     )
-    
+
     try:
-        
-        send_mail(
-            asunto, 
-            mensaje, 
-            settings.DEFAULT_FROM_EMAIL, 
-            [usuario.email],
-            fail_silently=False,
+        enviar_correo_brevo(
+            destinatario_email=usuario.email,
+            destinatario_nombre=usuario.first_name,
+            asunto=asunto,
+            mensaje=mensaje,
         )
-        messages.success(request, f"El usuario {usuario.username} ha sido reactivado. Se enviaron las nuevas credenciales a {usuario.email}.")
+
+        usuario.is_active = True
+        usuario.set_password(password_temporal)
+        usuario.save()
+
+        messages.success(
+            request,
+            f"El usuario {usuario.username} ha sido reactivado. Se enviaron las nuevas credenciales a {usuario.email}."
+        )
+
     except Exception as e:
-        print(f"DEBUG: Error al enviar correo de reactivación: {e}")
-        messages.warning(request, f"Usuario reactivado ({usuario.username}), pero falló el envío del correo con la nueva contraseña. Revise la consola.")
-    
+        print(f"DEBUG: Error al enviar correo de reactivación por Brevo: {e}")
+        messages.error(
+            request,
+            f"No se reactivó el usuario porque no se pudo enviar el correo: {e}"
+        )
+
     return redirect('list_personal')
 
 @login_required
