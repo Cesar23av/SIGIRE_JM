@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
+from .email_api import enviar_correo_brevo
 from django.utils.crypto import get_random_string
 from django.conf import settings  
 from django.shortcuts import get_object_or_404
@@ -107,12 +108,11 @@ def registrar_personal(request):
             
             try:
                 # Usamos settings.DEFAULT_FROM_EMAIL para que use tu Gmail personal configurado
-                send_mail(
-                    asunto, 
-                    mensaje, 
-                    settings.DEFAULT_FROM_EMAIL, 
-                    [nuevo_usuario.email],
-                    fail_silently=False,
+                enviar_correo_brevo(
+                    destinatario_email=nuevo_usuario.email,
+                    destinatario_nombre=nuevo_usuario.first_name,
+                    asunto=asunto,
+                    mensaje=mensaje,
                 )
                 messages.success(request, f"Personal registrado. Credenciales enviadas a {nuevo_usuario.email}")
             except Exception as e:
