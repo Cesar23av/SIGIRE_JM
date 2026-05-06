@@ -158,43 +158,82 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function cargarEdicion(id, nombre) {
-    const form = document.getElementById('formRequisito');
-    const input = document.getElementById('inputNombreReq');
-    const btnAdd = document.getElementById('btnAddReq');
-    const btnUpdate = document.getElementById('btnUpdateReq');
-    const btnCancel = document.getElementById('btnCancelReq');
+let requisitoOriginal = {
+    nombre: "",
+    obligatorio: true,
+};
 
-    nombreOriginalRequisito = nombre.trim();
-
-    input.value = nombreOriginalRequisito;
-    input.focus();
+function cargarEdicion(id, nombre, obligatorio) {
+    const form = document.getElementById("formRequisito");
+    const inputNombre = document.getElementById("inputNombreReq");
+    const inputObligatorio = document.getElementById("inputObligatorioReq");
+    const btnAdd = document.getElementById("btnAddReq");
+    const btnUpdate = document.getElementById("btnUpdateReq");
+    const btnCancel = document.getElementById("btnCancelReq");
 
     form.action = `/requisitos/editar/${id}/`;
 
-    btnAdd.style.display = 'none';
-    btnAdd.disabled = true;
+    inputNombre.value = nombre;
+    inputObligatorio.checked = obligatorio === "true";
 
-    btnUpdate.style.display = 'flex';
-    btnCancel.style.display = 'flex';
+    requisitoOriginal = {
+        nombre: nombre.trim(),
+        obligatorio: obligatorio === "true",
+    };
 
-    btnUpdate.disabled = true; 
+    btnAdd.style.display = "none";
+    btnUpdate.style.display = "inline-flex";
+    btnCancel.style.display = "inline-flex";
+
+    btnUpdate.disabled = true;
+
+    inputNombre.focus();
+
+    inputNombre.removeEventListener("input", verificarCambiosRequisito);
+    inputObligatorio.removeEventListener("change", verificarCambiosRequisito);
+
+    inputNombre.addEventListener("input", verificarCambiosRequisito);
+    inputObligatorio.addEventListener("change", verificarCambiosRequisito);
+}
+
+function verificarCambiosRequisito() {
+    const inputNombre = document.getElementById("inputNombreReq");
+    const inputObligatorio = document.getElementById("inputObligatorioReq");
+    const btnUpdate = document.getElementById("btnUpdateReq");
+
+    const nombreActual = inputNombre.value.trim();
+    const obligatorioActual = inputObligatorio.checked;
+
+    const cambioNombre = nombreActual !== requisitoOriginal.nombre;
+    const cambioObligatorio = obligatorioActual !== requisitoOriginal.obligatorio;
+
+    const hayCambios = cambioNombre || cambioObligatorio;
+
+    btnUpdate.disabled = !hayCambios;
 }
 
 function cancelarEdicion() {
-    const form = document.getElementById('formRequisito');
-    const input = document.getElementById('inputNombreReq');
-    const btnAdd = document.getElementById('btnAddReq');
-    const btnUpdate = document.getElementById('btnUpdateReq');
-    const btnCancel = document.getElementById('btnCancelReq');
+    const form = document.getElementById("formRequisito");
+    const inputNombre = document.getElementById("inputNombreReq");
+    const inputObligatorio = document.getElementById("inputObligatorioReq");
+    const btnAdd = document.getElementById("btnAddReq");
+    const btnUpdate = document.getElementById("btnUpdateReq");
+    const btnCancel = document.getElementById("btnCancelReq");
 
-    input.value = '';
-    nombreOriginalRequisito = '';
-    form.action = urlCrearRequisitoOriginal;
+    form.action = "/requisitos/crear/";
+    inputNombre.value = "";
+    inputObligatorio.checked = true;
 
-    btnAdd.style.display = 'flex';
-    btnAdd.disabled = false;
+    requisitoOriginal = {
+        nombre: "",
+        obligatorio: true,
+    };
 
-    btnUpdate.style.display = 'none';
-    btnCancel.style.display = 'none';
+    btnAdd.style.display = "inline-flex";
+    btnUpdate.style.display = "none";
+    btnCancel.style.display = "none";
+    btnUpdate.disabled = false;
+
+    inputNombre.removeEventListener("input", verificarCambiosRequisito);
+    inputObligatorio.removeEventListener("change", verificarCambiosRequisito);
 }

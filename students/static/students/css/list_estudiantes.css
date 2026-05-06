@@ -603,3 +603,17 @@ input:checked + .slider:before { transform: translateX(20px); }
     border: 1px dashed #cbd5e1;
     cursor: not-allowed;
 }
+
+/* --- Botón Seleccionar para Inscripción --- */
+.btn-action.select {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.btn-action.select:hover {
+    background: #16a34a;
+    color: #ffffff;
+    border-color: #16a34a;
+    transform: translateY(-2px);
+}

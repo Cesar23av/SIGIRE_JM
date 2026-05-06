@@ -5,7 +5,9 @@ from .models import Tutor, Estudiante, Parentesco
 from .forms import TutorForm,EstudianteForm, EditarEstudianteForm
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Exists, OuterRef
+from academic.models import Gestion
+from enrollment.models import Inscripcion
 
 
 @login_required
@@ -130,12 +132,66 @@ def list_estudiantes(request):
     genero_filtro = request.GET.get('genero', '')
     ver_inactivos = request.GET.get('inactivos') == 'on'
 
+    modo_seleccion_inscripcion = request.GET.get('modo_seleccion_inscripcion') == 'true'
+    tipo_inscripcion = request.GET.get('tipo_inscripcion', '')
+
     estudiantes = Estudiante.objects.all().order_by('apellido_paterno')
 
     if ver_inactivos:
         estudiantes = estudiantes.filter(estado=False)
     else:
         estudiantes = estudiantes.filter(estado=True)
+
+    gestion_actual = Gestion.objects.filter(estado=True).order_by("-anio").first()
+
+    gestion_pasada = None
+    if gestion_actual:
+        gestion_pasada = (
+            Gestion.objects
+            .filter(anio__lt=gestion_actual.anio)
+            .order_by("-anio")
+            .first()
+        )
+
+    inscripciones_cualquier_gestion = Inscripcion.objects.filter(
+        estudiante=OuterRef("pk")
+    )
+
+    estudiantes = estudiantes.annotate(
+        tiene_alguna_inscripcion=Exists(inscripciones_cualquier_gestion)
+    )
+
+    if modo_seleccion_inscripcion and gestion_actual:
+
+        inscripcion_actual = Inscripcion.objects.filter(
+            estudiante=OuterRef("pk"),
+            gestion=gestion_actual
+        )
+
+        estudiantes = estudiantes.annotate(
+            tiene_inscripcion_actual=Exists(inscripcion_actual)
+        )
+
+        if tipo_inscripcion == "sin_previa":
+            estudiantes = estudiantes.filter(
+                tiene_alguna_inscripcion=False
+            )
+
+        elif tipo_inscripcion == "con_previa":
+            if gestion_pasada:
+                inscripcion_pasada = Inscripcion.objects.filter(
+                    estudiante=OuterRef("pk"),
+                    gestion=gestion_pasada
+                )
+
+                estudiantes = estudiantes.annotate(
+                    tiene_inscripcion_pasada=Exists(inscripcion_pasada)
+                ).filter(
+                    tiene_inscripcion_pasada=True,
+                    tiene_inscripcion_actual=False
+                )
+            else:
+                estudiantes = estudiantes.none()
 
     if query:
         estudiantes = estudiantes.filter(
@@ -152,7 +208,11 @@ def list_estudiantes(request):
         'estudiantes': estudiantes,
         'search_query': query,
         'genero_filter': genero_filtro,
-        'ver_inactivos': ver_inactivos
+        'ver_inactivos': ver_inactivos,
+        'modo_seleccion_inscripcion': modo_seleccion_inscripcion,
+        'tipo_inscripcion': tipo_inscripcion,
+        'gestion_actual': gestion_actual,
+        'gestion_pasada': gestion_pasada,
     })
 
 #REGISTRAR ESTUDIANTE 
@@ -178,7 +238,9 @@ def crear_estudiante(request):
             return redirect("list_tutores")
 
         if form.is_valid():
-            nuevo_estudiante = form.save()
+            nuevo_estudiante = form.save(commit=False)
+            nuevo_estudiante.estado = True
+            nuevo_estudiante.save()
             
             tipo_relacion = request.POST.get('relacion', 'Apoderado')
 

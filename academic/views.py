@@ -6,6 +6,7 @@ from .models import Nivel, Grado, Gestion, Paralelo
 from .forms import NivelForm, GradoForm, ParaleloForm
 from django.utils import timezone
 from enrollment.models import Inscripcion, Requisito
+from django.db import transaction
 
 
 
@@ -49,38 +50,72 @@ def estructura_academica(request):
 @login_required
 @only_director
 def toggle_gestion(request, pk):
-  
     gestion = get_object_or_404(Gestion, pk=pk)
-    año_actual = timezone.now().year
-    
-    if not gestion.estado and gestion.año < año_actual:
-        messages.error(request, f"¡Acción denegada! No puedes reabrir la Gestión {gestion.año} porque ya concluyó.")
+    anio_actual = timezone.now().year
+
+    if not gestion.estado and gestion.anio < anio_actual:
+        messages.error(
+            request,
+            f"¡Acción denegada! No puedes reabrir la Gestión {gestion.anio} porque ya concluyó."
+        )
         return redirect('estructura_academica')
 
     if not gestion.estado:
         Gestion.objects.update(estado=False)
         gestion.estado = True
-        messages.success(request, f"¡La Gestión {gestion.año} ahora es la gestión activa!")
+        messages.success(request, f"¡La Gestión {gestion.anio} ahora es la gestión activa!")
     else:
         gestion.estado = False
-        messages.warning(request, f"Se ha cerrado la Gestión {gestion.año}.")
-        
+        messages.warning(request, f"Se ha cerrado la Gestión {gestion.anio}.")
+
     gestion.save()
     return redirect('estructura_academica')
 
 @login_required
 @only_director
 def crear_gestion(request):
-    gestiones = Gestion.objects.all().order_by('-anio')
-    año_actual = timezone.now().year
+    with transaction.atomic():
+        gestiones = Gestion.objects.select_for_update().order_by('-anio')
+        anio_actual = timezone.now().year
 
-    nuevo_año = gestiones.first().anio + 1 if gestiones.exists() else año_actual
+        ultima_gestion = gestiones.first()
+        nuevo_anio = ultima_gestion.anio + 1 if ultima_gestion else anio_actual
 
-    Gestion.objects.all().update(estado=False)
+        gestion_a_cerrar = Gestion.objects.filter(estado=True).order_by('-anio').first()
 
-    Gestion.objects.create(anio=nuevo_año, estado=True)
+        if not gestion_a_cerrar:
+            gestion_a_cerrar = ultima_gestion
 
-    messages.success(request, f"¡La Gestión {nuevo_año} ha sido creada y activada automáticamente!")
+        inscripciones_cerradas = 0
+
+        if gestion_a_cerrar:
+            inscripciones_cerradas = Inscripcion.objects.filter(
+                gestion=gestion_a_cerrar,
+                estado=True
+            ).update(estado=False)
+
+        Gestion.objects.all().update(estado=False)
+
+        nueva_gestion, creada = Gestion.objects.get_or_create(
+            anio=nuevo_anio,
+            defaults={"estado": True}
+        )
+
+        nueva_gestion.estado = True
+        nueva_gestion.save()
+
+    if gestion_a_cerrar:
+        messages.success(
+            request,
+            f"¡Gestión {nuevo_anio} creada y activada! "
+            f"Se cerraron {inscripciones_cerradas} inscripciones activas de la Gestión {gestion_a_cerrar.anio}."
+        )
+    else:
+        messages.success(
+            request,
+            f"¡Gestión {nuevo_anio} creada y activada automáticamente!"
+        )
+
     return redirect('estructura_academica')
 
 @login_required
