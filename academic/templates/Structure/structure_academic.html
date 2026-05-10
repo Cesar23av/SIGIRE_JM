@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=19" />
+  <link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=20" />
 
   <div class="academic-dashboard">
     <div class="header-section">
@@ -149,6 +149,10 @@
             <input type="text" name="nombre_documento" id="inputNombreReq" 
                    placeholder="Nombre del documento (Ej: Certificado de Nacimiento Original)" required>
         </div>
+        <label class="req-obligatorio-check">
+            <input type="checkbox" name="obligatorio" id="inputObligatorioReq" checked>
+            <span>Obligatorio</span>
+        </label>
         
         <button type="submit" id="btnAddReq" class="btn-add-requirement">
             <i class="fa-solid fa-plus"></i> Añadir Requisito
@@ -170,6 +174,7 @@
                     <tr>
                         <th style="width: 80px;">ID</th>
                         <th>Documento Requerido</th>
+                        <th style="text-align: center; width: 140px;">Tipo</th>
                         <th style="text-align: center; width: 120px;">Acciones</th>
                     </tr>
                 </thead>
@@ -179,10 +184,21 @@
                         <tr>
                             <td><span class="badge-id">#{{ forloop.counter }}</span></td>
                             
-                            <td><strong class="text-main">{{ req.nombre_documento }}</strong></td>
-                            <td class="actions-cell">
+                            <td>
+    <strong class="text-main">{{ req.nombre_documento }}</strong>
+</td>
+
+<td style="text-align: center;">
+    {% if req.obligatorio %}
+    <span class="badge-required">Obligatorio</span>
+{% else %}
+    <span class="badge-optional">Opcional</span>
+{% endif %}
+</td>
+
+<td class="actions-cell">
                                 <a href="javascript:void(0)" class="btn-action edit-req" 
-                                   onclick="cargarEdicion('{{ req.id }}', '{{ req.nombre_documento|escapejs }}')" 
+                                   onclick="cargarEdicion('{{ req.id }}', '{{ req.nombre_documento|escapejs }}', '{{ req.obligatorio|yesno:"true,false" }}')" 
                                    title="Editar Requisito">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
@@ -198,7 +214,7 @@
                         {% endif %}
                     {% empty %}
                         <tr>
-                            <td colspan="3" class="empty-state-row">
+                            <td colspan="4" class="empty-state-row">
                                 <div class="empty-info">
                                     <i class="fa-solid fa-folder-open"></i>
                                     <p>No hay requisitos registrados todavía.</p>
@@ -266,6 +282,6 @@
     };
 </script>
 
-  <script src="{% static 'academic/js/form_nivel_grade.js' %}?v=8"></script>
-  <script src="{% static 'academic/js/structure_academic.js' %}?v=8"></script>
+  <script src="{% static 'academic/js/form_nivel_grade.js' %}?v=9"></script>
+  <script src="{% static 'academic/js/structure_academic.js' %}?v=10"></script>
 {% endblock %}

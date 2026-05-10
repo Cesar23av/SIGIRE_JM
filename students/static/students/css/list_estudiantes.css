@@ -603,3 +603,113 @@ input:checked + .slider:before { transform: translateX(20px); }
     border: 1px dashed #cbd5e1;
     cursor: not-allowed;
 }
+
+/* --- Botón Seleccionar para Inscripción --- */
+.btn-action.select {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.btn-action.select:hover {
+    background: #16a34a;
+    color: #ffffff;
+    border-color: #16a34a;
+    transform: translateY(-2px);
+}
+
+/* --- Filtro manual estilo tutores --- */
+.student-filter-form {
+    display: grid;
+    grid-template-columns: 1fr 240px auto auto;
+    gap: 14px;
+    align-items: center;
+}
+
+.btn-filter-student,
+.btn-clear-student {
+    height: 50px;
+    border-radius: 14px;
+    border: none;
+    text-decoration: none;
+    font-weight: 850;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.btn-filter-student {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 0 20px;
+}
+
+.btn-filter-student:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+}
+
+.btn-clear-student {
+    width: 50px;
+    background: #ffffff;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
+}
+
+.btn-clear-student:hover {
+    color: #c62828;
+    background: #fff1f2;
+    border-color: #fecaca;
+}
+
+/* --- Paginación estudiantes --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 22px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.pagination a {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 9px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.pagination a:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+}
+
+.pagination span {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+@media (max-width: 900px) {
+    .student-filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-filter-student,
+    .btn-clear-student {
+        width: 100%;
+    }
+}

@@ -597,3 +597,77 @@
     gap: 10px;
     width: 100%;
 }
+
+/* --- Checkbox Obligatorio / Opcional en requisitos --- */
+.req-obligatorio-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    min-height: 44px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-main);
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.req-obligatorio-check:hover {
+    border-color: var(--primary-color);
+    background: #fff7f7;
+}
+
+.req-obligatorio-check input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.badge-required,
+.badge-optional {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.badge-required {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-optional {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* Mejor alineación de acciones en tabla requisitos */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Responsive para formulario de requisitos */
+@media (max-width: 900px) {
+    .inline-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .req-obligatorio-check,
+    .btn-add-requirement,
+    .btn-update-req,
+    .btn-cancel-req {
+        width: 100%;
+        justify-content: center;
+    }
+}

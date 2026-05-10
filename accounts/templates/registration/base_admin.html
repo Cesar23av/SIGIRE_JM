@@ -8,7 +8,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
+
     <link rel="stylesheet" href="{% static 'accounts/css/base_admin.css' %}" />
   </head>
   <body>
@@ -17,20 +17,14 @@
         <i class="fa-solid fa-building-columns"></i> UE Jesus Maria
       </div>
       <nav class="nav-menu">
-        <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-          <i class="fa-solid fa-chart-pie"></i> Panel Principal
-        </a>
+        <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fa-solid fa-chart-pie"></i> Panel Principal</a>
 
         {% if request.user.rol == 'director' %}
-          <a href="{% url 'list_personal' %}" class="nav-item {% if request.resolver_match.url_name == 'list_personal' or request.resolver_match.url_name == 'registrar_personal' %}active{% endif %}">
-            <i class="fa-solid fa-user-tie"></i> Gestión de Personal
-          </a>
+          <a href="{% url 'list_personal' %}" class="nav-item {% if request.resolver_match.url_name == 'list_personal' or request.resolver_match.url_name == 'registrar_personal' %}active{% endif %}"><i class="fa-solid fa-user-tie"></i> Gestión de Personal</a>
         {% endif %}
 
         {% if request.user.rol == 'director' %}
-          <a href="{% url 'estructura_academica' %}" class="nav-item {% if request.resolver_match.url_name == 'estructura_academica' %}active{% endif %}">
-            <i class="fa-solid fa-chalkboard"></i> Académico
-          </a>
+          <a href="{% url 'estructura_academica' %}" class="nav-item {% if request.resolver_match.url_name == 'estructura_academica' %}active{% endif %}"><i class="fa-solid fa-chalkboard"></i> Académico</a>
         {% endif %}
 
         <div class="nav-group">
@@ -42,48 +36,33 @@
           </a>
 
           <div id="submenu-estudiantes" class="sub-menu {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}open{% endif %}">
-            <a href="{% url 'registrar_tutor' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_tutor' %}active-sub{% endif %}">
-              <i class="fa-solid fa-person-rays"></i> Registrar Tutor
-            </a>
+            <a href="{% url 'registrar_tutor' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_tutor' %}active-sub{% endif %}"><i class="fa-solid fa-person-rays"></i> Registrar Tutor</a>
 
-            <a href="{% url 'list_tutores' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_tutores' %}active-sub{% endif %}">
-              <i class="fa-solid fa-users-line"></i> Lista de Tutores
-            </a>
+            <a href="{% url 'list_tutores' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_tutores' %}active-sub{% endif %}"><i class="fa-solid fa-users-line"></i> Lista de Tutores</a>
 
-            <a href="{% url 'crear_estudiante' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'crear_estudiante' %}active-sub{% endif %}">
-              <i class="fa-solid fa-child-reaching"></i> Registrar Estudiante
-            </a>
+            <a href="{% url 'crear_estudiante' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'crear_estudiante' %}active-sub{% endif %}"><i class="fa-solid fa-child-reaching"></i> Registrar Estudiante</a>
 
-            <a href="{% url 'list_estudiantes' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_estudiantes' %}active-sub{% endif %}">
-              <i class="fa-solid fa-children"></i> Lista de Estudiantes
-            </a>
-
+            <a href="{% url 'list_estudiantes' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_estudiantes' %}active-sub{% endif %}"><i class="fa-solid fa-children"></i> Lista de Estudiantes</a>
           </div>
         </div>
 
         <div class="nav-group">
-  <a href="#" class="nav-item toggle-btn {% if 'inscripcion' in request.resolver_match.url_name %}active{% endif %}" 
-     onclick="toggleSubMenu(event, 'submenu-inscripciones')">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-      <span><i class="fa-solid fa-file-signature"></i> Inscripciones</span>
-      <i class="fa-solid fa-chevron-down chevron-icon {% if 'inscripcion' in request.resolver_match.url_name %}rotate{% endif %}"></i>
-    </div>
-  </a>
+          <a href="#" class="nav-item toggle-btn {% if 'inscripcion' in request.resolver_match.url_name %}active{% endif %}" onclick="toggleSubMenu(event, 'submenu-inscripciones')">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <span><i class="fa-solid fa-file-signature"></i> Inscripciones</span>
+              <i class="fa-solid fa-chevron-down chevron-icon {% if 'inscripcion' in request.resolver_match.url_name %}rotate{% endif %}"></i>
+            </div>
+          </a>
 
-  <div id="submenu-inscripciones" class="sub-menu {% if 'inscripcion' in request.resolver_match.url_name %}open{% endif %}">
-    
-    <a href="{% url 'registrar_inscripcion_view' %}" 
-        class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_inscripcion_view' %}active-sub{% endif %}">
-        <i class="fa-solid fa-user-plus"></i> Registrar Inscripción
-    </a>
+          <div id="submenu-inscripciones" class="sub-menu {% if 'inscripcion' in request.resolver_match.url_name %}open{% endif %}">
+            <a href="{% url 'registrar_inscripcion_view' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_inscripcion_view' %}active-sub{% endif %}"><i class="fa-solid fa-user-plus"></i> Registrar Inscripción</a>
 
-    <a href="{% url 'list_inscripciones' %}" 
-      class="nav-item sub-item {% if request.resolver_match.url_name == 'list_inscripciones' %}active-sub{% endif %}">
-      <i class="fa-solid fa-list-check"></i> Lista de Inscritos
-    </a>
-
-  </div>
-</div>
+            <a href="{% url 'list_inscripciones' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_inscripciones' %}active-sub{% endif %}"><i class="fa-solid fa-list-check"></i> Lista de Inscritos</a>
+          </div>
+        </div>
+        <a href="{% url 'reportes' %}" class="nav-item {% if request.resolver_match.url_name == 'reportes' %}active{% endif %}">
+          <i class="fa-solid fa-chart-column"></i> Reportes
+        </a>
       </nav>
     </aside>
 
@@ -111,8 +90,8 @@
 
       <main class="content-area">
         {% if messages %}
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          <script>
     document.addEventListener("DOMContentLoaded", function() {
       {% for message in messages %}
         Swal.fire({
@@ -130,15 +109,15 @@
       {% endfor %}
     });
   </script>
-{% endif %}
+        {% endif %}
 
         {% block content %}
+
         {% endblock %}
       </main>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'accounts/js/base_admin.js' %}?v=2"></script>
-    
   </body>
 </html>

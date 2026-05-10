@@ -1,0 +1,249 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Inscripción</title>
+    <link rel="stylesheet" href="{% static 'enrollments/css/print_enrollment.css' %}?v=1">
+</head>
+
+<body>
+
+    <div class="print-actions">
+        <a href="{% url 'detalle_inscripcion' inscripcion.id %}" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i>
+            Volver
+        </a>
+
+        <button type="button" onclick="window.print()" class="btn-print">
+            <i class="fa-solid fa-print"></i>
+            Imprimir
+        </button>
+    </div>
+
+    <main class="print-page">
+
+        <header class="print-header">
+            <div class="school-mark">
+                <div class="school-logo">
+                    <span>JM</span>
+                </div>
+
+                <div class="school-info">
+                    <h1>Unidad Educativa Jesús María</h1>
+                    <p>Formulario de Inscripción Académica</p>
+                    <span>Gestión {{ inscripcion.gestion.anio }}</span>
+                </div>
+            </div>
+
+            <div class="document-code">
+                <span>RUDE</span>
+                <strong>{{ inscripcion.rude }}</strong>
+            </div>
+        </header>
+
+        <section class="print-section">
+            <h2>Datos del Estudiante</h2>
+
+            <div class="info-grid">
+                <div class="info-field large">
+                    <span>Nombre completo</span>
+                    <strong>
+                        {{ inscripcion.estudiante.apellido_paterno }}
+                        {{ inscripcion.estudiante.apellido_materno }},
+                        {{ inscripcion.estudiante.nombres }}
+                    </strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Cédula de identidad</span>
+                    <strong>{{ inscripcion.estudiante.cedula_identidad }}</strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Fecha de nacimiento</span>
+                    <strong>{{ inscripcion.estudiante.fecha_nacimiento|date:"d/m/Y" }}</strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Género</span>
+                    <strong>{{ inscripcion.estudiante.get_genero_display }}</strong>
+                </div>
+
+                <div class="info-field large">
+                    <span>Dirección</span>
+                    <strong>{{ inscripcion.estudiante.direccion|default:"No registrada" }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="print-section">
+            <h2>Datos del Tutor / Apoderado</h2>
+
+            {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
+                {% if parentesco %}
+                    <div class="info-grid">
+                        <div class="info-field large">
+                            <span>Nombre completo</span>
+                            <strong>
+                                {{ parentesco.tutor.nombres }}
+                                {{ parentesco.tutor.apellidos }}
+                            </strong>
+                        </div>
+
+                        <div class="info-field">
+                            <span>Cédula de identidad</span>
+                            <strong>{{ parentesco.tutor.cedula_identidad }}</strong>
+                        </div>
+
+                        <div class="info-field">
+                            <span>Relación</span>
+                            <strong>{{ parentesco.relacion }}</strong>
+                        </div>
+
+                        <div class="info-field">
+                            <span>Celular</span>
+                            <strong>{{ parentesco.tutor.celular }}</strong>
+                        </div>
+
+                        <div class="info-field">
+                            <span>Ocupación</span>
+                            <strong>{{ parentesco.tutor.ocupacion }}</strong>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-box">
+                        No existe tutor vinculado a este estudiante.
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </section>
+
+        <section class="print-section">
+            <h2>Datos Académicos</h2>
+
+            <div class="info-grid">
+                <div class="info-field">
+                    <span>Gestión</span>
+                    <strong>{{ inscripcion.gestion.anio }}</strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Fecha de inscripción</span>
+                    <strong>{{ inscripcion.fecha_registro|date:"d/m/Y" }}</strong>
+                </div>
+
+                <div class="info-field large">
+                    <span>Curso / Paralelo</span>
+                    <strong>
+                        {{ inscripcion.paralelo.grado.nombre }}
+                        de {{ inscripcion.paralelo.grado.nivel.nombre }}
+                        - {{ inscripcion.paralelo.letra }}
+                    </strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Estado documental</span>
+                    <strong>{{ inscripcion.estado_documental|title }}</strong>
+                </div>
+
+                <div class="info-field">
+                    <span>Responsable</span>
+                    <strong>{{ inscripcion.usuario.username|default:"No definido" }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="print-section">
+            <h2>Documentos Presentados</h2>
+
+            <table class="documents-table">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Fecha de entrega</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for entrega in entregas %}
+                        <tr>
+                            <td>{{ entrega.requisito.nombre_documento }}</td>
+
+                            <td>
+                                {% if entrega.requisito.obligatorio %}
+                                    Obligatorio
+                                {% else %}
+                                    Opcional
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if entrega.estado %}
+                                    Entregado
+                                {% else %}
+                                    Pendiente
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if entrega.fecha_entrega %}
+                                    {{ entrega.fecha_entrega|date:"d/m/Y" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="empty-cell">
+                                No hay documentos registrados para esta inscripción.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        {% if inscripcion.observacion %}
+            <section class="print-section">
+                <h2>Observaciones</h2>
+
+                <div class="observation-box">
+                    {{ inscripcion.observacion }}
+                </div>
+            </section>
+        {% endif %}
+
+        {% if inscripcion.fecha_limite_documentos %}
+            <section class="deadline-section">
+                <strong>Fecha límite para regularización documental:</strong>
+                {{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}
+            </section>
+        {% endif %}
+
+        <section class="signature-section">
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <span>Firma del Tutor / Apoderado</span>
+            </div>
+
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <span>Responsable de Inscripción</span>
+            </div>
+        </section>
+
+        <footer class="print-footer">
+            <p>
+                Documento generado por el Sistema de Inscripciones y Registro Estudiantil.
+            </p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

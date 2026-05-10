@@ -8,6 +8,12 @@ from academic.models import Paralelo, Gestion
 #CLASE INSCRIPCION
 class Inscripcion(models.Model):
 
+    ESTADO_DOCUMENTAL_CHOICES = [
+        ("completa", "Completa"),
+        ("pendiente", "Pendiente"),
+        ("vencida", "Vencida"),
+    ]
+
     estudiante = models.ForeignKey(
         Estudiante,
         on_delete=models.CASCADE
@@ -32,6 +38,17 @@ class Inscripcion(models.Model):
 
     estado = models.BooleanField(default=True)
 
+    estado_documental = models.CharField(
+        max_length=20,
+        choices=ESTADO_DOCUMENTAL_CHOICES,
+        default="pendiente"
+    )
+
+    fecha_limite_documentos = models.DateField(
+        null=True,
+        blank=True
+    )
+
     rude = models.CharField(max_length=100)
 
     observacion = models.TextField(blank=True, null=True)
@@ -43,7 +60,10 @@ class Inscripcion(models.Model):
 class Requisito(models.Model):
 
     nombre_documento = models.CharField(max_length=100)
-    estado = models.BooleanField(default=True)  # Campo para borrado lógico
+
+    obligatorio = models.BooleanField(default=True)
+
+    estado = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre_documento
@@ -62,6 +82,16 @@ class EntregaDocumento(models.Model):
     )
 
     estado = models.BooleanField(default=False)
+
+    fecha_entrega = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    observacion = models.TextField(
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.inscripcion} - {self.requisito}"
