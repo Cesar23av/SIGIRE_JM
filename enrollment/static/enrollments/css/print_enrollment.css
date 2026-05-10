@@ -1,0 +1,365 @@
+/* --- Vista imprimible de inscripción --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #e5e7eb;
+    color: #111827;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* --- Acciones superiores --- */
+.print-actions {
+    max-width: 900px;
+    margin: 24px auto 14px;
+    padding: 0 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-print,
+.btn-back {
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: none;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-print {
+    background: #1e293b;
+    color: #ffffff;
+}
+
+.btn-print:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+}
+
+.btn-back {
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-back:hover {
+    color: #c62828;
+    border-color: #fecaca;
+    background: #fff1f2;
+}
+
+/* --- Página --- */
+.print-page {
+    width: 900px;
+    min-height: 1120px;
+    margin: 0 auto 40px;
+    background: #ffffff;
+    padding: 42px 48px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+}
+
+/* --- Header --- */
+.print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #111827;
+    padding-bottom: 20px;
+    margin-bottom: 26px;
+}
+
+.school-mark {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.school-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.15rem;
+    border: 4px solid #c62828;
+}
+
+.school-info h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #111827;
+}
+
+.school-info p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #374151;
+    font-weight: 700;
+}
+
+.school-info span {
+    font-size: 0.82rem;
+    color: #6b7280;
+    font-weight: 700;
+}
+
+.document-code {
+    border: 1.5px solid #111827;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 170px;
+}
+
+.document-code span {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.document-code strong {
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+/* --- Secciones --- */
+.print-section {
+    margin-bottom: 24px;
+}
+
+.print-section h2 {
+    margin: 0 0 13px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: #111827;
+    font-weight: 900;
+}
+
+/* --- Campos --- */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11px 18px;
+}
+
+.info-field {
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    padding: 10px 12px;
+    min-height: 58px;
+    background: #f9fafb;
+}
+
+.info-field.large {
+    grid-column: span 2;
+}
+
+.info-field span {
+    display: block;
+    font-size: 0.68rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+.info-field strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #111827;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+/* --- Tabla documentos --- */
+.documents-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.documents-table th,
+.documents-table td {
+    border: 1px solid #d1d5db;
+    padding: 9px 10px;
+    text-align: left;
+}
+
+.documents-table th {
+    background: #f3f4f6;
+    color: #374151;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.documents-table td {
+    color: #111827;
+    font-weight: 600;
+}
+
+.empty-cell {
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* --- Observaciones --- */
+.observation-box {
+    border: 1px dashed #9ca3af;
+    background: #f9fafb;
+    border-radius: 9px;
+    padding: 12px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #374151;
+    font-weight: 600;
+}
+
+/* --- Fecha límite --- */
+.deadline-section {
+    border: 1px solid #f59e0b;
+    background: #fffbeb;
+    color: #92400e;
+    padding: 12px 14px;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+}
+
+/* --- Empty --- */
+.empty-box {
+    border: 1px dashed #cbd5e1;
+    background: #f8fafc;
+    border-radius: 9px;
+    padding: 12px;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* --- Firmas --- */
+.signature-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    margin-top: 70px;
+}
+
+.signature-box {
+    text-align: center;
+}
+
+.signature-line {
+    border-top: 1.5px solid #111827;
+    margin-bottom: 9px;
+}
+
+.signature-box span {
+    font-size: 0.78rem;
+    color: #374151;
+    font-weight: 800;
+}
+
+/* --- Footer --- */
+.print-footer {
+    margin-top: 38px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 12px;
+    text-align: center;
+}
+
+.print-footer p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+/* --- Impresión --- */
+@media print {
+    body {
+        background: #ffffff;
+    }
+
+    .print-actions {
+        display: none;
+    }
+
+    .print-page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 18mm 16mm;
+        box-shadow: none;
+    }
+
+    .print-header {
+        page-break-inside: avoid;
+    }
+
+    .print-section,
+    .deadline-section,
+    .signature-section {
+        page-break-inside: avoid;
+    }
+}
+
+/* --- Responsive pantalla --- */
+@media (max-width: 940px) {
+    .print-page {
+        width: calc(100% - 24px);
+        padding: 32px 24px;
+    }
+
+    .print-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .document-code {
+        width: 100%;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-field.large {
+        grid-column: span 1;
+    }
+
+    .signature-section {
+        grid-template-columns: 1fr;
+        gap: 55px;
+    }
+
+    .print-actions {
+        justify-content: center;
+    }
+}

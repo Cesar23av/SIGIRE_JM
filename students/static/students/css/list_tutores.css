@@ -313,3 +313,193 @@
     font-size: 0.85rem;
     color: var(--text-muted);
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 22px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.pagination a {
+    background: #1e293b;
+    color: white;
+    padding: 9px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.pagination a:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+}
+
+.pagination span {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.tutor-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-filter-tutor,
+.btn-clear-tutor {
+    min-height: 44px;
+    border-radius: 12px;
+    border: none;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.btn-filter-tutor {
+    background: #1e293b;
+    color: white;
+    padding: 0 16px;
+}
+
+.btn-filter-tutor:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+}
+
+.btn-clear-tutor {
+    width: 44px;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
+}
+
+.btn-clear-tutor:hover {
+    color: #c62828;
+    background: #fff1f2;
+    border-color: #fecaca;
+}
+
+@media (max-width: 800px) {
+    .tutor-filter-form {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-filter-tutor,
+    .btn-clear-tutor {
+        width: 100%;
+    }
+}
+
+/* --- Ajuste del header de tutores con filtro --- */
+.list-header {
+    gap: 20px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.tutor-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 560px;
+    min-width: 0;
+}
+
+.tutor-filter-form .search-box {
+    flex: 1;
+    min-width: 260px;
+}
+
+.tutor-filter-form .search-box input {
+    width: 100%;
+}
+
+.btn-add-tutor {
+    min-width: 175px;
+    height: 46px;
+    padding: 0 20px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Ajuste para que el botón limpiar no se deforme */
+.btn-clear-tutor {
+    flex-shrink: 0;
+}
+
+.btn-filter-tutor {
+    flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 1050px) {
+    .list-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .tutor-filter-form {
+        max-width: none;
+    }
+
+    .btn-add-tutor {
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 720px) {
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tutor-filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tutor-filter-form .search-box {
+        min-width: 100%;
+    }
+
+    .btn-filter-tutor,
+    .btn-clear-tutor,
+    .btn-add-tutor {
+        width: 100%;
+    }
+}

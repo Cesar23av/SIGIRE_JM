@@ -424,3 +424,174 @@ body.modal-open {
         grid-template-columns: 1fr 1.25fr 1.1fr !important;
     }
 }
+
+/* --- Badges de requisitos: Obligatorio / Opcional --- */
+.check-text {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #334155;
+    line-height: 1.35;
+}
+
+.req-required,
+.req-optional {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.req-required {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.req-optional {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+/* Mejora visual de cada requisito */
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    background: #ffffff;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    transition: all 0.22s ease;
+}
+
+.check-item:hover {
+    border-color: #c62828;
+    background: #fffafa;
+    transform: translateX(4px);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.05);
+}
+
+.check-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: #c62828;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.check-item:has(input:checked) {
+    border-color: #c62828;
+    background: #fff7f7;
+}
+
+.check-item:has(input:checked) .check-text {
+    color: #1e293b;
+}
+
+/* Avisos informativos dentro del formulario */
+.requirements-info {
+    margin-top: 20px;
+    padding: 14px 15px;
+    border-top: none;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.45;
+}
+
+.requirements-info i {
+    color: #c62828;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Botón deshabilitado cuando no hay estudiante */
+.btn-confirm-enroll:disabled {
+    background: #94a3b8;
+    color: #f8fafc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.75;
+}
+
+.btn-confirm-enroll:disabled:hover {
+    background: #94a3b8;
+    transform: none;
+}
+
+/* Responsive para requisitos */
+@media (max-width: 640px) {
+    .check-text {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .req-required,
+    .req-optional {
+        font-size: 0.64rem;
+    }
+}
+
+.input-help {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+/* --- Caja de aprobación gestión anterior --- */
+.approval-box {
+    margin-top: 12px;
+    padding: 14px 15px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+}
+
+.approval-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1e293b;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.approval-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: #c62828;
+    cursor: pointer;
+}
+
+.approval-box p {
+    margin: 10px 0 0;
+    color: #64748b;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    font-weight: 600;
+}

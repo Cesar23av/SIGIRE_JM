@@ -120,17 +120,28 @@ class EstudianteForm(forms.ModelForm):
         return estudiante
     
 class EditarEstudianteForm(forms.ModelForm):
+    fecha_nacimiento = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "class": "student-input",
+            },
+            format="%Y-%m-%d"
+        ),
+        input_formats=["%Y-%m-%d"]
+    )
+
     zona = forms.CharField(max_length=100)
     avenida = forms.CharField(max_length=100)
-    num_puerta = forms.CharField(max_length=10, required=False) 
+    num_puerta = forms.CharField(max_length=30, required=False)
 
     class Meta:
         model = Estudiante
-        
         fields = [
-            'nombres', 'apellido_paterno', 'apellido_materno', 
-            'fecha_nacimiento', 'genero', 'correo_electronico'
+            'nombres',
+            'apellido_paterno',
+            'apellido_materno',
+            'fecha_nacimiento',
+            'genero',
+            'correo_electronico',
         ]
-        widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
-        }

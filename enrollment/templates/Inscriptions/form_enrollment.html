@@ -4,7 +4,7 @@
   Formulario de Inscripción
 {% endblock %}
 {% block content %}
-  <link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=5" />
+  <link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=9" />
   <div class="enroll-container">
     <div class="enroll-card">
       <div class="enroll-card-header">
@@ -23,7 +23,7 @@
         {% if estudiante %}
           <input type="hidden" name="estudiante_id" value="{{ estudiante.cedula_identidad }}" />
         {% endif %}
-        <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}">
+        <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}" />
         <div class="enroll-layout-grid">
           <div class="enroll-column-main">
             <div class="form-section">
@@ -48,14 +48,18 @@
               <div class="input-row">
                 <div class="form-group">
                   <label>Paralelo / Curso</label>
+
                   <select name="paralelo" class="enroll-input" required>
                     <option value="">Seleccione el curso...</option>
+
                     {% if paralelo_anterior %}
                       <option value="{{ paralelo_anterior.id }}">Repetir: {{ paralelo_anterior.grado.nombre }} de {{ paralelo_anterior.grado.nivel.nombre }} - {{ paralelo_anterior.letra }}</option>
                     {% endif %}
+
                     {% if paralelo_sugerido %}
                       <option value="{{ paralelo_sugerido.id }}" selected>Sugerido: {{ paralelo_sugerido.grado.nombre }} de {{ paralelo_sugerido.grado.nivel.nombre }} - {{ paralelo_sugerido.letra }}</option>
                     {% endif %}
+
                     {% for paralelo in paralelos %}
                       {% if paralelo_anterior and paralelo.id == paralelo_anterior.id %}
 
@@ -66,7 +70,17 @@
                       {% endif %}
                     {% endfor %}
                   </select>
-                  {% if mensaje_sugerencia %}
+
+                  {% if tipo_inscripcion == 'con_previa' and paralelo_anterior %}
+                    <div class="approval-box">
+                      <label class="approval-check">
+                        <input type="checkbox" name="aprobo_anterior" checked />
+                        <span>El estudiante aprobó la gestión anterior</span>
+                      </label>
+
+                      <p>Si está marcado, se inscribirá al curso superior. Si no está marcado, se reinscribirá al mismo curso anterior.</p>
+                    </div>
+                  {% elif mensaje_sugerencia %}
                     <div class="requirements-info" style="margin-top: 12px;">
                       <i class="fa-solid fa-circle-info"></i>
                       <span>{{ mensaje_sugerencia }}</span>
@@ -75,7 +89,23 @@
                 </div>
                 <div class="form-group">
                   <label>Código RUDE</label>
-                  <input type="text" name="rude" class="enroll-input" placeholder="Ej: 8067000..." required />
+
+                  {% if rude_bloqueado %}
+                    <input type="hidden" name="tipo_rude" value="existente" />
+
+                    <input type="text" name="rude" class="enroll-input" value="{{ rude_sugerido }}" readonly />
+
+                    <small class="input-help">Este estudiante ya tiene RUDE asignado. Se conservará el mismo código.</small>
+                  {% else %}
+                    <select name="tipo_rude" class="enroll-input" id="tipoRude">
+                      <option value="auto">Generar RUDE institucional</option>
+                      <option value="manual">Ingresar RUDE existente de otra unidad educativa</option>
+                    </select>
+
+                    <input type="text" name="rude" class="enroll-input" placeholder="Solo si viene de otra unidad educativa" style="margin-top: 10px;" />
+
+                    <small class="input-help">Si el estudiante es nuevo en la unidad educativa, el sistema generará el RUDE automáticamente. Si viene de otra unidad educativa, ingrese el RUDE que ya tenía.</small>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -87,21 +117,25 @@
           <div class="enroll-column-side">
             <div class="requirements-box">
               <h4 class="section-subtitle"><i class="fa-solid fa-folder-open"></i> Entrega de Requisitos</h4>
-              <p class="requirements-hint">Marque los documentos entregados físicamente:</p>
+              {% if tipo_inscripcion == 'con_previa' %}
+                <p class="requirements-hint">Para estudiantes con inscripción previa, solo se requiere la libreta de notas de la gestión anterior y el formulario RUDE.</p>
+              {% else %}
+                <p class="requirements-hint">Marque los documentos entregados físicamente:</p>
+              {% endif %}
               <div class="requirements-checklist">
                 {% for requisito in requisitos %}
                   <label class="check-item">
                     <input type="checkbox" name="requisitos" value="{{ requisito.id }}" />
                     <span class="check-custom"></span>
                     <span class="check-text">
-    {{ requisito.nombre_documento }}
+                      {{ requisito.nombre_documento }}
 
-    {% if requisito.obligatorio %}
-        <small class="req-required">Obligatorio</small>
-    {% else %}
-        <small class="req-optional">Opcional</small>
-    {% endif %}
-</span>
+                      {% if requisito.obligatorio %}
+                        <small class="req-required">Obligatorio</small>
+                      {% else %}
+                        <small class="req-optional">Opcional</small>
+                      {% endif %}
+                    </span>
                   </label>
                 {% empty %}
                   <div class="requirements-info">
@@ -112,7 +146,7 @@
               </div>
               <div class="requirements-info">
                 <i class="fa-solid fa-circle-info"></i>
-                <span>Los documentos no marcados quedarán como pendientes. El tutor tendrá un plazo administrativo de 30 días para regularizarlos.</span>
+                <span>Los documentos obligatorios no marcados dejarán la inscripción como pendiente. El tutor tendrá un plazo administrativo de 30 días para regularizarlos. Los documentos opcionales no afectan el estado documental.</span>
               </div>
             </div>
           </div>

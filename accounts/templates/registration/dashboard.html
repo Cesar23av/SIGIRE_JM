@@ -10,21 +10,39 @@
 <div class="stats-grid">
     <div class="stat-card">
         <h3>Total Estudiantes</h3>
-        <div class="number">0</div>
+        <div class="number">{{ total_estudiantes }}</div>
     </div>
+
     <div class="stat-card">
         <h3>Inscripciones Activas</h3>
-        <div class="number">0</div>
+        <div class="number">{{ inscripciones_activas }}</div>
     </div>
+
     <div class="stat-card alt-border">
         <h3>Cupos Disponibles</h3>
-        <div class="number">0</div>
+        <div class="number">{{ cupos_disponibles }}</div>
     </div>
 </div>
 
 <div class="welcome-panel">
     <h2>Bienvenido al Sistema de Inscripciones</h2>
-    <p>Utiliza el menú lateral para navegar entre los diferentes módulos del sistema. Recuerda que todas las acciones realizadas quedan registradas bajo tu usuario: <strong>{{ request.user.username }}</strong>.</p>
+
+    {% if gestion_activa %}
+        <p>
+            Gestión activa actual:
+            <strong>{{ gestion_activa.anio }}</strong>
+        </p>
+    {% else %}
+        <p class="warning-text">
+            No existe una gestión activa configurada.
+        </p>
+    {% endif %}
+
+    <p>
+        Utiliza el menú lateral para navegar entre los diferentes módulos del sistema.
+        Recuerda que todas las acciones realizadas quedan registradas bajo tu usuario:
+        <strong>{{ request.user.username }}</strong>.
+    </p>
 </div>
 
 {% endblock %}

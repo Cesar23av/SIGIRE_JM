@@ -78,4 +78,12 @@ urlpatterns = [
     path('requisitos/eliminar/<int:pk>/', enrollment_views.eliminar_requisito, name='eliminar_requisito'),
 
     path('requisitos/editar/<int:pk>/', enrollment_views.editar_requisito, name='editar_requisito'),
+    
+    path('inscripciones/<int:pk>/detalle/', enrollment_views.detalle_inscripcion, name='detalle_inscripcion'),
+
+    path('inscripciones/<int:pk>/documentos/', enrollment_views.completar_documentos, name='completar_documentos'),
+    
+    path('inscripciones/<int:pk>/imprimir/', enrollment_views.imprimir_inscripcion, name='imprimir_inscripcion'),
+
+    path('reportes/', accounts_views.reportes, name='reportes'),
 ]

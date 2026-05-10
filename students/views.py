@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.db.models import Q, Exists, OuterRef
 from academic.models import Gestion
 from enrollment.models import Inscripcion
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -33,18 +34,31 @@ def registrar_tutor(request):
 
 @login_required
 def list_tutores(request):
-    query = request.GET.get('search', '')
-    
-    tutores = Tutor.objects.filter(estado=True).order_by('apellidos')
-    
+    query = request.GET.get('search', '').strip()
+
+    parentescos = Parentesco.objects.filter(
+        tutor=OuterRef("pk")
+    )
+
+    tutores_qs = (
+        Tutor.objects
+        .filter(estado=True)
+        .annotate(tiene_estudiantes_db=Exists(parentescos))
+        .order_by('apellidos', 'nombres')
+    )
+
     if query:
-        tutores = tutores.filter(
-            Q(nombres__icontains=query) | 
-            Q(apellidos__icontains=query) | 
+        tutores_qs = tutores_qs.filter(
+            Q(nombres__icontains=query) |
+            Q(apellidos__icontains=query) |
             Q(cedula_identidad__icontains=query) |
             Q(ocupacion__icontains=query)
         ).distinct()
-        
+
+    paginator = Paginator(tutores_qs, 15)
+    page_number = request.GET.get('page')
+    tutores = paginator.get_page(page_number)
+
     return render(request, 'Tutor/list_tutores.html', {
         'tutores': tutores,
         'search_query': query
@@ -135,7 +149,7 @@ def list_estudiantes(request):
     modo_seleccion_inscripcion = request.GET.get('modo_seleccion_inscripcion') == 'true'
     tipo_inscripcion = request.GET.get('tipo_inscripcion', '')
 
-    estudiantes = Estudiante.objects.all().order_by('apellido_paterno')
+    estudiantes = Estudiante.objects.all().order_by('apellido_paterno', 'apellido_materno', 'nombres')
 
     if ver_inactivos:
         estudiantes = estudiantes.filter(estado=False)
@@ -203,6 +217,10 @@ def list_estudiantes(request):
 
     if genero_filtro:
         estudiantes = estudiantes.filter(genero=genero_filtro)
+
+    paginator = Paginator(estudiantes, 15)
+    page_number = request.GET.get("page")
+    estudiantes = paginator.get_page(page_number)
 
     return render(request, 'Student/list_estudiantes.html', {
         'estudiantes': estudiantes,

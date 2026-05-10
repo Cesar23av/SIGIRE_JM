@@ -3,7 +3,7 @@
 {% block page_title %}Gestión de Estudiantes{% endblock %}
 {% block content %}
     <link rel="stylesheet"
-          href="{% static 'students/css/list_estudiantes.css' %}?v=8" />
+          href="{% static 'students/css/list_estudiantes.css' %}?v=9" />
     <div class="list-container-wrapper">
         <div class="student-list-card">
             <div class="list-header">
@@ -31,30 +31,54 @@
                 </div>
             </div>
             <div class="filter-bar">
-                <form method="GET" id="searchForm" class="combined-search-form">
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text"
-                               name="search"
-                               id="searchInput"
-                               placeholder="Buscar por CI, nombres o apellidos..."
-                               value="{{ search_query|default:'' }}">
-                        {% if search_query %}
-                            <a href="{% url 'list_estudiantes' %}" class="clear-search"><i class="fa-solid fa-xmark"></i></a>
-                        {% endif %}
-                    </div>
-                    <div class="select-box">
-                        <select name="genero" id="generoFilter">
-                            <option value="">Todos los géneros</option>
-                            <option value="M" {% if genero_filter == 'M' %}selected{% endif %}>Masculino</option>
-                            <option value="F" {% if genero_filter == 'F' %}selected{% endif %}>Femenino</option>
-                        </select>
-                    </div>
-                    <input type="hidden"
-                           name="inactivos"
-                           id="hiddenInactivos"
-                           value="{% if ver_inactivos %}on{% endif %}">
-                </form>
+                <form method="GET" action="{% url 'list_estudiantes' %}" id="searchForm" class="combined-search-form student-filter-form">
+
+    {% if modo_seleccion_inscripcion %}
+        <input type="hidden" name="modo_seleccion_inscripcion" value="true">
+        <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}">
+    {% endif %}
+
+    {% if ver_inactivos %}
+        <input type="hidden" name="inactivos" id="hiddenInactivos" value="on">
+    {% else %}
+        <input type="hidden" name="inactivos" id="hiddenInactivos" value="">
+    {% endif %}
+
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+        <input type="text"
+               name="search"
+               id="searchInput"
+               placeholder="Buscar por CI, nombres o apellidos..."
+               value="{{ search_query|default:'' }}">
+    </div>
+
+    <div class="select-box">
+        <select name="genero" id="generoFilter">
+            <option value="">Todos los géneros</option>
+            <option value="M" {% if genero_filter == 'M' %}selected{% endif %}>
+                Masculino
+            </option>
+            <option value="F" {% if genero_filter == 'F' %}selected{% endif %}>
+                Femenino
+            </option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn-filter-student">
+        <i class="fa-solid fa-filter"></i>
+        Filtrar
+    </button>
+
+    {% if search_query or genero_filter %}
+        <a href="{% url 'list_estudiantes' %}{% if modo_seleccion_inscripcion %}?modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
+           class="btn-clear-student"
+           title="Limpiar búsqueda">
+            <i class="fa-solid fa-rotate-left"></i>
+        </a>
+    {% endif %}
+</form>
             </div>
             <div class="list-body">
                 <table class="student-table">
@@ -73,7 +97,13 @@
                         {% for estudiante in estudiantes %}
                             <tr>
                                 <td>
-                                    <span class="row-number">{{ forloop.counter }}</span>
+                                    <span class="row-number">
+    {% if estudiantes.start_index %}
+        {{ estudiantes.start_index|add:forloop.counter0 }}
+    {% else %}
+        {{ forloop.counter }}
+    {% endif %}
+</span>
                                 </td>
                                 <td>
                                     <div class="student-info">
@@ -179,9 +209,30 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% if estudiantes.has_other_pages %}
+    <div class="pagination">
+        {% if estudiantes.has_previous %}
+            <a href="?page={{ estudiantes.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}">
+                <i class="fa-solid fa-chevron-left"></i>
+                Anterior
+            </a>
+        {% endif %}
+
+        <span>
+            Página {{ estudiantes.number }} de {{ estudiantes.paginator.num_pages }}
+        </span>
+
+        {% if estudiantes.has_next %}
+            <a href="?page={{ estudiantes.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}">
+                Siguiente
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{% static 'students/js/list_estudiantes.js' %}?v=7"></script>
+    <script src="{% static 'students/js/list_estudiantes.js' %}?v=8"></script>
 {% endblock %}

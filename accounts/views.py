@@ -13,6 +13,10 @@ from .decorators import only_director, only_administrative
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from .forms import CustomPasswordChangeForm
+from django.db.models import Sum
+from students.models import Estudiante
+from enrollment.models import Inscripcion
+from academic.models import Gestion, Paralelo
 
 
 # 1. Vista Pública
@@ -230,3 +234,48 @@ def eliminar_personal_fisico(request, pk):
     messages.success(request, f"¡Completado! El usuario '{nombre}' ha sido eliminado definitivamente de la base de datos.")
     
     return redirect('/personal/?inactivos=true')
+
+@login_required
+@only_administrative
+def dashboard(request):
+    gestion_activa = Gestion.objects.filter(estado=True).first()
+
+    total_estudiantes = Estudiante.objects.filter(
+        estado=True
+    ).count()
+
+    inscripciones_activas = 0
+    cupos_disponibles = 0
+
+    if gestion_activa:
+        inscripciones_activas = Inscripcion.objects.filter(
+            gestion=gestion_activa,
+            estado=True
+        ).count()
+
+        paralelos = Paralelo.objects.filter(
+            estado=True
+        )
+
+        for paralelo in paralelos:
+            inscritos = Inscripcion.objects.filter(
+                paralelo=paralelo,
+                gestion=gestion_activa,
+                estado=True
+            ).count()
+
+            cupos_disponibles += max(paralelo.cupo_max - inscritos, 0)
+
+    context = {
+        'total_estudiantes': total_estudiantes,
+        'inscripciones_activas': inscripciones_activas,
+        'cupos_disponibles': cupos_disponibles,
+        'gestion_activa': gestion_activa,
+    }
+
+    return render(request, 'registration/dashboard.html', context)
+
+@login_required
+@only_administrative
+def reportes(request):
+    return render(request, 'registration/reportes.html')
