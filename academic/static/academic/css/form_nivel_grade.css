@@ -1,197 +1,572 @@
-.academic-dashboard {
-    padding: 30px;
-    animation: fadeIn 0.5s ease-out;
+/* =========================================================
+   FORM_NIVEL_GRADE.CSS - FORMULARIO DE NIVEL Y GRADO
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia con el panel administrativo.
+   ========================================================= */
+
+:root {
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --secondary-light: #334155;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+
+/* =========================================================
+   2. CONTENEDOR PRINCIPAL
+   Agrupa toda la pantalla de configuración académica.
+   ========================================================= */
+
+.academic-form-page {
+  width: 100%;
 }
 
-.header-section {
-    margin-bottom: 40px;
-    text-align: center;
-    border-bottom: 2px solid #f1f5f9;
-    padding-bottom: 20px;
+
+/* =========================================================
+   3. CABECERA DE LA PÁGINA
+   Título superior y descripción general.
+   ========================================================= */
+
+.academic-form-header {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 26px 30px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-soft);
 }
 
-.header-section h2 {
-    color: #1e293b;
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+.academic-form-header h2 {
+  color: var(--secondary-color);
+  font-size: 1.55rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
-.registration-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 60vh;
+.academic-form-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
 
-.card-large {
-    max-width: 700px;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 24px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
 
-.card-header-large {
-    padding: 35px 45px;
-    border-bottom: 2px solid #f1f5f9;
-}
+/* =========================================================
+   4. MENSAJES DEL SISTEMA
+   Alertas de éxito o error.
+   ========================================================= */
 
-.card-header-large.nivel { background: #f0f9ff; color: #0369a1; }
-.card-header-large.grado { background: #fffbeb; color: #b45309; }
-
-.card-header-large h3 {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.card-body-large {
-    padding: 50px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 700;
-    color: #334155;
-    margin-bottom: 12px;
-    font-size: 1.05rem;
-}
-
-.form-control-academic {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: 2px solid #e2e8f0;
-    background: #f8fafc;
-    font-size: 1.1rem;
-    color: #1e293b;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-control-academic:focus {
-    background: #ffffff;
-    border-color: #3b82f6;
-    outline: none;
-    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.1);
-}
-
-.btn-save-academic {
-    width: 100%;
-    padding: 18px;
-    border: none;
-    border-radius: 14px;
-    font-weight: 800;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    color: white;
-    margin-top: 10px;
-}
-
-.btn-nivel { background: #0ea5e9; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2); }
-.btn-grado { background: #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2); }
-.btn-edit { background: #10b981 !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-
-.btn-save-academic:hover {
-    transform: translateY(-3px);
-    filter: brightness(1.05);
-}
-
-.btn-save-academic:active { transform: translateY(0); }
-
-
-.btn-back {
-    display: flex;             
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 15px;
-    padding: 18px;            
-    background-color: #f8fafc; 
-    color: #64748b;
-    border: 2px solid #e2e8f0; 
-    border-radius: 14px;    
-    text-decoration: none;
-    font-weight: 800;          
-    font-size: 1.2rem;       
-    gap: 12px;                
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    box-sizing: border-box;  
-}
-
-.btn-back:hover {
-    background-color: #fff1f2; 
-    color: #e11d48;           
-    border-color: #fecaca;
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.1);
-}
-
-.btn-back:active {
-    transform: translateY(0);
-}
-
-.btn-save-academic:disabled {
-    background-color: #cbd5e1 !important; 
-    color: #94a3b8 !important;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-    opacity: 0.7 !important; 
-}
-
-.messages-container {
-    max-width: 700px;
-    margin: 20px auto;
-    width: 100%;
-    padding: 0 15px;
+.messages-wrapper {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  display: grid;
+  gap: 12px;
 }
 
 .alert-msg {
-    padding: 16px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from { transform: translateY(-15px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.alert-error {
-    background: #fff1f2;
-    color: #be123c;
-    border-left: 6px solid #e11d48;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
 }
 
 .alert-success {
-    background: #f0fdf4;
-    color: #15803d;
-    border-left: 6px solid #22c55e;
+  background: var(--green-soft);
+  color: var(--green-main);
+  border-left: 4px solid var(--green-main);
+}
+
+.alert-error {
+  background: var(--red-soft);
+  color: var(--red-main);
+  border-left: 4px solid var(--red-main);
+}
+
+.alert-msg i {
+  margin-top: 2px;
+}
+
+
+/* =========================================================
+   5. LAYOUT GENERAL
+   Panel informativo lateral + formulario.
+   ========================================================= */
+
+.academic-form-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 26px;
+  align-items: stretch;
+}
+
+.registration-wrapper {
+  width: 100%;
+  max-width: 760px;
+}
+
+
+/* =========================================================
+   6. PANEL INFORMATIVO
+   Recomendaciones y contexto del módulo.
+   ========================================================= */
+
+.academic-info-panel {
+  background: linear-gradient(145deg, #1e293b, #334155);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.academic-info-panel::after {
+  content: "";
+  position: absolute;
+  right: -55px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+}
+
+.academic-info-icon {
+  width: 62px;
+  height: 62px;
+  background: rgba(198, 40, 40, 0.95);
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.7rem;
+  margin-bottom: 24px;
+}
+
+.academic-info-panel h3 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.academic-info-panel p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.academic-tips {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.academic-tips li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f8fafc;
+  font-size: 0.92rem;
+}
+
+.academic-tips i {
+  color: #86efac;
+  margin-top: 3px;
+}
+
+
+/* =========================================================
+   7. TARJETA DEL FORMULARIO
+   Contenedor para creación o edición de nivel/grado.
+   ========================================================= */
+
+.academic-form-card,
+.card-large {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.academic-form-card:last-child,
+.card-large:last-child {
+  margin-bottom: 0;
+}
+
+.academic-card-header,
+.card-header-large {
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.academic-card-header.nivel,
+.card-header-large.nivel {
+  background: linear-gradient(135deg, #ffffff, #eff6ff);
+}
+
+.academic-card-header.grado,
+.card-header-large.grado {
+  background: linear-gradient(135deg, #ffffff, #fef2f2);
+}
+
+.academic-card-header h3,
+.card-header-large h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.academic-card-header h3 i,
+.card-header-large h3 i {
+  color: var(--primary-color);
+}
+
+.academic-card-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.academic-card-body,
+.card-body-large {
+  padding: 30px;
+}
+
+
+/* =========================================================
+   8. FORMULARIO
+   Campos generados por Django.
+   ========================================================= */
+
+.academic-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  width: 100%;
+}
+
+.input-wrapper input,
+.input-wrapper select,
+.academic-form input,
+.academic-form select {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus,
+.academic-form input:focus,
+.academic-form select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
+}
+
+
+/* =========================================================
+   9. ACCIONES DEL FORMULARIO
+   Botones de cancelar, confirmar y guardar cambios.
+   ========================================================= */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-back,
+.btn-save-academic {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-back {
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-back:hover {
+  background: #e2e8f0;
+}
+
+.btn-save-academic {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-save-academic:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-save-academic:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* =========================================================
+   10. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Reduce ancho del panel lateral.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .academic-form-layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .academic-info-panel {
+    padding: 28px 24px;
+  }
+
+  .academic-card-body,
+  .card-body-large {
+    padding: 26px;
+  }
+}
+
+
+/* =========================================================
+   11. RESPONSIVE - TABLETS
+   El panel informativo pasa arriba del formulario.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .academic-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-wrapper {
+    max-width: 100%;
+  }
+
+  .academic-info-panel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: start;
+  }
+
+  .academic-info-icon {
+    margin-bottom: 0;
+  }
+
+  .academic-info-panel p,
+  .academic-tips {
+    grid-column: 2;
+  }
+}
+
+
+/* =========================================================
+   12. RESPONSIVE - CELULARES
+   Botones e inputs a una sola columna.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .academic-form-header {
+    padding: 24px 22px;
+  }
+
+  .academic-form-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .academic-info-panel {
+    display: block;
+    padding: 26px 22px;
+  }
+
+  .academic-info-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .academic-info-panel h3 {
+    font-size: 1.25rem;
+  }
+
+  .academic-card-header,
+  .card-header-large {
+    padding: 24px 22px;
+  }
+
+  .academic-card-body,
+  .card-body-large {
+    padding: 24px 22px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-back,
+  .btn-save-academic {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   13. RESPONSIVE - CELULARES PEQUEÑOS
+   Ajustes finos para evitar desbordes.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .academic-form-header {
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+
+  .academic-form-header h2 {
+    font-size: 1.22rem;
+  }
+
+  .academic-form-header p {
+    font-size: 0.86rem;
+  }
+
+  .academic-info-panel {
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+
+  .academic-form-card,
+  .card-large {
+    border-radius: 14px;
+  }
+
+  .academic-card-header,
+  .card-header-large {
+    padding: 22px 18px;
+  }
+
+  .academic-card-header h3,
+  .card-header-large h3 {
+    font-size: 1.1rem;
+  }
+
+  .academic-card-header p {
+    font-size: 0.86rem;
+  }
+
+  .academic-card-body,
+  .card-body-large {
+    padding: 22px 18px;
+  }
+
+  .form-group label {
+    font-size: 0.86rem;
+  }
+
+  .input-wrapper input,
+  .input-wrapper select,
+  .academic-form input,
+  .academic-form select {
+    font-size: 0.9rem;
+    padding: 11px 12px;
+  }
+
+  .alert-msg {
+    font-size: 0.84rem;
+  }
 }

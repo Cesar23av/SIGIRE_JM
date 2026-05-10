@@ -1,175 +1,295 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
-{% block page_title %}
-  Formulario de Inscripción
-{% endblock %}
+
+{% block page_title %}Formulario de Inscripción{% endblock %}
+
 {% block content %}
-  <link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=9" />
-  <div class="enroll-container">
-    <div class="enroll-card">
-      <div class="enroll-card-header">
-        <div class="header-text">
-          <h3><i class="fa-solid fa-file-signature"></i> Nueva Inscripción Académica</h3>
-          <p>
-            Gestión Escolar: <strong>{{ gestion_actual|default:'2026' }}</strong>
-          </p>
-        </div>
-        <div class="header-badge">
-          <span class="badge-process">En Proceso</span>
-        </div>
+
+<link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=10" />
+
+<section class="enroll-page">
+
+  <div class="enroll-card">
+
+    <div class="enroll-card-header">
+      <div class="header-text">
+        <h3>
+          <i class="fa-solid fa-file-signature"></i>
+          Nueva Inscripción Académica
+        </h3>
+
+        <p>
+          Gestión Escolar:
+          <strong>{{ gestion_actual|default:'2026' }}</strong>
+        </p>
       </div>
-      <form action="{% url 'registrar_inscripcion_view' %}" method="POST" class="enroll-form-body">
-        {% csrf_token %}
-        {% if estudiante %}
-          <input type="hidden" name="estudiante_id" value="{{ estudiante.cedula_identidad }}" />
-        {% endif %}
-        <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}" />
-        <div class="enroll-layout-grid">
-          <div class="enroll-column-main">
-            <div class="form-section">
-              <h4 class="section-subtitle"><i class="fa-solid fa-user-graduate"></i> Datos del Estudiante</h4>
-              <div class="student-info-banner">
-                <div class="student-avatar">
-                  <i class="fa-solid fa-user-tie"></i>
-                </div>
-                <div class="student-data">
-                  {% if estudiante %}
-                    <strong>{{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}, {{ estudiante.nombres }}</strong>
-                    <span>CI: {{ estudiante.cedula_identidad }}</span>
-                  {% else %}
-                    <strong>Sin estudiante seleccionado</strong>
-                    <span>Seleccione un estudiante para continuar.</span>
-                  {% endif %}
-                </div>
+
+      <div class="header-badge">
+        <span class="badge-process">En Proceso</span>
+      </div>
+    </div>
+
+    <form
+      action="{% url 'registrar_inscripcion_view' %}"
+      method="POST"
+      class="enroll-form-body"
+      novalidate
+    >
+      {% csrf_token %}
+
+      {% if estudiante %}
+        <input
+          type="hidden"
+          name="estudiante_id"
+          value="{{ estudiante.cedula_identidad }}"
+        >
+      {% endif %}
+
+      <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}">
+
+      <div class="enroll-layout-grid">
+
+        <div class="enroll-column-main">
+
+          <section class="form-section">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-user-graduate"></i>
+              Datos del Estudiante
+            </h4>
+
+            <div class="student-info-banner">
+              <div class="student-avatar">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+
+              <div class="student-data">
+                {% if estudiante %}
+                  <strong>
+                    {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }},
+                    {{ estudiante.nombres }}
+                  </strong>
+
+                  <span>CI: {{ estudiante.cedula_identidad }}</span>
+                {% else %}
+                  <strong>Sin estudiante seleccionado</strong>
+                  <span>Seleccione un estudiante para continuar.</span>
+                {% endif %}
               </div>
             </div>
-            <div class="form-section">
-              <h4 class="section-subtitle"><i class="fa-solid fa-school"></i> Asignación de Grado</h4>
-              <div class="input-row">
-                <div class="form-group">
-                  <label>Paralelo / Curso</label>
+          </section>
 
-                  <select name="paralelo" class="enroll-input" required>
-                    <option value="">Seleccione el curso...</option>
+          <section class="form-section">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-school"></i>
+              Asignación de Grado
+            </h4>
 
-                    {% if paralelo_anterior %}
-                      <option value="{{ paralelo_anterior.id }}">Repetir: {{ paralelo_anterior.grado.nombre }} de {{ paralelo_anterior.grado.nivel.nombre }} - {{ paralelo_anterior.letra }}</option>
+            <div class="input-row">
+
+              <div class="form-group">
+                <label for="id_paralelo">Paralelo / Curso</label>
+
+                <select name="paralelo" id="id_paralelo" class="enroll-input" required>
+                  <option value="">Seleccione el curso...</option>
+
+                  {% if paralelo_anterior %}
+                    <option value="{{ paralelo_anterior.id }}">
+                      Repetir:
+                      {{ paralelo_anterior.grado.nombre }} de
+                      {{ paralelo_anterior.grado.nivel.nombre }} -
+                      {{ paralelo_anterior.letra }}
+                    </option>
+                  {% endif %}
+
+                  {% if paralelo_sugerido %}
+                    <option value="{{ paralelo_sugerido.id }}" selected>
+                      Sugerido:
+                      {{ paralelo_sugerido.grado.nombre }} de
+                      {{ paralelo_sugerido.grado.nivel.nombre }} -
+                      {{ paralelo_sugerido.letra }}
+                    </option>
+                  {% endif %}
+
+                  {% for paralelo in paralelos %}
+                    {% if paralelo_anterior and paralelo.id == paralelo_anterior.id %}
+                    {% elif paralelo_sugerido and paralelo.id == paralelo_sugerido.id %}
+                    {% else %}
+                      <option value="{{ paralelo.id }}">
+                        {{ paralelo.grado.nombre }} de {{ paralelo.grado.nivel.nombre }} -
+                        {{ paralelo.letra }}
+                      </option>
                     {% endif %}
+                  {% endfor %}
+                </select>
 
-                    {% if paralelo_sugerido %}
-                      <option value="{{ paralelo_sugerido.id }}" selected>Sugerido: {{ paralelo_sugerido.grado.nombre }} de {{ paralelo_sugerido.grado.nivel.nombre }} - {{ paralelo_sugerido.letra }}</option>
-                    {% endif %}
+                {% if tipo_inscripcion == 'con_previa' and paralelo_anterior %}
+                  <div class="approval-box">
+                    <label class="approval-check">
+                      <input type="checkbox" name="aprobo_anterior" checked>
+                      <span>El estudiante aprobó la gestión anterior</span>
+                    </label>
 
-                    {% for paralelo in paralelos %}
-                      {% if paralelo_anterior and paralelo.id == paralelo_anterior.id %}
+                    <p>
+                      Si está marcado, se inscribirá al curso superior.
+                      Si no está marcado, se reinscribirá al mismo curso anterior.
+                    </p>
+                  </div>
+                {% elif mensaje_sugerencia %}
+                  <div class="requirements-info suggestion-info">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{ mensaje_sugerencia }}</span>
+                  </div>
+                {% endif %}
+              </div>
 
-                      {% elif paralelo_sugerido and paralelo.id == paralelo_sugerido.id %}
+              <div class="form-group">
+                <label for="id_rude">Código RUDE</label>
 
-                      {% else %}
-                        <option value="{{ paralelo.id }}">{{ paralelo.grado.nombre }} de {{ paralelo.grado.nivel.nombre }} - {{ paralelo.letra }}</option>
-                      {% endif %}
-                    {% endfor %}
+                {% if rude_bloqueado %}
+                  <input type="hidden" name="tipo_rude" value="existente">
+
+                  <input
+                    type="text"
+                    id="id_rude"
+                    name="rude"
+                    class="enroll-input input-readonly"
+                    value="{{ rude_sugerido }}"
+                    readonly
+                  >
+
+                  <small class="input-help">
+                    Este estudiante ya tiene RUDE asignado. Se conservará el mismo código.
+                  </small>
+                {% else %}
+                  <select name="tipo_rude" class="enroll-input" id="tipoRude">
+                    <option value="auto">Generar RUDE institucional</option>
+                    <option value="manual">Ingresar RUDE existente de otra unidad educativa</option>
                   </select>
 
-                  {% if tipo_inscripcion == 'con_previa' and paralelo_anterior %}
-                    <div class="approval-box">
-                      <label class="approval-check">
-                        <input type="checkbox" name="aprobo_anterior" checked />
-                        <span>El estudiante aprobó la gestión anterior</span>
-                      </label>
+                  <input
+                    type="text"
+                    id="id_rude"
+                    name="rude"
+                    class="enroll-input rude-manual-input"
+                    placeholder="Solo si viene de otra unidad educativa"
+                  >
 
-                      <p>Si está marcado, se inscribirá al curso superior. Si no está marcado, se reinscribirá al mismo curso anterior.</p>
-                    </div>
-                  {% elif mensaje_sugerencia %}
-                    <div class="requirements-info" style="margin-top: 12px;">
-                      <i class="fa-solid fa-circle-info"></i>
-                      <span>{{ mensaje_sugerencia }}</span>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="form-group">
-                  <label>Código RUDE</label>
-
-                  {% if rude_bloqueado %}
-                    <input type="hidden" name="tipo_rude" value="existente" />
-
-                    <input type="text" name="rude" class="enroll-input" value="{{ rude_sugerido }}" readonly />
-
-                    <small class="input-help">Este estudiante ya tiene RUDE asignado. Se conservará el mismo código.</small>
-                  {% else %}
-                    <select name="tipo_rude" class="enroll-input" id="tipoRude">
-                      <option value="auto">Generar RUDE institucional</option>
-                      <option value="manual">Ingresar RUDE existente de otra unidad educativa</option>
-                    </select>
-
-                    <input type="text" name="rude" class="enroll-input" placeholder="Solo si viene de otra unidad educativa" style="margin-top: 10px;" />
-
-                    <small class="input-help">Si el estudiante es nuevo en la unidad educativa, el sistema generará el RUDE automáticamente. Si viene de otra unidad educativa, ingrese el RUDE que ya tenía.</small>
-                  {% endif %}
-                </div>
+                  <small class="input-help">
+                    Si el estudiante es nuevo en la unidad educativa, el sistema generará el RUDE automáticamente.
+                    Si viene de otra unidad educativa, ingrese el RUDE que ya tenía.
+                  </small>
+                {% endif %}
               </div>
+
             </div>
-            <div class="form-section">
-              <h4 class="section-subtitle"><i class="fa-solid fa-comment-dots"></i> Observaciones</h4>
-              <textarea name="observacion" class="enroll-textarea" placeholder="¿Alguna nota especial sobre esta inscripción?"></textarea>
+          </section>
+
+          <section class="form-section">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-comment-dots"></i>
+              Observaciones
+            </h4>
+
+            <textarea
+              name="observacion"
+              class="enroll-textarea"
+              placeholder="¿Alguna nota especial sobre esta inscripción?"
+            ></textarea>
+          </section>
+
+        </div>
+
+        <aside class="enroll-column-side">
+          <div class="requirements-box">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-folder-open"></i>
+              Entrega de Requisitos
+            </h4>
+
+            {% if tipo_inscripcion == 'con_previa' %}
+              <p class="requirements-hint">
+                Para estudiantes con inscripción previa, solo se requiere la libreta de notas de la gestión anterior y el formulario RUDE.
+              </p>
+            {% else %}
+              <p class="requirements-hint">
+                Marque los documentos entregados físicamente:
+              </p>
+            {% endif %}
+
+            <div class="requirements-checklist">
+              {% for requisito in requisitos %}
+                <label class="check-item">
+                  <input type="checkbox" name="requisitos" value="{{ requisito.id }}">
+
+                  <span class="check-custom"></span>
+
+                  <span class="check-text">
+                    {{ requisito.nombre_documento }}
+
+                    {% if requisito.obligatorio %}
+                      <small class="req-required">Obligatorio</small>
+                    {% else %}
+                      <small class="req-optional">Opcional</small>
+                    {% endif %}
+                  </span>
+                </label>
+              {% empty %}
+                <div class="requirements-info">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>No hay requisitos activos registrados.</span>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="requirements-info">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>
+                Los documentos obligatorios no marcados dejarán la inscripción como pendiente.
+                El tutor tendrá un plazo administrativo de 30 días para regularizarlos.
+                Los documentos opcionales no afectan el estado documental.
+              </span>
             </div>
           </div>
-          <div class="enroll-column-side">
-            <div class="requirements-box">
-              <h4 class="section-subtitle"><i class="fa-solid fa-folder-open"></i> Entrega de Requisitos</h4>
-              {% if tipo_inscripcion == 'con_previa' %}
-                <p class="requirements-hint">Para estudiantes con inscripción previa, solo se requiere la libreta de notas de la gestión anterior y el formulario RUDE.</p>
-              {% else %}
-                <p class="requirements-hint">Marque los documentos entregados físicamente:</p>
-              {% endif %}
-              <div class="requirements-checklist">
-                {% for requisito in requisitos %}
-                  <label class="check-item">
-                    <input type="checkbox" name="requisitos" value="{{ requisito.id }}" />
-                    <span class="check-custom"></span>
-                    <span class="check-text">
-                      {{ requisito.nombre_documento }}
+        </aside>
 
-                      {% if requisito.obligatorio %}
-                        <small class="req-required">Obligatorio</small>
-                      {% else %}
-                        <small class="req-optional">Opcional</small>
-                      {% endif %}
-                    </span>
-                  </label>
-                {% empty %}
-                  <div class="requirements-info">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>No hay requisitos activos registrados.</span>
-                  </div>
-                {% endfor %}
-              </div>
-              <div class="requirements-info">
-                <i class="fa-solid fa-circle-info"></i>
-                <span>Los documentos obligatorios no marcados dejarán la inscripción como pendiente. El tutor tendrá un plazo administrativo de 30 días para regularizarlos. Los documentos opcionales no afectan el estado documental.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="enroll-form-footer">
-          {% if estudiante %}
-            <button type="submit" class="btn-confirm-enroll"><i class="fa-solid fa-file-import"></i> Confirmar Inscripción</button>
-          {% else %}
-            <button type="button" class="btn-confirm-enroll" disabled><i class="fa-solid fa-file-import"></i> Seleccione un estudiante</button>
-          {% endif %}
-          <a href="{% url 'list_estudiantes' %}" class="btn-cancel-enroll">Cancelar</a>
-        </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="enroll-form-footer">
+        <a href="{% url 'list_estudiantes' %}" class="btn-cancel-enroll">
+          <i class="fa-solid fa-arrow-left"></i>
+          Cancelar
+        </a>
+
+        {% if estudiante %}
+          <button type="submit" class="btn-confirm-enroll">
+            <i class="fa-solid fa-file-import"></i>
+            Confirmar Inscripción
+          </button>
+        {% else %}
+          <button type="button" class="btn-confirm-enroll" disabled>
+            <i class="fa-solid fa-file-import"></i>
+            Seleccione un estudiante
+          </button>
+        {% endif %}
+      </div>
+
+    </form>
+
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    const configInscripcion = {
-        mostrarPregunta: {% if estudiante %}false{% else %}true{% endif %},
-        urlEstudianteNuevo: "{% url 'list_tutores' %}?modo_seleccion=true&next=inscripcion",
-        urlEstudianteRegistradoSinInscripcion: "{% url 'list_estudiantes' %}?modo_seleccion_inscripcion=true&tipo_inscripcion=sin_previa",
-        urlEstudianteConInscripcionPrevia: "{% url 'list_estudiantes' %}?modo_seleccion_inscripcion=true&tipo_inscripcion=con_previa"
-    };
-    </script>
-  <script src="{% static 'enrollments/js/form_enrollment.js' %}?v=4"></script>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  const configInscripcion = {
+    mostrarPregunta: {% if estudiante %}false{% else %}true{% endif %},
+    urlEstudianteNuevo: "{% url 'list_tutores' %}?modo_seleccion=true&next=inscripcion",
+    urlEstudianteRegistradoSinInscripcion: "{% url 'list_estudiantes' %}?modo_seleccion_inscripcion=true&tipo_inscripcion=sin_previa",
+    urlEstudianteConInscripcionPrevia: "{% url 'list_estudiantes' %}?modo_seleccion_inscripcion=true&tipo_inscripcion=con_previa"
+  };
+</script>
+
+<script src="{% static 'enrollments/js/form_enrollment.js' %}?v=5"></script>
+
 {% endblock %}

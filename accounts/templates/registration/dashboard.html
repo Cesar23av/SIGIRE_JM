@@ -3,46 +3,98 @@
 
 {% block page_title %}Panel de Control{% endblock %}
 
-{% block content %} 
+{% block content %}
 
-<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}?v=1">
 
-<div class="stats-grid">
-    <div class="stat-card">
-        <h3>Total Estudiantes</h3>
-        <div class="number">{{ total_estudiantes }}</div>
+<section class="dashboard-container">
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Panel de Control</h2>
+      <p>Resumen general del sistema de inscripciones y gestión académica.</p>
     </div>
-
-    <div class="stat-card">
-        <h3>Inscripciones Activas</h3>
-        <div class="number">{{ inscripciones_activas }}</div>
-    </div>
-
-    <div class="stat-card alt-border">
-        <h3>Cupos Disponibles</h3>
-        <div class="number">{{ cupos_disponibles }}</div>
-    </div>
-</div>
-
-<div class="welcome-panel">
-    <h2>Bienvenido al Sistema de Inscripciones</h2>
 
     {% if gestion_activa %}
-        <p>
-            Gestión activa actual:
-            <strong>{{ gestion_activa.anio }}</strong>
-        </p>
+      <div class="active-year-badge">
+        <i class="fa-solid fa-calendar-check"></i>
+        Gestión {{ gestion_activa.anio }}
+      </div>
     {% else %}
-        <p class="warning-text">
-            No existe una gestión activa configurada.
-        </p>
+      <div class="inactive-year-badge">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Sin gestión activa
+      </div>
     {% endif %}
+  </div>
 
-    <p>
-        Utiliza el menú lateral para navegar entre los diferentes módulos del sistema.
-        Recuerda que todas las acciones realizadas quedan registradas bajo tu usuario:
+  <div class="stats-grid">
+
+    <article class="stat-card">
+      <div class="stat-icon students-icon">
+        <i class="fa-solid fa-users"></i>
+      </div>
+
+      <div class="stat-info">
+        <h3>Total Estudiantes</h3>
+        <div class="number">{{ total_estudiantes }}</div>
+        <p>Estudiantes activos registrados</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon enrollments-icon">
+        <i class="fa-solid fa-file-signature"></i>
+      </div>
+
+      <div class="stat-info">
+        <h3>Inscripciones Activas</h3>
+        <div class="number">{{ inscripciones_activas }}</div>
+        <p>Inscripciones vigentes en el sistema</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon capacity-icon">
+        <i class="fa-solid fa-chair"></i>
+      </div>
+
+      <div class="stat-info">
+        <h3>Cupos Disponibles</h3>
+        <div class="number">{{ cupos_disponibles }}</div>
+        <p>Cupos restantes en paralelos activos</p>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="welcome-panel">
+    <div class="welcome-icon">
+      <i class="fa-solid fa-building-columns"></i>
+    </div>
+
+    <div class="welcome-content">
+      <h2>Bienvenido al Sistema de Inscripciones</h2>
+
+      {% if gestion_activa %}
+        <p class="management-text">
+          Actualmente estás trabajando sobre la gestión:
+          <strong>{{ gestion_activa.anio }}</strong>.
+        </p>
+      {% else %}
+        <p class="warning-text">
+          No existe una gestión activa configurada. Para operar correctamente, primero habilita una gestión académica.
+        </p>
+      {% endif %}
+
+      <p>
+        Utiliza el menú lateral para navegar entre los módulos del sistema.
+        Todas las acciones realizadas quedan registradas bajo tu usuario:
         <strong>{{ request.user.username }}</strong>.
-    </p>
-</div>
+      </p>
+    </div>
+  </section>
+
+</section>
 
 {% endblock %}

@@ -1,248 +1,673 @@
+/* =========================================================
+   FORM_STUDENT.CSS - REGISTRO Y EDICIÓN DE ESTUDIANTE
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
 
 :root {
-    --primary-color: #c62828;       
-    --primary-hover: #b71c1c;       
-    --secondary-color: #1e293b;    
-    --bg-light: #f8fafc;
-    --border-color: #e2e8f0;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --secondary-light: #334155;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --gray-soft: #f1f5f9;
+  --gray-main: #475569;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-.form-container-wrapper { 
-    max-width: 850px; 
-    margin: 40px auto; 
-    padding: 0 20px; 
-    animation: slideUpFade 0.4s ease-out forwards;
+
+/* =========================================================
+   2. CONTENEDOR PRINCIPAL
+   Agrupa toda la pantalla del formulario de estudiante.
+   ========================================================= */
+
+.student-form-page {
+  width: 100%;
 }
 
-@keyframes slideUpFade {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+.student-form-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 26px;
+  align-items: stretch;
 }
 
-.student-form-card { 
-    background: #ffffff; 
-    border-radius: 16px; 
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02); 
-    border: 1px solid var(--border-color); 
-    overflow: hidden; 
+
+/* =========================================================
+   3. PANEL INFORMATIVO
+   Bloque lateral de orientación para registro/edición.
+   ========================================================= */
+
+.student-info-panel {
+  background: linear-gradient(145deg, #1e293b, #334155);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
 }
 
-.student-form-header { 
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-    padding: 24px 32px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    color: white; 
-    border-bottom: 4px solid var(--primary-color);
+.student-info-panel::after {
+  content: "";
+  position: absolute;
+  right: -55px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
 }
 
-.student-form-header h3 { 
-    margin: 0; 
-    font-size: 1.25rem; 
-    font-weight: 800; 
-    display: flex; 
-    align-items: center; 
-    gap: 12px;
-    letter-spacing: -0.01em;
+.student-info-icon {
+  width: 62px;
+  height: 62px;
+  background: rgba(198, 40, 40, 0.95);
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.7rem;
+  margin-bottom: 24px;
+}
+
+.student-info-panel h3 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.student-info-panel p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.student-tips {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.student-tips li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f8fafc;
+  font-size: 0.92rem;
+}
+
+.student-tips i {
+  color: #86efac;
+  margin-top: 3px;
+}
+
+
+/* =========================================================
+   4. TARJETA DEL FORMULARIO
+   Contenedor principal del formulario.
+   ========================================================= */
+
+.student-form-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.student-form-header {
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.student-form-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .student-form-header h3 i {
-    color: #fca5a5; 
+  color: var(--primary-color);
 }
 
-.module-badge { 
-    font-size: 0.75rem; 
-    background: rgba(255,255,255,0.15); 
-    padding: 6px 14px; 
-    border-radius: 20px; 
-    font-weight: 700; 
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+.student-form-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
-.student-form-body { 
-    padding: 40px 45px; 
+.module-badge {
+  flex-shrink: 0;
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.student-form-body {
+  padding: 30px;
+}
+
+
+/* =========================================================
+   5. BANNERS INFORMATIVOS
+   Tutor vinculado e identidad protegida.
+   ========================================================= */
+
+.student-banner {
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .tutor-linked-banner {
-    background-color: #eff6ff; 
-    border: 1px solid #bfdbfe;
-    border-left: 4px solid #3b82f6; 
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    color: #1e40af;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.05);
+  background: var(--blue-soft);
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid var(--blue-main);
+  color: #1e40af;
 }
 
-.tutor-linked-banner .banner-icon {
-    font-size: 1.5rem;
-    color: #3b82f6;
+.identity-banner {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--text-muted);
+  color: var(--text-muted);
 }
 
-.tutor-linked-banner .banner-content {
-    font-size: 0.95rem;
-    line-height: 1.5;
+.banner-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+
+  background: var(--white);
+  color: var(--primary-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
 }
 
-.student-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 28px; 
+.banner-content strong {
+  color: var(--secondary-color);
 }
 
-.full-width { grid-column: span 2; }
-
-.ci-grid { 
-    display: grid; 
-    grid-template-columns: 2fr 1fr 1.5fr; 
-    gap: 16px; 
+.banner-content small {
+  color: var(--text-muted);
 }
 
-.form-group label { 
-    font-weight: 700; 
-    color: var(--text-main); 
-    margin-bottom: 10px; 
-    font-size: 0.9rem; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
+
+/* =========================================================
+   6. GRID DEL FORMULARIO
+   Distribución de campos en escritorio.
+   ========================================================= */
+
+.student-form {
+  width: 100%;
 }
 
-.form-group label i { 
-    color: var(--primary-color); 
-    font-size: 1rem;
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
 }
 
-.input-hint { 
-    color: var(--text-muted); 
-    font-size: 0.75rem; 
-    margin-top: 6px; 
-    display: block; 
-    font-weight: 500;
+.form-group {
+  min-width: 0;
 }
 
-.student-input { 
-    width: 100%; 
-    padding: 14px 18px; 
-    border: 2px solid var(--border-color); 
-    border-radius: 10px; 
-    font-size: 0.95rem; 
-    color: var(--text-main);
-    background-color: var(--bg-light); 
-    transition: all 0.3s ease; 
-    box-sizing: border-box; 
-    font-family: inherit; 
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.form-group label i {
+  color: var(--primary-color);
+}
+
+
+/* =========================================================
+   7. CAMPOS DEL FORMULARIO
+   Inputs y selects del estudiante.
+   ========================================================= */
+
+.student-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
+}
+
+.student-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
 }
 
 .student-input::placeholder {
-    color: #94a3b8;
-    opacity: 0.8;
+  color: var(--text-light);
 }
 
-.student-input:focus { 
-    border-color: var(--primary-color); 
-    background-color: #ffffff; 
-    box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.1); 
-    outline: none; 
+.input-disabled,
+.student-input:disabled,
+.student-input[readonly] {
+  background: var(--gray-soft);
+  color: var(--text-muted);
+  cursor: not-allowed;
 }
 
-.form-footer-actions { 
-    margin-top: 40px; 
-    padding-top: 30px; 
-    border-top: 2px dashed var(--border-color); 
-    display: flex; 
-    gap: 20px; 
-}
-
-.btn-save-student { 
-    flex: 2; 
-    background: var(--primary-color); 
-    color: white; 
-    border: none; 
-    padding: 16px; 
-    border-radius: 10px; 
-    font-weight: 800; 
-    font-size: 1.05rem; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 12px; 
-    transition: all 0.3s; 
-    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
-}
-
-.btn-save-student:hover { 
-    background: var(--primary-hover); 
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(198, 40, 40, 0.3);
-}
-
-.btn-save-student:active {
-    transform: translateY(0);
-}
-
-.btn-cancel-student { 
-    flex: 1; 
-    background: #f1f5f9; 
-    color: var(--text-muted); 
-    text-align: center; 
-    text-decoration: none; 
-    padding: 16px; 
-    border-radius: 10px; 
-    font-weight: 700; 
-    font-size: 1rem;
-    transition: all 0.3s; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    border: 2px solid transparent;
-}
-
-.btn-cancel-student:hover { 
-    background: #e2e8f0; 
-    color: var(--text-main); 
-    border-color: #cbd5e1;
+.input-hint {
+  display: block;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  margin-top: 6px;
 }
 
 
+/* =========================================================
+   8. CÉDULA Y DIRECCIÓN
+   Grids especiales para datos compuestos.
+   ========================================================= */
 
-input[type="date"].student-input {
-    font-family: inherit;
-    font-weight: 600;
-    color: var(--text-main);
-    letter-spacing: 1px;
-    cursor: pointer;
-    position: relative;
-
-    padding-top: 13px;
-    padding-bottom: 13px;
+.ci-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 14px;
 }
 
-input[type="date"].student-input::-webkit-calendar-picker-indicator {
-    background-color: var(--bg-light);
-    padding: 6px;
-    cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
+.address-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr;
+  gap: 14px;
 }
 
-input[type="date"].student-input::-webkit-calendar-picker-indicator:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-hover);
-    filter: invert(1) brightness(200%); 
+.ci-field,
+.address-field {
+  min-width: 0;
 }
 
-input[type="date"].student-input:focus::-webkit-calendar-picker-indicator {
-    background-color: var(--primary-color);
-    border-color: var(--primary-hover);
-    filter: invert(1) brightness(200%);
+.locked-badge,
+.optional-badge {
+  margin-left: auto;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 900;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.locked-badge {
+  background: var(--gray-soft);
+  color: var(--text-muted);
+}
+
+.locked-badge i {
+  color: var(--text-muted);
+}
+
+.optional-badge {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+
+/* =========================================================
+   9. BLOQUE DE PARENTESCO
+   Aparece cuando se registra estudiante con tutor seleccionado.
+   ========================================================= */
+
+.relation-box {
+  background: var(--bg-soft);
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px dashed #cbd5e1;
+}
+
+
+/* =========================================================
+   10. ERRORES DE FORMULARIO
+   Validaciones por campo.
+   ========================================================= */
+
+.error-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+
+  margin-top: 8px;
+  padding: 9px 11px;
+
+  background: var(--red-soft);
+  color: #991b1b;
+  border-left: 4px solid var(--red-main);
+  border-radius: 8px;
+
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.error-text i {
+  color: var(--red-main);
+  margin-top: 2px;
+}
+
+
+/* =========================================================
+   11. ACCIONES DEL FORMULARIO
+   Botones inferiores: cancelar y registrar/guardar.
+   ========================================================= */
+
+.form-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-save-student,
+.btn-cancel-student {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cancel-student {
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-cancel-student:hover {
+  background: #e2e8f0;
+}
+
+.btn-save-student {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-save-student:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   12. FLATPICKR
+   Ajuste visual para que el calendario no rompa la línea del sistema.
+   ========================================================= */
+
+.flatpickr-calendar {
+  font-family: 'Inter', sans-serif;
+  border-radius: 14px;
+  box-shadow: var(--shadow-medium);
+}
+
+
+/* =========================================================
+   13. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Reduce ancho del panel lateral.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .student-form-layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .student-info-panel {
+    padding: 28px 24px;
+  }
+
+  .student-form-body {
+    padding: 26px;
+  }
+}
+
+
+/* =========================================================
+   14. RESPONSIVE - TABLETS
+   El panel informativo pasa arriba del formulario.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .student-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .student-info-panel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: start;
+  }
+
+  .student-info-icon {
+    margin-bottom: 0;
+  }
+
+  .student-info-panel p,
+  .student-tips {
+    grid-column: 2;
+  }
+}
+
+
+/* =========================================================
+   15. RESPONSIVE - CELULARES
+   El formulario pasa a una sola columna.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .student-info-panel {
+    display: block;
+    padding: 26px 22px;
+  }
+
+  .student-info-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .student-info-panel h3 {
+    font-size: 1.25rem;
+  }
+
+  .student-form-header {
+    flex-direction: column;
+    padding: 24px 22px;
+  }
+
+  .module-badge {
+    align-self: flex-start;
+  }
+
+  .student-form-body {
+    padding: 24px 22px;
+  }
+
+  .student-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ci-grid,
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .locked-badge,
+  .optional-badge {
+    margin-left: 0;
+  }
+
+  .form-group label {
+    flex-wrap: wrap;
+  }
+
+  .student-banner {
+    flex-direction: column;
+  }
+
+  .form-footer-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-save-student,
+  .btn-cancel-student {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   16. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce espacios y tamaños para evitar desbordes.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .student-info-panel {
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+
+  .student-form-card {
+    border-radius: 14px;
+  }
+
+  .student-form-header {
+    padding: 22px 18px;
+  }
+
+  .student-form-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .student-form-header p {
+    font-size: 0.86rem;
+  }
+
+  .student-form-body {
+    padding: 22px 18px;
+  }
+
+  .form-group label {
+    font-size: 0.86rem;
+  }
+
+  .student-input {
+    font-size: 0.9rem;
+    padding: 11px 12px;
+  }
+
+  .input-hint,
+  .error-text {
+    font-size: 0.78rem;
+  }
+
+  .relation-box {
+    padding: 16px;
+  }
 }

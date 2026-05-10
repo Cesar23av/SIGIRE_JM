@@ -1,715 +1,962 @@
-/* --- Variables base (Consistentes con Tutores) --- */
+/* =========================================================
+   LIST_ESTUDIANTES.CSS - LISTADO DE ESTUDIANTES
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
+
 :root {
-    --primary: #c62828; 
-    --primary-hover: #b71c1c;
-    --success: #10b981;
-    --success-hover: #059669;
-    --danger: #ef4444;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --bg-light: #f8fafc;
-    --border: #e2e8f0;
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --pink-soft: #fdf2f8;
+  --pink-main: #ec4899;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --gray-soft: #f1f5f9;
+  --gray-main: #475569;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-/* --- Contenedor con Animación --- */
-.list-container-wrapper { 
-    max-width: 1200px; 
-    margin: 30px auto; 
-    padding: 0 20px; 
-    animation: fadeIn 0.4s ease-out forwards;
+
+/* =========================================================
+   2. CONTENEDOR GENERAL
+   Agrupa la vista completa del listado.
+   ========================================================= */
+
+.student-list-page {
+  width: 100%;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.student-list-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-.student-list-card { 
-    background: #ffffff; 
-    border-radius: 16px; 
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
-    border: 1px solid var(--border); 
-    overflow: hidden; 
+
+/* =========================================================
+   3. CABECERA DEL LISTADO
+   Título, descripción, botón de registro y switch.
+   ========================================================= */
+
+.student-list-header {
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 22px;
 }
 
-/* --- AJUSTE: Encabezado (Espaciado de Título) --- */
-.list-header { 
-    padding: 28px 32px; 
-    background: #ffffff; 
-    border-bottom: 1px solid var(--border); 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
+.header-info h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
-.header-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; 
+.header-info h3 i {
+  color: var(--primary-color);
 }
 
-.header-info h3 { 
-    margin: 0; 
-    color: var(--text-main); 
-    font-size: 1.4rem; 
-    font-weight: 800; 
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.header-info p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
 }
 
-.header-info h3 i { color: var(--primary); }
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
 
 .module-badge {
-    align-self: flex-start;
-    font-size: 0.75rem;
-    background: #fee2e2;
-    color: var(--primary);
-    padding: 4px 14px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    font-weight: 700;
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-/* --- Contenedor de Acciones (Botón + Switch) --- */
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
 
-/* --- Switch de Inactivos --- */
-.toggle-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 16px;
-    background: var(--bg-light);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
+/* =========================================================
+   4. BOTÓN NUEVO ESTUDIANTE
+   Acción principal de registro.
+   ========================================================= */
 
-.toggle-container:hover {
-    border-color: #cbd5e1;
-    background: #f1f5f9;
-}
-
-.toggle-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 42px;
-    height: 22px;
-}
-
-.switch input { opacity: 0; width: 0; height: 0; }
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #cbd5e1;
-    transition: .3s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .3s;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-input:checked + .slider { background-color: var(--primary); }
-input:checked + .slider:before { transform: translateX(20px); }
-
-/* --- Barra de Filtros / Buscador Avanzado --- */
-.filter-bar {
-    padding: 24px 32px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    border-bottom: 1px solid var(--border);
-}
-
-/* Formulario general */
-.combined-search-form {
-    display: grid;
-    grid-template-columns: 1fr 230px auto;
-    gap: 16px;
-    align-items: end;
-}
-
-/* Grupo visual para cada filtro */
-.search-box,
-.select-box {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Etiquetas opcionales si las usas en HTML */
-.search-box label,
-.select-box label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-/* Caja de búsqueda principal */
-.search-box {
-    min-width: 280px;
-}
-
-.search-icon {
-    position: absolute;
-    left: 17px;
-    bottom: 15px;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    pointer-events: none;
-    transition: color 0.25s ease;
-}
-
-.search-box input {
-    width: 100%;
-    height: 50px;
-    padding: 0 44px 0 46px;
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    font-size: 0.92rem;
-    font-weight: 600;
-    color: var(--text-main);
-    background: #ffffff;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-}
-
-.search-box input::placeholder {
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-.search-box input:hover {
-    border-color: #cbd5e1;
-    background: #ffffff;
-}
-
-.search-box input:focus {
-    background: #ffffff;
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 
-        0 0 0 4px rgba(198, 40, 40, 0.08),
-        0 8px 18px rgba(15, 23, 42, 0.06);
-}
-
-.search-box:focus-within .search-icon {
-    color: var(--primary);
-}
-
-/* Botón para limpiar búsqueda, si tienes una X o enlace */
-.clear-search {
-    position: absolute;
-    right: 14px;
-    bottom: 11px;
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    border: none;
-    background: #f1f5f9;
-    color: var(--text-muted);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.clear-search:hover {
-    background: #fee2e2;
-    color: var(--primary);
-}
-
-/* Select de género */
-.select-box select {
-    width: 100%;
-    height: 50px;
-    padding: 0 42px 0 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-main);
-    background:
-        #ffffff
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")
-        no-repeat right 14px center;
-    background-size: 16px;
-    appearance: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-}
-
-.select-box select:hover {
-    border-color: #cbd5e1;
-}
-
-.select-box select:focus {
-    border-color: var(--primary);
-    outline: none;
-    box-shadow:
-        0 0 0 4px rgba(198, 40, 40, 0.08),
-        0 8px 18px rgba(15, 23, 42, 0.06);
-}
-
-/* Botón de filtro */
-.btn-filter {
-    height: 50px;
-    padding: 0 22px;
-    border: none;
-    border-radius: 14px;
-    background: var(--primary);
-    color: #ffffff;
-    font-size: 0.9rem;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 14px rgba(198, 40, 40, 0.22);
-}
-
-.btn-filter:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(198, 40, 40, 0.28);
-}
-
-.btn-filter:active {
-    transform: translateY(0);
-}
-
-/* Resumen de filtros activos */
-.active-filters {
-    margin-top: 16px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.filter-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: #fff7ed;
-    color: #9a3412;
-    border: 1px solid #fed7aa;
-    font-size: 0.78rem;
-    font-weight: 800;
-}
-
-.filter-chip i {
-    font-size: 0.8rem;
-}
-
-/* Estado visual cuando no hay filtros */
-.filter-hint {
-    margin-top: 14px;
-    color: var(--text-muted);
-    font-size: 0.82rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-    .combined-search-form {
-        grid-template-columns: 1fr;
-    }
-
-    .search-box {
-        min-width: 100%;
-    }
-
-    .btn-filter {
-        width: 100%;
-    }
-}
-
-@media (max-width: 600px) {
-    .filter-bar {
-        padding: 20px;
-    }
-
-    .search-box input,
-    .select-box select,
-    .btn-filter {
-        height: 48px;
-        border-radius: 12px;
-    }
-}
-
-/* --- AJUSTE: Tabla de Estudiantes (Más Espaciosa) --- */
-.list-body {
-    padding: 0;
-    overflow-x: auto;
-}
-
-.student-table { 
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.student-table th { 
-    background: var(--bg-light);
-    padding: 18px 24px; 
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border-bottom: 2px solid var(--border);
-    text-align: left;
-}
-
-.student-table td {
-    padding: 20px 24px; 
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: middle;
-}
-
-.student-name {
-    font-weight: 700;
-    color: var(--text-main);
-    font-size: 0.95rem;
-}
-
-/* --- Elementos de Celda --- */
-.ci-badge {
-    background: #f1f5f9;
-    color: var(--text-main);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-family: 'Consolas', monospace;
-    font-weight: 700;
-    border: 1px solid var(--border);
-}
-
-.status-active {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: #dcfce7;
-    color: #166534;
-    box-shadow: inset 0 0 0 1px #bbf7d0;
-}
-
-.status-inactive {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: #fee2e2;
-    color: #991b1b;
-    box-shadow: inset 0 0 0 1px #fecaca;
-}
-
-/* --- Botón Nuevo Estudiante --- */
 .btn-add-student {
-    background: var(--success);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 10px;
+
+  background: var(--primary-color);
+  color: var(--white);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 800;
+
+  transition: var(--transition);
 }
 
 .btn-add-student:hover {
-    background: var(--success-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+  background: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
-/* --- Acciones --- */
-.actions-cell {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
+
+/* =========================================================
+   5. SWITCH VER INACTIVOS
+   Control para alternar estudiantes activos/inactivos.
+   ========================================================= */
+
+.toggle-container {
+  min-height: 42px;
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: var(--gray-soft);
+  border: 1px solid var(--border-color);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.btn-action {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    font-size: 0.95rem;
-    border: 1px solid transparent;
+.toggle-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 800;
 }
 
-/* EDITAR */
-.btn-action.edit {
-    background: #dbeafe;
-    color: #1d4ed8;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
-.btn-action.edit:hover {
-    background: #2563eb;
-    color: white;
-    transform: translateY(-2px);
+.switch input {
+  display: none;
 }
 
-/* DESACTIVAR */
-.btn-action.delete {
-    background: #fee2e2;
-    color: #b91c1c;
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+
+  background-color: #cbd5e1;
+  border-radius: 999px;
+
+  transition: var(--transition);
 }
 
-.btn-action.delete:hover {
-    background: #dc2626;
-    color: white;
-    transform: translateY(-2px);
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+
+  background-color: var(--white);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.25);
+
+  transition: var(--transition);
 }
 
-/* REACTIVAR */
-.btn-action.reactivate {
-    background: #d1fae5;
-    color: #047857;
+.switch input:checked + .slider {
+  background-color: var(--primary-color);
 }
 
-.btn-action.reactivate:hover {
-    background: #059669;
-    color: white;
-    transform: translateY(-2px);
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
 }
 
-/* ELIMINAR PERMANENTE */
-.btn-action.delete-db {
-    background: #fff;
-    color: #dc2626;
-    border: 1px dashed #fca5a5;
+
+/* =========================================================
+   6. BANNER MODO SELECCIÓN
+   Se muestra cuando se elige estudiante para inscripción.
+   ========================================================= */
+
+.selection-banner {
+  margin: 20px 30px 0;
+  padding: 16px 18px;
+
+  background: var(--orange-soft);
+  color: #92400e;
+  border-left: 4px solid var(--orange-main);
+  border-radius: 12px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
-.btn-action.delete-db:hover {
-    background: #dc2626;
-    color: white;
-    border-color: #dc2626;
-    transform: translateY(-2px);
+.selection-banner i {
+  color: var(--orange-main);
+  font-size: 1.5rem;
+  margin-top: 2px;
 }
 
-.student-table td {
-    padding: 18px 20px; /* Más espacio interno en cada celda */
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: middle;
+
+/* =========================================================
+   7. FILTROS Y BUSCADOR
+   Barra de búsqueda por texto y género.
+   ========================================================= */
+
+.filter-bar {
+  padding: 24px 30px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Para que el nombre no se vea tan pequeño */
-.student-name {
-    font-weight: 700;
-    color: #1e293b;
-    font-size: 0.95rem;
-}
-
-/* --- Badges de Contacto --- */
-.contact-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.contact-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: none;
-    cursor: pointer;
-}
-
-/* Badge de Email */
-.email-badge {
-    background-color: #eff6ff;
-    color: #2563eb;
-    border: 1px solid #bfdbfe;
-}
-
-.email-badge:hover {
-    background-color: #2563eb;
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
-}
-
-/* Badge de Dirección */
-.address-badge {
-    background-color: #f0fdf4;
-    color: #16a34a;
-    border: 1px solid #bbf7d0;
-    padding: 6px 10px; /* Un poco más cuadrado para el puro icono */
-}
-
-.address-badge:hover {
-    background-color: #16a34a;
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(22, 163, 74, 0.2);
-}
-
-/* Estado sin datos */
-.no-contact {
-    color: #94a3b8;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    cursor: not-allowed;
-}
-
-/* --- Botón Seleccionar para Inscripción --- */
-.btn-action.select {
-    background: #dcfce7;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-}
-
-.btn-action.select:hover {
-    background: #16a34a;
-    color: #ffffff;
-    border-color: #16a34a;
-    transform: translateY(-2px);
-}
-
-/* --- Filtro manual estilo tutores --- */
 .student-filter-form {
-    display: grid;
-    grid-template-columns: 1fr 240px auto auto;
-    gap: 14px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 220px auto auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.search-box {
+  position: relative;
+  min-width: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.search-box input,
+.select-box select {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 14px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
+}
+
+.search-box input {
+  padding-left: 40px;
+}
+
+.search-box input:focus,
+.select-box select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
 }
 
 .btn-filter-student,
 .btn-clear-student {
-    height: 50px;
-    border-radius: 14px;
-    border: none;
-    text-decoration: none;
-    font-weight: 850;
-    font-size: 0.88rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    white-space: nowrap;
+  min-height: 44px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-filter-student {
-    background: #1e293b;
-    color: #ffffff;
-    padding: 0 20px;
+  padding: 10px 16px;
+  background: var(--secondary-color);
+  color: var(--white);
+  border: 1px solid var(--secondary-color);
 }
 
 .btn-filter-student:hover {
-    background: #c62828;
-    transform: translateY(-2px);
+  background: #0f172a;
 }
 
 .btn-clear-student {
-    width: 50px;
-    background: #ffffff;
-    color: #64748b;
-    border: 1.5px solid #e2e8f0;
+  width: 44px;
+  background: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
 }
 
 .btn-clear-student:hover {
-    color: #c62828;
-    background: #fff1f2;
-    border-color: #fecaca;
+  background: var(--red-soft);
 }
 
-/* --- Paginación estudiantes --- */
+
+/* =========================================================
+   8. CUERPO Y TABLA
+   Tabla tradicional en escritorio.
+   ========================================================= */
+
+.list-body {
+  padding: 24px 30px 30px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-table thead {
+  background: var(--bg-soft);
+}
+
+.student-table th {
+  padding: 15px 16px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.student-table td {
+  padding: 16px;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.student-table tbody tr {
+  transition: var(--transition);
+}
+
+.student-table tbody tr:hover {
+  background: var(--bg-soft);
+}
+
+.number-column {
+  width: 50px;
+}
+
+.status-column,
+.actions-column {
+  text-align: center;
+}
+
+
+/* =========================================================
+   9. DATOS DEL ESTUDIANTE
+   Nombre, CI, género, fecha, contacto.
+   ========================================================= */
+
+.row-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+
+  background: var(--gray-soft);
+  color: var(--gray-main);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.student-info {
+  display: grid;
+  gap: 3px;
+}
+
+.student-name {
+  color: var(--secondary-color);
+  font-weight: 900;
+}
+
+.ci-badge {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.demographics-info {
+  display: grid;
+  gap: 4px;
+}
+
+.demographics-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+}
+
+.gender-male {
+  color: var(--blue-main);
+}
+
+.gender-female {
+  color: var(--pink-main);
+}
+
+.sub-text {
+  color: var(--text-light);
+  font-size: 0.78rem;
+}
+
+.contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.contact-badge {
+  min-height: 34px;
+  border-radius: 999px;
+  padding: 7px 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border: none;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 900;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.email-badge {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+.email-badge:hover {
+  background: #dbeafe;
+}
+
+.address-badge {
+  background: var(--green-soft);
+  color: var(--green-main);
+}
+
+.address-badge:hover {
+  background: #dcfce7;
+}
+
+.no-contact {
+  background: var(--gray-soft);
+  color: var(--text-light);
+}
+
+
+/* =========================================================
+   10. ESTADOS
+   Activo e inactivo.
+   ========================================================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 7px 11px;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.status-cell {
+  text-align: center;
+}
+
+.status-active {
+  background: var(--green-soft);
+  color: var(--green-main);
+}
+
+.status-inactive {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+
+/* =========================================================
+   11. BOTONES DE ACCIÓN
+   Editar, desactivar, reactivar, eliminar y seleccionar.
+   ========================================================= */
+
+.actions-cell {
+  text-align: center;
+}
+
+.btn-action {
+  min-height: 36px;
+  min-width: 36px;
+  border-radius: 9px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 900;
+
+  transition: var(--transition);
+}
+
+.btn-action.edit {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+.btn-action.edit:hover {
+  background: #dbeafe;
+}
+
+.btn-action.delete,
+.btn-action.delete-db {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+.btn-action.delete:hover,
+.btn-action.delete-db:hover {
+  background: #fee2e2;
+}
+
+.btn-action.reactivate {
+  background: var(--green-soft);
+  color: var(--green-main);
+}
+
+.btn-action.reactivate:hover {
+  background: #dcfce7;
+}
+
+.btn-action.select {
+  width: auto;
+  padding: 7px 12px;
+  background: var(--orange-main);
+  color: var(--white);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.btn-action.select:hover {
+  background: #c2410c;
+}
+
+
+/* =========================================================
+   12. ESTADO VACÍO
+   Mensaje cuando no existen resultados.
+   ========================================================= */
+
+.empty-state {
+  padding: 50px 20px !important;
+  text-align: center;
+  color: var(--text-light);
+}
+
+.empty-state i {
+  display: block;
+  font-size: 2.6rem;
+  margin-bottom: 15px;
+  opacity: 0.55;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   13. PAGINACIÓN
+   Navegación entre páginas.
+   ========================================================= */
+
 .pagination {
-    display: flex;
+  margin-top: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.pagination-link,
+.pagination-current {
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 9px 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.pagination-link {
+  background: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.pagination-link:hover {
+  background: var(--red-soft);
+}
+
+.pagination-current {
+  background: var(--gray-soft);
+  color: var(--gray-main);
+}
+
+
+/* =========================================================
+   14. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Ajuste de espacios.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .student-list-header,
+  .filter-bar,
+  .list-body {
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+
+  .student-table th,
+  .student-table td {
+    padding: 15px 14px;
+  }
+}
+
+
+/* =========================================================
+   15. RESPONSIVE - TABLETS
+   Cabecera y filtros se apilan.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .student-list-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+  }
+
+  .student-filter-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-box {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* =========================================================
+   16. RESPONSIVE - CELULARES
+   La tabla se convierte en tarjetas.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .student-list-header {
+    padding: 24px 22px;
+  }
+
+  .header-info h3 {
+    font-size: 1.18rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-add-student,
+  .toggle-container,
+  .module-badge {
+    width: 100%;
     justify-content: center;
-    align-items: center;
-    gap: 14px;
+  }
+
+  .selection-banner {
+    margin: 18px 22px 0;
+  }
+
+  .filter-bar {
     padding: 22px;
-    border-top: 1px solid #e2e8f0;
-    background: #f8fafc;
+  }
+
+  .student-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-filter-student,
+  .btn-clear-student {
+    width: 100%;
+  }
+
+  .btn-clear-student {
+    width: 100%;
+  }
+
+  .list-body {
+    padding: 22px;
+  }
+
+  .table-responsive {
+    overflow-x: visible;
+  }
+
+  .student-table,
+  .student-table thead,
+  .student-table tbody,
+  .student-table th,
+  .student-table td,
+  .student-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .student-table thead {
+    display: none;
+  }
+
+  .student-table tbody {
+    background: var(--bg-soft);
+    padding: 14px;
+  }
+
+  .student-table tr {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .student-table td {
+    border-bottom: none;
+    padding: 10px 0;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+
+    text-align: right;
+  }
+
+  .student-table td::before {
+    content: attr(data-label);
+    color: var(--text-muted);
+    font-weight: 900;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .student-table td[data-label="Nombre Completo"] {
+    display: block;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 14px;
+    margin-bottom: 4px;
+  }
+
+  .student-table td[data-label="Nombre Completo"]::before {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .student-table td[data-label="Acciones"] {
+    display: block;
+    text-align: left;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
+    margin-top: 6px;
+  }
+
+  .student-table td[data-label="Acciones"]::before {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .actions-cell {
+    text-align: left;
+  }
+
+  .btn-action.select {
+    width: 100%;
+  }
+
+  .empty-state::before {
+    display: none;
+  }
 }
 
-.pagination a {
-    background: #1e293b;
-    color: #ffffff;
-    padding: 9px 16px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-}
 
-.pagination a:hover {
-    background: #c62828;
-    transform: translateY(-2px);
-}
+/* =========================================================
+   17. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce tamaños y espacios.
+   ========================================================= */
 
-.pagination span {
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 800;
-}
+@media (max-width: 480px) {
+  .student-list-card {
+    border-radius: 14px;
+  }
 
-@media (max-width: 900px) {
-    .student-filter-form {
-        grid-template-columns: 1fr;
-    }
+  .student-list-header {
+    padding: 22px 18px;
+  }
 
-    .btn-filter-student,
-    .btn-clear-student {
-        width: 100%;
-    }
+  .header-info h3 {
+    font-size: 1.08rem;
+  }
+
+  .header-info p {
+    font-size: 0.86rem;
+  }
+
+  .selection-banner {
+    margin: 16px 18px 0;
+    font-size: 0.84rem;
+  }
+
+  .filter-bar {
+    padding: 20px 18px;
+  }
+
+  .list-body {
+    padding: 20px 18px;
+  }
+
+  .student-table tbody {
+    padding: 12px;
+  }
+
+  .student-table tr {
+    padding: 13px;
+  }
+
+  .student-table td {
+    font-size: 0.86rem;
+    gap: 12px;
+  }
+
+  .badge,
+  .ci-badge,
+  .contact-badge {
+    font-size: 0.74rem;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .pagination-link,
+  .pagination-current {
+    width: 100%;
+  }
 }

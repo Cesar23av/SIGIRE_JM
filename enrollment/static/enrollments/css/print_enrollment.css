@@ -1,365 +1,566 @@
-/* --- Vista imprimible de inscripción --- */
+/* =========================================================
+   PRINT_ENROLLMENT.CSS - FORMULARIO IMPRIMIBLE DE INSCRIPCIÓN
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES
+   Colores base para pantalla e impresión.
+   ========================================================= */
+
+:root {
+  --primary-color: #c62828;
+  --secondary-color: #1e293b;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-page: #f1f5f9;
+  --bg-soft: #f8fafc;
+  --border-color: #dbe3ec;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --shadow-print: 0 20px 45px rgba(15, 23, 42, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+}
+
+
+/* =========================================================
+   2. CONFIGURACIÓN GENERAL
+   Base del documento en pantalla.
+   ========================================================= */
+
 * {
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-page);
 }
 
 body {
-    margin: 0;
-    background: #e5e7eb;
-    color: #111827;
-    font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
 }
 
-/* --- Acciones superiores --- */
+
+/* =========================================================
+   3. ACCIONES EN PANTALLA
+   Botones superiores: volver e imprimir.
+   No aparecen al imprimir.
+   ========================================================= */
+
 .print-actions {
-    max-width: 900px;
-    margin: 24px auto 14px;
-    padding: 0 16px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  max-width: 900px;
+  margin: 24px auto 16px;
+  padding: 0 16px;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-.btn-print,
+.btn-back,
+.btn-print {
+  min-height: 40px;
+  padding: 9px 15px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
 .btn-back {
-    min-height: 42px;
-    padding: 0 18px;
-    border-radius: 10px;
-    border: none;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.25s ease;
+  background: var(--white);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .btn-print {
-    background: #1e293b;
-    color: #ffffff;
+  background: var(--primary-color);
+  color: var(--white);
 }
 
-.btn-print:hover {
-    background: #c62828;
-    transform: translateY(-2px);
-}
 
-.btn-back {
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid #cbd5e1;
-}
+/* =========================================================
+   4. HOJA IMPRIMIBLE
+   Contenedor que simula una hoja tamaño carta/A4.
+   ========================================================= */
 
-.btn-back:hover {
-    color: #c62828;
-    border-color: #fecaca;
-    background: #fff1f2;
-}
-
-/* --- Página --- */
 .print-page {
-    width: 900px;
-    min-height: 1120px;
-    margin: 0 auto 40px;
-    background: #ffffff;
-    padding: 42px 48px;
-    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+  max-width: 900px;
+  margin: 0 auto 40px;
+  background: var(--white);
+  padding: 34px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-print);
 }
 
-/* --- Header --- */
+
+/* =========================================================
+   5. CABECERA INSTITUCIONAL
+   Logo textual, datos del colegio y RUDE.
+   ========================================================= */
+
 .print-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 3px solid #111827;
-    padding-bottom: 20px;
-    margin-bottom: 26px;
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .school-mark {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .school-logo {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: #1e293b;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 1.15rem;
-    border: 4px solid #c62828;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+
+  background: var(--primary-color);
+  color: var(--white);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
 }
 
 .school-info h1 {
-    margin: 0;
-    font-size: 1.35rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: #111827;
+  color: var(--secondary-color);
+  font-size: 1.45rem;
+  font-weight: 900;
+  line-height: 1.2;
 }
 
 .school-info p {
-    margin: 4px 0;
-    font-size: 0.95rem;
-    color: #374151;
-    font-weight: 700;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 4px;
 }
 
 .school-info span {
-    font-size: 0.82rem;
-    color: #6b7280;
-    font-weight: 700;
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .document-code {
-    border: 1.5px solid #111827;
-    padding: 10px 14px;
-    border-radius: 10px;
-    text-align: center;
-    min-width: 170px;
+  min-width: 180px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  text-align: center;
+  background: var(--bg-soft);
 }
 
 .document-code span {
-    display: block;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: #6b7280;
-    font-weight: 900;
-    margin-bottom: 4px;
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 .document-code strong {
-    font-family: Consolas, monospace;
-    font-size: 0.95rem;
-    color: #111827;
+  color: var(--secondary-color);
+  font-size: 1rem;
+  word-break: break-word;
 }
 
-/* --- Secciones --- */
+
+/* =========================================================
+   6. SECCIONES DEL DOCUMENTO
+   Bloques principales del formulario.
+   ========================================================= */
+
 .print-section {
-    margin-bottom: 24px;
+  margin-bottom: 22px;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .print-section h2 {
-    margin: 0 0 13px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid #d1d5db;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    color: #111827;
-    font-weight: 900;
+  color: var(--secondary-color);
+  font-size: 1rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* --- Campos --- */
+
+/* =========================================================
+   7. GRID DE INFORMACIÓN
+   Campos del estudiante, tutor y datos académicos.
+   ========================================================= */
+
 .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 11px 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .info-field {
-    border: 1px solid #d1d5db;
-    border-radius: 9px;
-    padding: 10px 12px;
-    min-height: 58px;
-    background: #f9fafb;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  min-height: 58px;
 }
 
 .info-field.large {
-    grid-column: span 2;
+  grid-column: 1 / -1;
 }
 
 .info-field span {
-    display: block;
-    font-size: 0.68rem;
-    color: #6b7280;
-    text-transform: uppercase;
-    font-weight: 900;
-    margin-bottom: 5px;
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
 }
 
 .info-field strong {
-    display: block;
-    font-size: 0.85rem;
-    color: #111827;
-    font-weight: 800;
-    line-height: 1.35;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
-/* --- Tabla documentos --- */
+
+/* =========================================================
+   8. TABLA DE DOCUMENTOS
+   Documentos entregados, pendientes y fechas.
+   ========================================================= */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .documents-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-}
-
-.documents-table th,
-.documents-table td {
-    border: 1px solid #d1d5db;
-    padding: 9px 10px;
-    text-align: left;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
 }
 
 .documents-table th {
-    background: #f3f4f6;
-    color: #374151;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    font-weight: 900;
+  background: var(--secondary-color);
+  color: var(--white);
+  padding: 9px 10px;
+  text-align: left;
+  font-size: 0.76rem;
+  text-transform: uppercase;
 }
 
 .documents-table td {
-    color: #111827;
-    font-weight: 600;
+  padding: 9px 10px;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.documents-table tbody tr:nth-child(even) {
+  background: var(--bg-soft);
 }
 
 .empty-cell {
-    text-align: center;
-    color: #6b7280;
-    font-style: italic;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 700;
 }
 
-/* --- Observaciones --- */
+
+/* =========================================================
+   9. OBSERVACIONES Y FECHA LÍMITE
+   Bloques informativos adicionales.
+   ========================================================= */
+
 .observation-box {
-    border: 1px dashed #9ca3af;
-    background: #f9fafb;
-    border-radius: 9px;
-    padding: 12px;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: #374151;
-    font-weight: 600;
+  background: var(--bg-soft);
+  border-left: 4px solid var(--primary-color);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  color: var(--text-main);
+  font-size: 0.9rem;
 }
 
-/* --- Fecha límite --- */
 .deadline-section {
-    border: 1px solid #f59e0b;
-    background: #fffbeb;
-    color: #92400e;
-    padding: 12px 14px;
-    border-radius: 9px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 28px;
+  margin: 18px 0 24px;
+  background: var(--red-soft);
+  color: #991b1b;
+  border-left: 4px solid var(--red-main);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
-/* --- Empty --- */
 .empty-box {
-    border: 1px dashed #cbd5e1;
-    background: #f8fafc;
-    border-radius: 9px;
-    padding: 12px;
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 700;
+  background: var(--bg-soft);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
-/* --- Firmas --- */
+
+/* =========================================================
+   10. FIRMAS
+   Espacios para firmas físicas.
+   ========================================================= */
+
 .signature-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 70px;
-    margin-top: 70px;
+  margin-top: 42px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 54px;
+
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .signature-box {
-    text-align: center;
+  text-align: center;
 }
 
 .signature-line {
-    border-top: 1.5px solid #111827;
-    margin-bottom: 9px;
+  border-top: 1.5px solid #111827;
+  margin-bottom: 8px;
 }
 
 .signature-box span {
-    font-size: 0.78rem;
-    color: #374151;
-    font-weight: 800;
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
-/* --- Footer --- */
+
+/* =========================================================
+   11. FOOTER
+   Texto final del comprobante.
+   ========================================================= */
+
 .print-footer {
-    margin-top: 38px;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 12px;
-    text-align: center;
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
 }
 
 .print-footer p {
-    margin: 0;
-    color: #6b7280;
-    font-size: 0.72rem;
-    font-weight: 600;
+  color: var(--text-light);
+  font-size: 0.78rem;
 }
 
-/* --- Impresión --- */
+
+/* =========================================================
+   12. RESPONSIVE - PANTALLA
+   Ajustes para ver el comprobante desde celular.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .print-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .btn-back,
+  .btn-print {
+    width: 100%;
+  }
+
+  .print-page {
+    margin: 0 12px 30px;
+    padding: 24px 20px;
+    border-radius: 14px;
+  }
+
+  .print-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .document-code {
+    width: 100%;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .signature-section {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .school-mark {
+    align-items: flex-start;
+  }
+
+  .school-logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+  }
+
+  .school-info h1 {
+    font-size: 1.15rem;
+  }
+
+  .school-info p,
+  .school-info span {
+    font-size: 0.82rem;
+  }
+
+  .print-page {
+    padding: 22px 16px;
+  }
+
+  .documents-table {
+    font-size: 0.78rem;
+  }
+
+  .documents-table th,
+  .documents-table td {
+    padding: 8px;
+  }
+}
+
+
+/* =========================================================
+   13. CONFIGURACIÓN DE IMPRESIÓN
+   Oculta botones y optimiza el documento físico.
+   ========================================================= */
+
 @media print {
-    body {
-        background: #ffffff;
-    }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
 
-    .print-actions {
-        display: none;
-    }
+  html,
+  body {
+    background: #ffffff;
+  }
 
-    .print-page {
-        width: 100%;
-        min-height: auto;
-        margin: 0;
-        padding: 18mm 16mm;
-        box-shadow: none;
-    }
+  .print-actions {
+    display: none !important;
+  }
 
-    .print-header {
-        page-break-inside: avoid;
-    }
+  .print-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 
-    .print-section,
-    .deadline-section,
-    .signature-section {
-        page-break-inside: avoid;
-    }
-}
+  .print-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+  }
 
-/* --- Responsive pantalla --- */
-@media (max-width: 940px) {
-    .print-page {
-        width: calc(100% - 24px);
-        padding: 32px 24px;
-    }
+  .school-logo {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 
-    .print-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
+  .document-code,
+  .info-field,
+  .observation-box,
+  .deadline-section,
+  .empty-box {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 
-    .document-code {
-        width: 100%;
-    }
+  .print-section {
+    margin-bottom: 16px;
+  }
 
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
+  .print-section h2 {
+    font-size: 0.95rem;
+    margin-bottom: 9px;
+  }
 
-    .info-field.large {
-        grid-column: span 1;
-    }
+  .info-grid {
+    gap: 8px;
+  }
 
-    .signature-section {
-        grid-template-columns: 1fr;
-        gap: 55px;
-    }
+  .info-field {
+    padding: 8px 10px;
+    min-height: auto;
+  }
 
-    .print-actions {
-        justify-content: center;
-    }
+  .info-field span {
+    font-size: 0.68rem;
+  }
+
+  .info-field strong {
+    font-size: 0.82rem;
+  }
+
+  .documents-table {
+    font-size: 0.78rem;
+  }
+
+  .documents-table th,
+  .documents-table td {
+    padding: 7px 8px;
+  }
+
+  .signature-section {
+    margin-top: 36px;
+  }
+
+  .print-footer {
+    margin-top: 20px;
+  }
 }

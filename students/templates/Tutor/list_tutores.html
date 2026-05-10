@@ -1,173 +1,242 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
 
-{% block page_title %}
-  Gestión de Tutores
-{% endblock %}
+{% block page_title %}Gestión de Tutores{% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'students/css/list_tutores.css' %}?v=7" />
 
-  <div class="list-container-wrapper">
-    <div class="tutor-list-card">
-      <div class="list-header">
-        <div class="header-info">
-          <h3><i class="fa-solid fa-users"></i> Directorio de Tutores</h3>
-          <p>Lista general de padres de familia y apoderados.</p>
-        </div>
+<link rel="stylesheet" href="{% static 'students/css/list_tutores.css' %}?v=8" />
 
-        <div class="header-actions">
-          <form method="GET" action="{% url 'list_tutores' %}" class="search-form tutor-filter-form">
-            {% if request.GET.modo_seleccion %}
-              <input type="hidden" name="modo_seleccion" value="true" />
-            {% endif %}
+<section class="tutor-list-page">
 
-            {% if request.GET.next %}
-              <input type="hidden" name="next" value="{{ request.GET.next }}" />
-            {% endif %}
+  <div class="tutor-list-card">
 
-            <div class="search-box">
-              <i class="fa-solid fa-magnifying-glass search-icon"></i>
-
-              <input type="text" name="search" placeholder="Nombre, CI u ocupación..." value="{{ search_query }}" />
-            </div>
-
-            <button type="submit" class="btn-filter-tutor">
-              <i class="fa-solid fa-filter"></i>
-              Filtrar
-            </button>
-
-            {% if search_query %}
-              <a href="{% url 'list_tutores' %}{% if request.GET.modo_seleccion %}
-                  ?modo_seleccion=true
-                  {% if request.GET.next %}
-                    &next={{ request.GET.next }}
-                  {% endif %}
-                {% endif %}"
-                class="btn-clear-tutor"
-                title="Limpiar búsqueda">
-                <i class="fa-solid fa-rotate-left"></i>
-              </a>
-            {% endif %}
-          </form>
-
-          <a href="{% url 'registrar_tutor' %}" class="btn-add-tutor"><i class="fa-solid fa-user-plus"></i> Nuevo Tutor</a>
-        </div>
+    <div class="tutor-list-header">
+      <div class="header-info">
+        <h3>
+          <i class="fa-solid fa-users"></i>
+          Directorio de Tutores
+        </h3>
+        <p>Lista general de padres de familia y apoderados registrados en el sistema.</p>
       </div>
 
-      {% if search_query %}
-        <div class="search-results-info">
-          <i class="fa-solid fa-filter"></i> Se encontraron <strong>{{ tutores.paginator.count }}</strong> resultados para: "<strong>{{ search_query }}</strong>"
-        </div>
-      {% endif %}
+      <div class="header-actions">
+        <form
+          method="GET"
+          action="{% url 'list_tutores' %}"
+          class="search-form tutor-filter-form"
+        >
+          {% if request.GET.modo_seleccion %}
+            <input type="hidden" name="modo_seleccion" value="true">
+          {% endif %}
 
-      {% if request.GET.modo_seleccion %}
-        <div class="selection-banner">
-          <i class="fa-solid fa-circle-info fa-2x"></i>
-          <div>
-            <strong>Modo Selección de Tutor:</strong>
-            Busque en la lista al tutor que desea asociar con el nuevo estudiante y presione el botón naranja <strong>"Seleccionar"</strong>.
+          {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+          {% endif %}
+
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+            <input
+              type="text"
+              name="search"
+              placeholder="Nombre, CI u ocupación..."
+              value="{{ search_query }}"
+            >
           </div>
-        </div>
-      {% endif %}
 
-      <div class="list-body">
+          <button type="submit" class="btn-filter-tutor">
+            <i class="fa-solid fa-filter"></i>
+            Filtrar
+          </button>
+
+          {% if search_query %}
+            <a
+              href="{% url 'list_tutores' %}{% if request.GET.modo_seleccion %}?modo_seleccion=true{% if request.GET.next %}&next={{ request.GET.next }}{% endif %}{% endif %}"
+              class="btn-clear-tutor"
+              title="Limpiar búsqueda"
+            >
+              <i class="fa-solid fa-rotate-left"></i>
+            </a>
+          {% endif %}
+        </form>
+
+        {% if not request.GET.modo_seleccion %}
+          <a href="{% url 'registrar_tutor' %}" class="btn-add-tutor">
+            <i class="fa-solid fa-user-plus"></i>
+            Nuevo Tutor
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if search_query %}
+      <div class="search-results-info">
+        <i class="fa-solid fa-filter"></i>
+        <span>
+          Se encontraron <strong>{{ tutores.paginator.count }}</strong> resultados para:
+          "<strong>{{ search_query }}</strong>"
+        </span>
+      </div>
+    {% endif %}
+
+    {% if request.GET.modo_seleccion %}
+      <div class="selection-banner">
+        <i class="fa-solid fa-circle-info"></i>
+
+        <div>
+          <strong>Modo Selección de Tutor:</strong>
+          Busque en la lista al tutor que desea asociar con el nuevo estudiante y presione
+          <strong>Seleccionar</strong>.
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="list-body">
+      <div class="table-responsive">
         <table class="tutor-table">
           <thead>
             <tr>
-              <th style="width: 50px;">#</th>
+              <th class="number-column">#</th>
               <th>Nombre Completo</th>
               <th>Cédula de Identidad</th>
               <th>Contacto</th>
               <th>Ocupación</th>
 
               {% if request.GET.modo_seleccion %}
-                <th style="text-align: center; background-color: #fef3c7;">Seleccionar</th>
+                <th class="selection-column">Seleccionar</th>
               {% else %}
-                <th style="text-align: center;">Acciones</th>
+                <th class="actions-column">Acciones</th>
               {% endif %}
             </tr>
           </thead>
+
           <tbody>
             {% for tutor in tutores %}
               <tr>
-                <td>
-                  <span class="row-number">{{ tutores.start_index|add:forloop.counter0 }}</span>
+                <td data-label="#">
+                  <span class="row-number">
+                    {{ tutores.start_index|add:forloop.counter0 }}
+                  </span>
                 </td>
 
-                <td>
+                <td data-label="Nombre Completo">
                   <div class="tutor-info">
-                    <span class="tutor-name">{{ tutor.apellidos }}, {{ tutor.nombres }}</span>
+                    <span class="tutor-name">
+                      {{ tutor.apellidos }}, {{ tutor.nombres }}
+                    </span>
                     <small class="tutor-sub">Apoderado</small>
                   </div>
                 </td>
 
-                <td>
-                  <span class="ci-badge">{{ tutor.cedula_identidad }}</span>
+                <td data-label="Cédula de Identidad">
+                  <span class="ci-badge">
+                    {{ tutor.cedula_identidad }}
+                  </span>
                 </td>
 
-                <td>
-                  <a href="https://wa.me/591{{ tutor.celular }}" target="_blank" class="whatsapp-link"><i class="fa-brands fa-whatsapp"></i> {{ tutor.celular }}</a>
+                <td data-label="Contacto">
+                  <a
+                    href="https://wa.me/591{{ tutor.celular }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="whatsapp-link"
+                  >
+                    <i class="fa-brands fa-whatsapp"></i>
+                    {{ tutor.celular }}
+                  </a>
                 </td>
 
-                <td>{{ tutor.ocupacion }}</td>
+                <td data-label="Ocupación">
+                  {{ tutor.ocupacion }}
+                </td>
 
                 {% if request.GET.modo_seleccion %}
-                  <td style="text-align: center; background-color: #fffbeb;">
-                    <a href="{% url 'crear_estudiante' %}?tutor_id={{ tutor.pk }}" class="btn-action select" style="background: #f59e0b; color: white; width: auto; padding: 6px 12px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-check-to-slot"></i> SELECCIONAR</a>
+                  <td data-label="Seleccionar" class="selection-cell">
+                    <a
+                      href="{% url 'crear_estudiante' %}?tutor_id={{ tutor.pk }}"
+                      class="btn-action select"
+                    >
+                      <i class="fa-solid fa-check-to-slot"></i>
+                      Seleccionar
+                    </a>
                   </td>
                 {% else %}
-                  <td class="actions-cell">
-                    <a href="{% url 'editar_tutor' tutor.pk %}" class="btn-action edit" title="Editar Tutor"><i class="fa-solid fa-pen-to-square"></i></a>
+                  <td data-label="Acciones" class="actions-cell">
+                    <a
+                      href="{% url 'editar_tutor' tutor.pk %}"
+                      class="btn-action edit"
+                      title="Editar tutor"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
 
                     {% if not tutor.tiene_estudiantes_db %}
-                      <a href="{% url 'eliminar_tutor' tutor.pk %}" class="btn-action delete" onclick="return confirm('¿Seguro que deseas eliminar este tutor?');" title="Eliminar Tutor"><i class="fa-solid fa-trash-can"></i></a>
+                      <a
+                        href="{% url 'eliminar_tutor' tutor.pk %}"
+                        class="btn-action delete alerta-eliminar"
+                        data-nombre="al tutor {{ tutor.nombres }} {{ tutor.apellidos }}"
+                        data-extra="Esta acción eliminará el tutor si no tiene estudiantes asignados."
+                        title="Eliminar tutor"
+                      >
+                        <i class="fa-solid fa-trash-can"></i>
+                      </a>
                     {% else %}
-                      <span class="btn-action" style="background: #f1f5f9; color: #94a3b8; cursor: not-allowed;" title="Protegido: Tiene estudiantes asignados"><i class="fa-solid fa-lock"></i></span>
+                      <span
+                        class="btn-action locked"
+                        title="Protegido: tiene estudiantes asignados"
+                      >
+                        <i class="fa-solid fa-lock"></i>
+                      </span>
                     {% endif %}
                   </td>
                 {% endif %}
               </tr>
             {% empty %}
               <tr>
-                <td colspan="6" style="text-align:center; padding: 30px;">
-                  <i class="fa-solid fa-folder-open" style="color: #cbd5e1; font-size: 2rem; margin-bottom: 10px;"></i>
-                  <br />
-                  No hay tutores registrados
+                <td colspan="6" class="empty-state">
+                  <i class="fa-solid fa-folder-open"></i>
+                  <span>No hay tutores registrados</span>
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-        {% if tutores.has_other_pages %}
-          <div class="pagination">
-            {% if tutores.has_previous %}
-              <a href="?page={{ tutores.previous_page_number }}{% if search_query %}
-                  
-                  &search={{ search_query }}
-                {% endif %}">
-                <i class="fa-solid fa-chevron-left"></i>
-                Anterior
-              </a>
-            {% endif %}
-
-            <span>Página {{ tutores.number }} de {{ tutores.paginator.num_pages }}</span>
-
-            {% if tutores.has_next %}
-              <a href="?page={{ tutores.next_page_number }}{% if search_query %}
-                  
-                  &search={{ search_query }}
-                {% endif %}">
-                Siguiente
-                <i class="fa-solid fa-chevron-right"></i>
-              </a>
-            {% endif %}
-          </div>
-        {% endif %}
       </div>
+
+      {% if tutores.has_other_pages %}
+        <div class="pagination">
+          {% if tutores.has_previous %}
+            <a
+              href="?page={{ tutores.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if request.GET.modo_seleccion %}&modo_seleccion=true{% endif %}{% if request.GET.next %}&next={{ request.GET.next }}{% endif %}"
+              class="pagination-link"
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+              Anterior
+            </a>
+          {% endif %}
+
+          <span class="pagination-current">
+            Página {{ tutores.number }} de {{ tutores.paginator.num_pages }}
+          </span>
+
+          {% if tutores.has_next %}
+            <a
+              href="?page={{ tutores.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if request.GET.modo_seleccion %}&modo_seleccion=true{% endif %}{% if request.GET.next %}&next={{ request.GET.next }}{% endif %}"
+              class="pagination-link"
+            >
+              Siguiente
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
     </div>
+
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="{% static 'students/js/list_tutores.js' %}?v=4"></script>
+</section>
+
+<script src="{% static 'students/js/list_tutores.js' %}?v=5"></script>
+
 {% endblock %}

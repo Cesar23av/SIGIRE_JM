@@ -1,99 +1,192 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
 
-{% block page_title %}
-  Estructura Académica
-{% endblock %}
+{% block page_title %}Estructura Académica{% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=20" />
 
-  <div class="academic-dashboard">
-    <div class="header-section">
+<link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=21" />
+
+<section class="academic-dashboard">
+
+  <div class="academic-header">
+    <div>
       <h2>Panel de Control Académico</h2>
-      <p>Gestión estratégica de periodos escolares y oferta académica.</p>
+      <p>Gestión estratégica de periodos escolares, niveles, grados, paralelos y requisitos.</p>
     </div>
+  </div>
 
-    <div class="grid-container">
-      <div class="card">
-        <div class="card-header">
-          <h3><i class="fa-solid fa-calendar-check"></i> Gestiones Escolares</h3>
-          {% if mostrar_btn_gestion %}
-            <a href="{% url 'crear_gestion' %}" class="btn-sm btn-add alerta-eliminar" data-nombre="la Gestión {{ siguiente_anio }}" data-extra="Esta acción activará el nuevo año escolar y cerrará la gestión actual."><i class="fa-solid fa-plus"></i> Abrir {{ siguiente_anio }}</a>
-          {% endif %}
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
-            {% for gestion in gestiones %}
-              <li class="list-item">
-                <span class="gestion-year">{{ gestion.anio }}</span>
-                <div class="actions">
-                  {% if gestion.estado %}
-                    <span class="badge active"><i class="fa-solid fa-check-circle"></i> Gestión Actual</span>
-                  {% else %}
-                    {% if gestion.anio >= anio_actual %}
-                      <a href="{% url 'toggle_gestion' gestion.pk %}" class="btn-toggle"><i class="fa-solid fa-play"></i> Activar</a>
-                    {% else %}
-                      <span class="badge" style="background: #f1f5f9; color: #94a3b8;"><i class="fa-solid fa-lock"></i> Histórico</span>
-                    {% endif %}
-                  {% endif %}
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
+  <div class="academic-grid">
+
+    <section class="academic-card">
+      <div class="card-header">
+        <h3>
+          <i class="fa-solid fa-calendar-check"></i>
+          Gestiones Escolares
+        </h3>
+
+        {% if mostrar_btn_gestion %}
+          <a
+            href="{% url 'crear_gestion' %}"
+            class="btn-sm btn-add alerta-eliminar"
+            data-nombre="la Gestión {{ siguiente_anio }}"
+            data-extra="Esta acción activará el nuevo año escolar y cerrará la gestión actual."
+          >
+            <i class="fa-solid fa-plus"></i>
+            Abrir {{ siguiente_anio }}
+          </a>
+        {% endif %}
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h3><i class="fa-solid fa-sitemap"></i> Niveles y Grados</h3>
-          <button onclick="abrirSelectorCreacion('{% url 'crear_nivel_grado' %}')" class="btn-sm btn-add" title="Añadir Nuevo..."><i class="fa-solid fa-plus"></i></button>
-        </div>
-        <div class="card-body">
-          {% for nivel in niveles %}
-            <div class="nivel-group">
-              <div class="nivel-header">
-                <h4 class="nivel-title">{{ nivel.nombre }}</h4>
-                <div class="action-buttons">
-                  <a href="{% url 'editar_nivel' nivel.pk %}" class="btn-edit" style="color: #3b82f6;"><i class="fa-solid fa-pen"></i></a>
+      <div class="card-body">
+        <ul class="list-group">
+          {% for gestion in gestiones %}
+            <li class="list-item">
+              <span class="gestion-year">{{ gestion.anio }}</span>
 
-                  {% with tiene_grados=nivel.grados.all %}
-                    {% if not tiene_grados %}
-                      <a href="{% url 'eliminar_nivel' nivel.pk %}" class="btn-delete alerta-eliminar" data-nombre="{{ nivel.nombre }}" style="color: #ef4444;"><i class="fa-solid fa-trash"></i></a>
-                    {% endif %}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="grados-tags">
-                {% for grado in grados %}
-                  {% if grado.nivel == nivel %}
-                    <div class="tag-grado">
-                      <span>{{ grado.nombre }}</span>
-                      <div class="tag-actions">
-                        {% if not grado.id in grados_ocupados %}
-                          <a href="{% url 'editar_grado' grado.pk %}" style="color: #0ea5e9;" title="Editar Grado"><i class="fa-solid fa-pen"></i></a>
-
-                          <a href="{% url 'eliminar_grado' grado.pk %}" class="alerta-eliminar" data-nombre="{{ grado.nombre }}" style="color: #ef4444;" title="Eliminar Grado"><i class="fa-solid fa-xmark"></i></a>
-                        {% else %}
-                          <span style="color: #94a3b8; font-size: 0.75rem;" title="Grado bloqueado: Tiene paralelos activos"><i class="fa-solid fa-lock"></i></span>
-                        {% endif %}
-                      </div>
-                    </div>
+              <div class="actions">
+                {% if gestion.estado %}
+                  <span class="badge active">
+                    <i class="fa-solid fa-check-circle"></i>
+                    Gestión Actual
+                  </span>
+                {% else %}
+                  {% if gestion.anio >= anio_actual %}
+                    <a href="{% url 'toggle_gestion' gestion.pk %}" class="btn-toggle">
+                      <i class="fa-solid fa-play"></i>
+                      Activar
+                    </a>
+                  {% else %}
+                    <span class="badge historical">
+                      <i class="fa-solid fa-lock"></i>
+                      Histórico
+                    </span>
                   {% endif %}
-                {% endfor %}
+                {% endif %}
+              </div>
+            </li>
+          {% empty %}
+            <li class="empty-list-item">
+              No hay gestiones registradas.
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <section class="academic-card">
+      <div class="card-header">
+        <h3>
+          <i class="fa-solid fa-sitemap"></i>
+          Niveles y Grados
+        </h3>
+
+        <button
+          type="button"
+          onclick="abrirSelectorCreacion('{% url 'crear_nivel_grado' %}')"
+          class="btn-sm btn-add"
+          title="Añadir nuevo"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+        {% for nivel in niveles %}
+          <div class="nivel-group">
+            <div class="nivel-header">
+              <h4 class="nivel-title">{{ nivel.nombre }}</h4>
+
+              <div class="action-buttons">
+                <a
+                  href="{% url 'editar_nivel' nivel.pk %}"
+                  class="btn-icon btn-edit"
+                  title="Editar nivel"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+
+                {% with tiene_grados=nivel.grados.all %}
+                  {% if not tiene_grados %}
+                    <a
+                      href="{% url 'eliminar_nivel' nivel.pk %}"
+                      class="btn-icon btn-delete alerta-eliminar"
+                      data-nombre="{{ nivel.nombre }}"
+                      title="Eliminar nivel"
+                    >
+                      <i class="fa-solid fa-trash"></i>
+                    </a>
+                  {% endif %}
+                {% endwith %}
               </div>
             </div>
-          {% endfor %}
-        </div>
+
+            <div class="grados-tags">
+              {% for grado in grados %}
+                {% if grado.nivel == nivel %}
+                  <div class="tag-grado">
+                    <span>{{ grado.nombre }}</span>
+
+                    <div class="tag-actions">
+                      {% if not grado.id in grados_ocupados %}
+                        <a
+                          href="{% url 'editar_grado' grado.pk %}"
+                          class="tag-action edit"
+                          title="Editar grado"
+                        >
+                          <i class="fa-solid fa-pen"></i>
+                        </a>
+
+                        <a
+                          href="{% url 'eliminar_grado' grado.pk %}"
+                          class="tag-action delete alerta-eliminar"
+                          data-nombre="{{ grado.nombre }}"
+                          title="Eliminar grado"
+                        >
+                          <i class="fa-solid fa-xmark"></i>
+                        </a>
+                      {% else %}
+                        <span
+                          class="tag-action locked"
+                          title="Grado bloqueado: tiene paralelos activos"
+                        >
+                          <i class="fa-solid fa-lock"></i>
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% empty %}
+                <p class="empty-small">No hay grados registrados.</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="empty-state-card">
+            <i class="fa-solid fa-folder-open"></i>
+            <p>No hay niveles registrados todavía.</p>
+          </div>
+        {% endfor %}
       </div>
+    </section>
+
+  </div>
+
+  <section class="academic-card full-width mt-20">
+    <div class="card-header">
+      <h3>
+        <i class="fa-solid fa-users-rectangle"></i>
+        Configuración de Paralelos y Cupos
+      </h3>
+
+      <button type="button" class="btn-sm btn-add" onclick="abrirModal()">
+        <i class="fa-solid fa-plus-circle"></i>
+        Nuevo Paralelo
+      </button>
     </div>
 
-    <div class="card full-width mt-20">
-      <div class="card-header">
-        <h3><i class="fa-solid fa-users-rectangle"></i> Configuración de Paralelos y Cupos</h3>
-        <button class="btn-sm btn-add" onclick="abrirModal()"><i class="fa-solid fa-plus-circle"></i> Nuevo Paralelo</button>
-      </div>
-      <div class="card-body">
+    <div class="card-body">
+      <div class="table-responsive">
         <table class="tabla-academica">
           <thead>
             <tr>
@@ -101,28 +194,60 @@
               <th>Grado Escolar</th>
               <th>Paralelo</th>
               <th>Cupo Disponible</th>
-              <th style="text-align: center;">Acciones</th>
+              <th class="text-center">Acciones</th>
             </tr>
           </thead>
+
           <tbody>
             {% for paralelo in paralelos %}
               <tr>
-                <td>{{ paralelo.grado.nivel.nombre }}</td>
-                <td>
+                <td data-label="Nivel Educativo">
+                  {{ paralelo.grado.nivel.nombre }}
+                </td>
+
+                <td data-label="Grado Escolar">
                   <strong>{{ paralelo.grado.nombre }}</strong>
                 </td>
-                <td>
+
+                <td data-label="Paralelo">
                   <span class="badge-paralelo">{{ paralelo.letra }}</span>
                 </td>
-                <td>
-                  <i class="fa-solid fa-user-group"></i> {{ paralelo.cupo_max }} plazas
+
+                <td data-label="Cupo Disponible">
+                  <span class="capacity-text">
+                    <i class="fa-solid fa-user-group"></i>
+                    {{ paralelo.cupo_max }} plazas
+                  </span>
                 </td>
-                <td style="text-align: center;">
+
+                <td data-label="Acciones" class="text-center">
                   {% if not paralelo.tiene_inscritos %}
-                    <a href="{% url 'eliminar_paralelo' paralelo.pk %}" class="alerta-eliminar" data-nombre="Paralelo {{ paralelo.letra }}" style="color: #ef4444; font-size: 1.2rem;" title="Desactivar Paralelo"><i class="fa-solid fa-trash-can"></i></a>
+                    <a
+                      href="{% url 'eliminar_paralelo' paralelo.pk %}"
+                      class="btn-delete-paralelo alerta-eliminar"
+                      data-nombre="Paralelo {{ paralelo.letra }}"
+                      title="Desactivar paralelo"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </a>
                   {% else %}
-                    <span class="badge" style="background: #f8fafc; color: #94a3b8; font-size: 0.8rem; border: 1px solid #e2e8f0; padding: 6px 12px;" title="Protegido: Tiene alumnos inscritos"><i class="fa-solid fa-lock"></i> En Uso</span>
+                    <span
+                      class="badge in-use"
+                      title="Protegido: tiene alumnos inscritos"
+                    >
+                      <i class="fa-solid fa-lock"></i>
+                      En Uso
+                    </span>
                   {% endif %}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="empty-state-row">
+                  <div class="empty-info">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <p>No hay paralelos registrados todavía.</p>
+                  </div>
                 </td>
               </tr>
             {% endfor %}
@@ -130,110 +255,149 @@
         </table>
       </div>
     </div>
+  </section>
 
-    <div class="card full-width mt-20">
-      <div class="card-header">
-        <h3><i class="fa-solid fa-file-circle-check"></i> Requisitos de Inscripción</h3>
-      </div>
+  <section class="academic-card full-width mt-20">
+    <div class="card-header">
+      <h3>
+        <i class="fa-solid fa-file-circle-check"></i>
+        Requisitos de Inscripción
+      </h3>
+    </div>
 
-      <div class="card-body">
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-            Define la documentación obligatoria para los nuevos registros.
-        </p>
+    <div class="card-body">
+      <p class="section-description">
+        Define la documentación obligatoria para los nuevos registros.
+      </p>
 
-        <form id="formRequisito" action="{% url 'crear_requisito' %}" method="POST" class="requirement-form-inline">
-    {% csrf_token %}
-    <div class="inline-group">
-        <div class="input-wrapper">
+      <form
+        id="formRequisito"
+        action="{% url 'crear_requisito' %}"
+        method="POST"
+        class="requirement-form-inline"
+      >
+        {% csrf_token %}
+
+        <div class="inline-group">
+          <div class="input-wrapper">
             <i class="fa-solid fa-file-signature input-icon"></i>
-            <input type="text" name="nombre_documento" id="inputNombreReq" 
-                   placeholder="Nombre del documento (Ej: Certificado de Nacimiento Original)" required>
-        </div>
-        <label class="req-obligatorio-check">
+
+            <input
+              type="text"
+              name="nombre_documento"
+              id="inputNombreReq"
+              placeholder="Nombre del documento. Ej: Certificado de Nacimiento Original"
+              required
+            >
+          </div>
+
+          <label class="req-obligatorio-check">
             <input type="checkbox" name="obligatorio" id="inputObligatorioReq" checked>
             <span>Obligatorio</span>
-        </label>
-        
-        <button type="submit" id="btnAddReq" class="btn-add-requirement">
-            <i class="fa-solid fa-plus"></i> Añadir Requisito
-        </button>
+          </label>
 
-        <button type="submit" id="btnUpdateReq" class="btn-update-req" style="display: none;">
-            <i class="fa-solid fa-floppy-disk"></i> Actualizar
-        </button>
-        
-        <button type="button" id="btnCancelReq" class="btn-cancel-req" style="display: none;" onclick="cancelarEdicion()">
+          <button type="submit" id="btnAddReq" class="btn-add-requirement">
+            <i class="fa-solid fa-plus"></i>
+            Añadir Requisito
+          </button>
+
+          <button type="submit" id="btnUpdateReq" class="btn-update-req hidden">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Actualizar
+          </button>
+
+          <button
+            type="button"
+            id="btnCancelReq"
+            class="btn-cancel-req hidden"
+            onclick="cancelarEdicion()"
+          >
             <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-</form>
+          </button>
+        </div>
+      </form>
 
-        <div class="mt-20">
-            <table class="tabla-academica"> 
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">ID</th>
-                        <th>Documento Requerido</th>
-                        <th style="text-align: center; width: 140px;">Tipo</th>
-                        <th style="text-align: center; width: 120px;">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for req in requisitos %}
-                        {% if req.estado %} 
-                        <tr>
-                            <td><span class="badge-id">#{{ forloop.counter }}</span></td>
-                            
-                            <td>
-    <strong class="text-main">{{ req.nombre_documento }}</strong>
-</td>
+      <div class="mt-20">
+        <div class="table-responsive">
+          <table class="tabla-academica">
+            <thead>
+              <tr>
+                <th class="id-column">ID</th>
+                <th>Documento Requerido</th>
+                <th class="type-column">Tipo</th>
+                <th class="actions-column">Acciones</th>
+              </tr>
+            </thead>
 
-<td style="text-align: center;">
-    {% if req.obligatorio %}
-    <span class="badge-required">Obligatorio</span>
-{% else %}
-    <span class="badge-optional">Opcional</span>
-{% endif %}
-</td>
+            <tbody>
+              {% for req in requisitos %}
+                {% if req.estado %}
+                  <tr>
+                    <td data-label="ID">
+                      <span class="badge-id">#{{ forloop.counter }}</span>
+                    </td>
 
-<td class="actions-cell">
-                                <a href="javascript:void(0)" class="btn-action edit-req" 
-                                   onclick="cargarEdicion('{{ req.id }}', '{{ req.nombre_documento|escapejs }}', '{{ req.obligatorio|yesno:"true,false" }}')" 
-                                   title="Editar Requisito">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
+                    <td data-label="Documento Requerido">
+                      <strong class="text-main">{{ req.nombre_documento }}</strong>
+                    </td>
 
-                                <a href="{% url 'eliminar_requisito' req.id %}" 
-                                   class="btn-delete-req alerta-eliminar" 
-                                   data-nombre="{{ req.nombre_documento }}"
-                                   title="Eliminar Requisito">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% empty %}
-                        <tr>
-                            <td colspan="4" class="empty-state-row">
-                                <div class="empty-info">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                    <p>No hay requisitos registrados todavía.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    <td data-label="Tipo" class="text-center">
+                      {% if req.obligatorio %}
+                        <span class="badge-required">Obligatorio</span>
+                      {% else %}
+                        <span class="badge-optional">Opcional</span>
+                      {% endif %}
+                    </td>
+
+                    <td data-label="Acciones" class="actions-cell">
+                      <a
+                        href="javascript:void(0)"
+                        class="btn-action edit-req"
+                        onclick="cargarEdicion('{{ req.id }}', '{{ req.nombre_documento|escapejs }}', '{{ req.obligatorio|yesno:"true,false" }}')"
+                        title="Editar requisito"
+                      >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </a>
+
+                      <a
+                        href="{% url 'eliminar_requisito' req.id %}"
+                        class="btn-delete-req alerta-eliminar"
+                        data-nombre="{{ req.nombre_documento }}"
+                        title="Eliminar requisito"
+                      >
+                        <i class="fa-solid fa-trash-can"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endif %}
+              {% empty %}
+                <tr>
+                  <td colspan="4" class="empty-state-row">
+                    <div class="empty-info">
+                      <i class="fa-solid fa-folder-open"></i>
+                      <p>No hay requisitos registrados todavía.</p>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </section>
 
-  <!-- Modal de Asignación de Paralelo (CORREGIDO) -->
   <div id="modalParalelo" class="modal-overlay">
     <div class="modal-content-premium">
       <div class="modal-header-premium">
-        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Asignación de Paralelo</h3>
-        <button type="button" onclick="cerrarModal()" class="btn-close-modal">&times;</button>
+        <h3>
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Asignación de Paralelo
+        </h3>
+
+        <button type="button" onclick="cerrarModal()" class="btn-close-modal">
+          &times;
+        </button>
       </div>
 
       <div class="modal-body-premium">
@@ -241,47 +405,69 @@
           {% csrf_token %}
 
           <div class="form-group-premium">
-            <label><i class="fa-solid fa-layer-group"></i> Nivel Educativo:</label>
-            <div class="select-wrapper-premium">{{ form_paralelo.nivel }}</div>
+            <label>
+              <i class="fa-solid fa-layer-group"></i>
+              Nivel Educativo:
+            </label>
+
+            <div class="select-wrapper-premium">
+              {{ form_paralelo.nivel }}
+            </div>
           </div>
 
           <div class="form-group-premium">
-            <label><i class="fa-solid fa-graduation-cap"></i> Grado de Destino:</label>
-            <div class="select-wrapper-premium">{{ form_paralelo.grado }}</div>
+            <label>
+              <i class="fa-solid fa-graduation-cap"></i>
+              Grado de Destino:
+            </label>
+
+            <div class="select-wrapper-premium">
+              {{ form_paralelo.grado }}
+            </div>
           </div>
 
           <div class="info-box-premium">
             <div class="info-icon">
               <i class="fa-solid fa-robot"></i>
             </div>
+
             <div class="info-text">
               <strong>Generación Inteligente</strong>
-              <span>El sistema asignará automáticamente la siguiente letra disponible (A, B, C...) con 30 cupos.</span>
+              <span>
+                El sistema asignará automáticamente la siguiente letra disponible A, B, C... con 30 cupos.
+              </span>
             </div>
           </div>
 
           <button type="submit" class="btn-submit-premium">
-            <i class="fa-solid fa-bolt"></i> Generar Paralelo
+            <i class="fa-solid fa-bolt"></i>
+            Generar Paralelo
           </button>
         </form>
       </div>
     </div>
   </div>
 
-  <script>
-    const gradosPorNivel = {
-        {% for nivel in niveles %}
-            "{{ nivel.id }}": [
-                {% for grado in grados %}
-                    {% if grado.nivel.id == nivel.id %}
-                        { id: "{{ grado.id }}", nombre: "{{ grado.nombre }}" },
-                    {% endif %}
-                {% endfor %}
-            ],
+</section>
+
+<script>
+  const gradosPorNivel = {
+    {% for nivel in niveles %}
+      "{{ nivel.id }}": [
+        {% for grado in grados %}
+          {% if grado.nivel.id == nivel.id %}
+            {
+              id: "{{ grado.id }}",
+              nombre: "{{ grado.nombre }}"
+            },
+          {% endif %}
         {% endfor %}
-    };
+      ],
+    {% endfor %}
+  };
 </script>
 
-  <script src="{% static 'academic/js/form_nivel_grade.js' %}?v=9"></script>
-  <script src="{% static 'academic/js/structure_academic.js' %}?v=10"></script>
+<script src="{% static 'academic/js/form_nivel_grade.js' %}?v=9"></script>
+<script src="{% static 'academic/js/structure_academic.js' %}?v=11"></script>
+
 {% endblock %}
