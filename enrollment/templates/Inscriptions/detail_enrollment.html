@@ -1,271 +1,274 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
 
-{% block page_title %}
-  Detalle de Inscripción
-{% endblock %}
+{% block page_title %}Detalle de Inscripción{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'enrollments/css/detail_enrollment.css' %}?v=1" />
 
-<div class="detail-container">
-    <div class="detail-card">
+<link rel="stylesheet" href="{% static 'enrollments/css/detail_enrollment.css' %}?v=3" />
 
-        <div class="detail-header">
-            <div class="detail-header-info">
-                <h3>
-                    <i class="fa-solid fa-eye"></i>
-                    Detalle de Inscripción
-                </h3>
-                <p>
-                    Gestión Escolar:
-                    <strong>{{ inscripcion.gestion.anio }}</strong>
-                </p>
+<section class="detail-page">
+
+  <div class="detail-card">
+
+    <div class="detail-header">
+      <div class="detail-header-info">
+        <h3>
+          <i class="fa-solid fa-eye"></i>
+          Detalle de Inscripción
+        </h3>
+
+        <p>
+          Gestión Escolar:
+          <strong>{{ inscripcion.gestion.anio }}</strong>
+        </p>
+      </div>
+
+      <div class="detail-header-status">
+        {% if inscripcion.estado_documental == "completa" %}
+          <span class="status-pill complete">
+            <i class="fa-solid fa-circle-check"></i>
+            Completa
+          </span>
+        {% elif inscripcion.estado_documental == "pendiente" %}
+          <span class="status-pill pending">
+            <i class="fa-solid fa-clock"></i>
+            Pendiente
+          </span>
+        {% elif inscripcion.estado_documental == "vencida" %}
+          <span class="status-pill expired">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Vencida
+          </span>
+        {% else %}
+          <span class="status-pill neutral">
+            <i class="fa-solid fa-circle-info"></i>
+            Sin estado
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="detail-main">
+
+        <section class="detail-section">
+          <h4>
+            <i class="fa-solid fa-user-graduate"></i>
+            Datos del Estudiante
+          </h4>
+
+          <div class="student-resume">
+            <div class="student-avatar">
+              <i class="fa-solid fa-user-graduate"></i>
             </div>
 
-            <div class="detail-header-status">
-                {% if inscripcion.estado_documental == "completa" %}
-                    <span class="status-pill complete">
-                        <i class="fa-solid fa-circle-check"></i>
-                        Completa
-                    </span>
-                {% elif inscripcion.estado_documental == "pendiente" %}
-                    <span class="status-pill pending">
-                        <i class="fa-solid fa-clock"></i>
-                        Pendiente
-                    </span>
-                {% elif inscripcion.estado_documental == "vencida" %}
-                    <span class="status-pill expired">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Vencida
-                    </span>
-                {% else %}
-                    <span class="status-pill neutral">
-                        <i class="fa-solid fa-circle-info"></i>
-                        Sin estado
-                    </span>
-                {% endif %}
+            <div class="student-data">
+              <strong>
+                {{ inscripcion.estudiante.apellido_paterno }}
+                {{ inscripcion.estudiante.apellido_materno }},
+                {{ inscripcion.estudiante.nombres }}
+              </strong>
+
+              <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
             </div>
-        </div>
+          </div>
 
-        <div class="detail-body">
-
-            <div class="detail-main">
-
-                <section class="detail-section">
-                    <h4>
-                        <i class="fa-solid fa-user-graduate"></i>
-                        Datos del Estudiante
-                    </h4>
-
-                    <div class="student-resume">
-                        <div class="student-avatar">
-                            <i class="fa-solid fa-user-tie"></i>
-                        </div>
-
-                        <div class="student-data">
-                            <strong>
-                                {{ inscripcion.estudiante.apellido_paterno }}
-                                {{ inscripcion.estudiante.apellido_materno }},
-                                {{ inscripcion.estudiante.nombres }}
-                            </strong>
-                            <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
-                        </div>
-                    </div>
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">Fecha de nacimiento</span>
-                            <strong>{{ inscripcion.estudiante.fecha_nacimiento|date:"d/m/Y" }}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span class="info-label">Género</span>
-                            <strong>{{ inscripcion.estudiante.get_genero_display }}</strong>
-                        </div>
-
-                        <div class="info-item full">
-                            <span class="info-label">Dirección</span>
-                            <strong>{{ inscripcion.estudiante.direccion|default:"No registrada" }}</strong>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="detail-section">
-                    <h4>
-                        <i class="fa-solid fa-school"></i>
-                        Datos Académicos
-                    </h4>
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">Curso / Paralelo</span>
-                            <strong>
-                                {{ inscripcion.paralelo.grado.nombre }}
-                                de {{ inscripcion.paralelo.grado.nivel.nombre }}
-                                - {{ inscripcion.paralelo.letra }}
-                            </strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span class="info-label">Código RUDE</span>
-                            <strong class="rude-code">{{ inscripcion.rude }}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span class="info-label">Fecha de inscripción</span>
-                            <strong>{{ inscripcion.fecha_registro|date:"d/m/Y" }}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span class="info-label">Registrado por</span>
-                            <strong>{{ inscripcion.usuario.username|default:"No definido" }}</strong>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="detail-section">
-                    <h4>
-                        <i class="fa-solid fa-user-shield"></i>
-                        Tutor / Apoderado
-                    </h4>
-
-                    {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
-                        {% if parentesco %}
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <span class="info-label">Nombre del tutor</span>
-                                    <strong>
-                                        {{ parentesco.tutor.nombres }}
-                                        {{ parentesco.tutor.apellidos }}
-                                    </strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span class="info-label">CI Tutor</span>
-                                    <strong>{{ parentesco.tutor.cedula_identidad }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span class="info-label">Relación</span>
-                                    <strong>{{ parentesco.relacion }}</strong>
-                                </div>
-
-                                <div class="info-item">
-                                    <span class="info-label">Celular</span>
-                                    <strong>{{ parentesco.tutor.celular }}</strong>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="empty-mini">
-                                <i class="fa-solid fa-circle-info"></i>
-                                No hay tutor vinculado a este estudiante.
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                </section>
-
-                {% if inscripcion.observacion %}
-                    <section class="detail-section">
-                        <h4>
-                            <i class="fa-solid fa-comment-dots"></i>
-                            Observaciones
-                        </h4>
-
-                        <div class="observation-box">
-                            {{ inscripcion.observacion }}
-                        </div>
-                    </section>
-                {% endif %}
-
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Fecha de nacimiento</span>
+              <strong>{{ inscripcion.estudiante.fecha_nacimiento|date:"d/m/Y" }}</strong>
             </div>
 
-            <aside class="detail-side">
-                <section class="documents-card">
-                    <h4>
-                        <i class="fa-solid fa-folder-open"></i>
-                        Documentación
-                    </h4>
+            <div class="info-item">
+              <span class="info-label">Género</span>
+              <strong>{{ inscripcion.estudiante.get_genero_display }}</strong>
+            </div>
 
-                    <p class="documents-hint">
-                        Estado de los documentos asociados a esta inscripción.
-                    </p>
+            <div class="info-item full">
+              <span class="info-label">Dirección</span>
+              <strong>{{ inscripcion.estudiante.direccion|default:"No registrada" }}</strong>
+            </div>
+          </div>
+        </section>
 
-                    <div class="documents-list">
-                        {% for entrega in entregas %}
-                            <div class="document-item">
-                                <div class="document-icon {% if entrega.estado %}ok{% else %}pending{% endif %}">
-                                    {% if entrega.estado %}
-                                        <i class="fa-solid fa-check"></i>
-                                    {% else %}
-                                        <i class="fa-solid fa-clock"></i>
-                                    {% endif %}
-                                </div>
+        <section class="detail-section">
+          <h4>
+            <i class="fa-solid fa-school"></i>
+            Datos Académicos
+          </h4>
 
-                                <div class="document-info">
-                                    <strong>{{ entrega.requisito.nombre_documento }}</strong>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Curso / Paralelo</span>
+              <strong>
+                {{ inscripcion.paralelo.grado.nombre }}
+                de {{ inscripcion.paralelo.grado.nivel.nombre }}
+                - {{ inscripcion.paralelo.letra }}
+              </strong>
+            </div>
 
-                                    <div class="document-meta">
-                                        {% if entrega.requisito.obligatorio %}
-                                            <span class="doc-type required">Obligatorio</span>
-                                        {% else %}
-                                            <span class="doc-type optional">Opcional</span>
-                                        {% endif %}
+            <div class="info-item">
+              <span class="info-label">Código RUDE</span>
+              <strong class="rude-code">{{ inscripcion.rude }}</strong>
+            </div>
 
-                                        {% if entrega.estado %}
-                                            <span class="doc-state delivered">Entregado</span>
-                                        {% else %}
-                                            <span class="doc-state missing">Pendiente</span>
-                                        {% endif %}
-                                    </div>
+            <div class="info-item">
+              <span class="info-label">Fecha de inscripción</span>
+              <strong>{{ inscripcion.fecha_registro|date:"d/m/Y" }}</strong>
+            </div>
 
-                                    {% if entrega.fecha_entrega %}
-                                        <small>
-                                            Entregado el {{ entrega.fecha_entrega|date:"d/m/Y" }}
-                                        </small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% empty %}
-                            <div class="empty-mini">
-                                <i class="fa-solid fa-circle-info"></i>
-                                No hay documentos registrados.
-                            </div>
-                        {% endfor %}
-                    </div>
+            <div class="info-item">
+              <span class="info-label">Registrado por</span>
+              <strong>{{ inscripcion.usuario.username|default:"No definido" }}</strong>
+            </div>
+          </div>
+        </section>
 
-                    {% if inscripcion.fecha_limite_documentos %}
-                        <div class="deadline-box">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <span>
-                                Fecha límite:
-                                <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
-                            </span>
-                        </div>
-                    {% endif %}
-                </section>
-            </aside>
+        <section class="detail-section">
+          <h4>
+            <i class="fa-solid fa-user-shield"></i>
+            Tutor / Apoderado
+          </h4>
 
-        </div>
+          {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
+            {% if parentesco %}
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Nombre del tutor</span>
+                  <strong>
+                    {{ parentesco.tutor.nombres }}
+                    {{ parentesco.tutor.apellidos }}
+                  </strong>
+                </div>
 
-        <div class="detail-footer">
-            {% if inscripcion.estado_documental == "pendiente" %}
-                <a href="{% url 'completar_documentos' inscripcion.id %}" class="btn-primary-detail">
-                    <i class="fa-solid fa-folder-open"></i>
-                    Completar Documentos
-                </a>
+                <div class="info-item">
+                  <span class="info-label">CI Tutor</span>
+                  <strong>{{ parentesco.tutor.cedula_identidad }}</strong>
+                </div>
+
+                <div class="info-item">
+                  <span class="info-label">Relación</span>
+                  <strong>{{ parentesco.relacion }}</strong>
+                </div>
+
+                <div class="info-item">
+                  <span class="info-label">Celular</span>
+                  <strong>{{ parentesco.tutor.celular }}</strong>
+                </div>
+              </div>
+            {% else %}
+              <div class="empty-mini">
+                <i class="fa-solid fa-circle-info"></i>
+                No hay tutor vinculado a este estudiante.
+              </div>
             {% endif %}
+          {% endwith %}
+        </section>
 
-            <a href="{% url 'imprimir_inscripcion' inscripcion.id %}" class="btn-print-detail">
-                <i class="fa-solid fa-print"></i>
-                Imprimir
-            </a>
+        {% if inscripcion.observacion %}
+          <section class="detail-section">
+            <h4>
+              <i class="fa-solid fa-comment-dots"></i>
+              Observaciones
+            </h4>
 
-            <a href="{% url 'list_inscripciones' %}" class="btn-back-detail">
-                Volver
-            </a>
-        </div>
+            <div class="observation-box">
+              {{ inscripcion.observacion }}
+            </div>
+          </section>
+        {% endif %}
+
+      </div>
+
+      <aside class="detail-side">
+        <section class="documents-card">
+          <h4>
+            <i class="fa-solid fa-folder-open"></i>
+            Documentación
+          </h4>
+
+          <p class="documents-hint">
+            Estado de los documentos asociados a esta inscripción.
+          </p>
+
+          <div class="documents-list">
+            {% for entrega in entregas %}
+              <div class="document-item">
+                <div class="document-icon {% if entrega.estado %}ok{% else %}pending{% endif %}">
+                  {% if entrega.estado %}
+                    <i class="fa-solid fa-check"></i>
+                  {% else %}
+                    <i class="fa-solid fa-clock"></i>
+                  {% endif %}
+                </div>
+
+                <div class="document-info">
+                  <strong>{{ entrega.requisito.nombre_documento }}</strong>
+
+                  <div class="document-meta">
+                    {% if entrega.requisito.obligatorio %}
+                      <span class="doc-type required">Obligatorio</span>
+                    {% else %}
+                      <span class="doc-type optional">Opcional</span>
+                    {% endif %}
+
+                    {% if entrega.estado %}
+                      <span class="doc-state delivered">Entregado</span>
+                    {% else %}
+                      <span class="doc-state missing">Pendiente</span>
+                    {% endif %}
+                  </div>
+
+                  {% if entrega.fecha_entrega %}
+                    <small>Entregado el {{ entrega.fecha_entrega|date:"d/m/Y" }}</small>
+                  {% endif %}
+                </div>
+              </div>
+            {% empty %}
+              <div class="empty-mini">
+                <i class="fa-solid fa-circle-info"></i>
+                No hay documentos registrados.
+              </div>
+            {% endfor %}
+          </div>
+
+          {% if inscripcion.fecha_limite_documentos %}
+            <div class="deadline-box">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span>
+                Fecha límite:
+                <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
+              </span>
+            </div>
+          {% endif %}
+        </section>
+      </aside>
 
     </div>
-</div>
+
+    <div class="detail-footer">
+      <a href="{% url 'list_inscripciones' %}" class="btn-back-detail">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver
+      </a>
+
+      <a href="{% url 'imprimir_inscripcion' inscripcion.id %}" class="btn-print-detail">
+        <i class="fa-solid fa-print"></i>
+        Imprimir
+      </a>
+
+      {% if inscripcion.estado_documental == "pendiente" %}
+        <a href="{% url 'completar_documentos' inscripcion.id %}" class="btn-primary-detail">
+          <i class="fa-solid fa-folder-open"></i>
+          Completar Documentos
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+
+</section>
+
 {% endblock %}

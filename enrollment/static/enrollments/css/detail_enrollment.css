@@ -1,481 +1,689 @@
-/* --- Detalle de Inscripción --- */
-.detail-container {
-    max-width: 1180px;
-    margin: 30px auto;
-    padding: 0 20px;
-    animation: detailFadeIn 0.35s ease-out;
+/* =========================================================
+   DETAIL_ENROLLMENT.CSS - DETALLE DE INSCRIPCIÓN
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
+
+:root {
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --yellow-soft: #fffbeb;
+  --yellow-main: #f59e0b;
+
+  --gray-soft: #f1f5f9;
+  --gray-main: #475569;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-@keyframes detailFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* =========================================================
+   2. CONTENEDOR GENERAL
+   Agrupa toda la pantalla de detalle.
+   ========================================================= */
+
+.detail-page {
+  width: 100%;
+}
+
+.detail-container {
+  width: 100%;
 }
 
 .detail-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-/* --- Header --- */
+
+/* =========================================================
+   3. CABECERA DEL DETALLE
+   Título, gestión y estado documental.
+   ========================================================= */
+
 .detail-header {
-    background: #1e293b;
-    color: #ffffff;
-    padding: 26px 36px;
-    border-bottom: 4px solid #c62828;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .detail-header-info h3 {
-    margin: 0;
-    font-size: 1.45rem;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.detail-header-info h3 i {
+  color: var(--primary-color);
 }
 
 .detail-header-info p {
-    margin: 6px 0 0;
-    color: #cbd5e1;
-    font-size: 0.92rem;
-    font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.92rem;
 }
 
 .detail-header-info strong {
-    color: #ffffff;
+  color: var(--primary-color);
 }
 
 .detail-header-status {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
-/* --- Status --- */
+
+/* =========================================================
+   4. BADGES DE ESTADO DOCUMENTAL
+   Completa, pendiente, vencida o neutral.
+   ========================================================= */
+
 .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 15px;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .status-pill.complete {
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #bbf7d0;
+  background: var(--green-soft);
+  color: var(--green-main);
 }
 
 .status-pill.pending {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fde68a;
+  background: var(--yellow-soft);
+  color: #92400e;
 }
 
 .status-pill.expired {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
+  background: var(--red-soft);
+  color: var(--red-main);
 }
 
 .status-pill.neutral {
-    background: #e2e8f0;
-    color: #475569;
-    border: 1px solid #cbd5e1;
+  background: var(--gray-soft);
+  color: var(--gray-main);
 }
 
-/* --- Body --- */
+
+/* =========================================================
+   5. CUERPO DEL DETALLE
+   Layout principal con información y documentos.
+   ========================================================= */
+
 .detail-body {
-    display: grid;
-    grid-template-columns: 1.45fr 0.95fr;
-    gap: 34px;
-    padding: 36px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 26px;
+  padding: 30px;
 }
 
-.detail-main {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.detail-main,
+.detail-side {
+  min-width: 0;
 }
 
 .detail-section,
 .documents-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 24px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+.detail-section {
+  margin-bottom: 22px;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
 }
 
 .detail-section h4,
 .documents-card h4 {
-    margin: 0 0 18px;
-    color: #334155;
-    font-size: 0.98rem;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1rem;
+  font-weight: 900;
+  margin-bottom: 16px;
 }
 
 .detail-section h4 i,
 .documents-card h4 i {
-    color: #c62828;
-}
-
-/* --- Student resume --- */
-.student-resume {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.student-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: #c62828;
-    color: #ffffff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.15rem;
-    flex-shrink: 0;
-}
-
-.student-data {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.student-data strong {
-    color: #1e293b;
-    font-size: 1rem;
-    font-weight: 900;
-}
-
-.student-data span {
-    color: #64748b;
-    font-size: 0.84rem;
-    font-weight: 800;
-}
-
-/* --- Info grid --- */
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-}
-
-.info-item {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 13px;
-    padding: 13px 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.info-item.full {
-    grid-column: 1 / -1;
-}
-
-.info-label {
-    color: #64748b;
-    font-size: 0.72rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.info-item strong {
-    color: #1e293b;
-    font-size: 0.9rem;
-    font-weight: 850;
-}
-
-.rude-code {
-    font-family: Consolas, monospace;
-    background: #eef2f7;
-    width: fit-content;
-    padding: 4px 8px;
-    border-radius: 7px;
-    border: 1px solid #e2e8f0;
-}
-
-/* --- Observaciones --- */
-.observation-box {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 14px;
-    padding: 15px;
-    color: #475569;
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 1.5;
-}
-
-/* --- Documentos --- */
-.detail-side {
-    min-width: 0;
+  color: var(--primary-color);
 }
 
 .documents-card {
-    background: #f8fafc;
-    height: fit-content;
+  position: sticky;
+  top: 96px;
 }
 
+
+/* =========================================================
+   6. RESUMEN DEL ESTUDIANTE
+   Avatar y datos principales.
+   ========================================================= */
+
+.student-resume {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.student-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--primary-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.student-data {
+  display: grid;
+  gap: 5px;
+}
+
+.student-data strong {
+  color: var(--secondary-color);
+  font-size: 0.98rem;
+  font-weight: 900;
+}
+
+.student-data span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   7. GRID DE INFORMACIÓN
+   Datos personales, académicos y tutor.
+   ========================================================= */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.info-item {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.info-item.full {
+  grid-column: 1 / -1;
+}
+
+.info-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.info-item strong {
+  color: var(--text-main);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.rude-code {
+  color: var(--blue-main) !important;
+}
+
+
+/* =========================================================
+   8. OBSERVACIONES Y ESTADOS VACÍOS
+   Bloques informativos secundarios.
+   ========================================================= */
+
+.observation-box {
+  background: var(--yellow-soft);
+  border-left: 4px solid var(--yellow-main);
+  border-radius: 12px;
+  padding: 15px;
+
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.empty-mini {
+  background: var(--bg-soft);
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 14px;
+
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.empty-mini i {
+  color: var(--blue-main);
+  margin-top: 2px;
+}
+
+
+/* =========================================================
+   9. DOCUMENTACIÓN
+   Lista de documentos entregados y pendientes.
+   ========================================================= */
+
 .documents-hint {
-    margin: -4px 0 16px;
-    color: #64748b;
-    font-size: 0.84rem;
-    line-height: 1.4;
-    font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
 .documents-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: grid;
+  gap: 12px;
 }
 
 .document-item {
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 13px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px;
+
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .document-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 0.85rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+  font-size: 0.9rem;
 }
 
 .document-icon.ok {
-    background: #dcfce7;
-    color: #166534;
+  background: var(--green-soft);
+  color: var(--green-main);
 }
 
 .document-icon.pending {
-    background: #fef3c7;
-    color: #92400e;
+  background: var(--yellow-soft);
+  color: #92400e;
 }
 
 .document-info {
-    min-width: 0;
-    flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 8px;
 }
 
 .document-info strong {
-    display: block;
-    color: #1e293b;
-    font-size: 0.86rem;
-    font-weight: 900;
-    line-height: 1.35;
-    margin-bottom: 8px;
+  color: var(--secondary-color);
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .document-info small {
-    display: block;
-    margin-top: 7px;
-    color: #94a3b8;
-    font-size: 0.72rem;
-    font-weight: 700;
+  color: var(--text-light);
+  font-size: 0.76rem;
 }
 
 .document-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .doc-type,
 .doc-state {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 0.66rem;
-    font-weight: 900;
-    text-transform: uppercase;
+  width: max-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .doc-type.required {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
+  background: var(--red-soft);
+  color: var(--red-main);
 }
 
 .doc-type.optional {
-    background: #e0f2fe;
-    color: #0369a1;
-    border: 1px solid #bae6fd;
+  background: var(--blue-soft);
+  color: var(--blue-main);
 }
 
 .doc-state.delivered {
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #bbf7d0;
+  background: var(--green-soft);
+  color: var(--green-main);
 }
 
 .doc-state.missing {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fde68a;
+  background: var(--yellow-soft);
+  color: #92400e;
 }
 
-/* --- Fecha límite --- */
 .deadline-box {
-    margin-top: 18px;
-    padding: 13px 14px;
-    border-radius: 13px;
-    background: #fff7ed;
-    color: #9a3412;
-    border: 1px dashed #fed7aa;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 1.4;
+  margin-top: 18px;
+  background: var(--orange-soft);
+  border-left: 4px solid var(--orange-main);
+  border-radius: 12px;
+  padding: 13px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  color: #9a3412;
+  font-size: 0.86rem;
+  line-height: 1.5;
 }
 
 .deadline-box i {
-    margin-top: 2px;
+  color: var(--orange-main);
+  margin-top: 2px;
 }
 
-/* --- Empty mini --- */
-.empty-mini {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 13px;
-    padding: 14px;
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
-/* --- Footer --- */
+/* =========================================================
+   10. PIE DE ACCIONES
+   Volver, imprimir y completar documentos.
+   ========================================================= */
+
 .detail-footer {
-    padding: 24px 36px;
-    background: #f1f5f9;
-    border-top: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 14px;
-    flex-wrap: wrap;
+  padding: 24px 30px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-soft);
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .btn-primary-detail,
 .btn-print-detail,
 .btn-back-detail {
-    min-height: 44px;
-    padding: 0 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 900;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    transition: all 0.25s ease;
-}
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 18px;
 
-.btn-primary-detail {
-    background: #1e293b;
-    color: #ffffff;
-}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
 
-.btn-primary-detail:hover {
-    background: #c62828;
-    transform: translateY(-2px);
-}
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
 
-.btn-print-detail {
-    background: #fff1f2;
-    color: #c62828;
-    border: 1px solid #fecaca;
-}
-
-.btn-print-detail:hover {
-    background: #c62828;
-    color: #ffffff;
-    transform: translateY(-2px);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-back-detail {
-    color: #64748b;
-    background: transparent;
+  background: var(--white);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .btn-back-detail:hover {
-    color: #1e293b;
+  background: #e2e8f0;
 }
 
-/* --- Responsive --- */
-@media (max-width: 980px) {
-    .detail-body {
-        grid-template-columns: 1fr;
-    }
+.btn-print-detail {
+  background: var(--green-soft);
+  color: var(--green-main);
+  border: 1px solid #bbf7d0;
 }
 
-@media (max-width: 720px) {
-    .detail-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.btn-print-detail:hover {
+  background: #dcfce7;
+}
 
-    .detail-body {
-        padding: 24px;
-    }
+.btn-primary-detail {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
 
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
+.btn-primary-detail:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
 
-    .detail-footer {
-        justify-content: stretch;
-    }
 
-    .btn-primary-detail,
-    .btn-print-detail,
-    .btn-back-detail {
-        width: 100%;
-    }
+/* =========================================================
+   11. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Reduce la columna lateral.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .detail-body {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 22px;
+    padding: 26px;
+  }
+
+  .detail-header,
+  .detail-footer {
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+}
+
+
+/* =========================================================
+   12. RESPONSIVE - TABLETS
+   La documentación pasa debajo del contenido principal.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .detail-body {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-card {
+    position: static;
+  }
+}
+
+
+/* =========================================================
+   13. RESPONSIVE - CELULARES
+   Todo el contenido se apila.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .detail-header {
+    flex-direction: column;
+    padding: 24px 22px;
+  }
+
+  .detail-header-info h3 {
+    font-size: 1.18rem;
+  }
+
+  .detail-header-status,
+  .status-pill {
+    width: 100%;
+  }
+
+  .detail-body {
+    padding: 22px;
+  }
+
+  .detail-section,
+  .documents-card {
+    padding: 20px;
+  }
+
+  .student-resume {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-footer {
+    flex-direction: column-reverse;
+    padding: 22px;
+  }
+
+  .btn-primary-detail,
+  .btn-print-detail,
+  .btn-back-detail {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   14. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce espacios y tamaños.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .detail-card {
+    border-radius: 14px;
+  }
+
+  .detail-header {
+    padding: 22px 18px;
+  }
+
+  .detail-header-info h3 {
+    font-size: 1.08rem;
+  }
+
+  .detail-header-info p {
+    font-size: 0.86rem;
+  }
+
+  .detail-body {
+    padding: 20px 18px;
+  }
+
+  .detail-section,
+  .documents-card {
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .detail-section h4,
+  .documents-card h4 {
+    font-size: 0.95rem;
+  }
+
+  .student-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1.2rem;
+  }
+
+  .student-data strong,
+  .info-item strong {
+    font-size: 0.88rem;
+  }
+
+  .student-data span,
+  .documents-hint,
+  .empty-mini,
+  .deadline-box {
+    font-size: 0.8rem;
+  }
+
+  .detail-footer {
+    padding: 20px 18px;
+  }
 }

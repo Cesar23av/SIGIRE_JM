@@ -1,157 +1,507 @@
-.form-container {
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-    padding-bottom: 40px;
+/* =========================================================
+   FORM_PERSONAL.CSS - REGISTRO Y EDICIÓN DE PERSONAL
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
+
+:root {
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --secondary-light: #334155;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+
+  --white: #ffffff;
+  --border-color: #e2e8f0;
+  --bg-soft: #f8fafc;
+
+  --success-color: #16a34a;
+  --danger-color: #dc2626;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-.form-card {
-    background: var(--white, #ffffff);
-    width: 100%;
-    max-width: 750px;
-    padding: 40px;
-    border-radius: 16px; /* Bordes más suaves */
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02); /* Sombra 3D premium */
-    border: 1px solid #f1f5f9;
+
+/* =========================================================
+   2. CONTENEDOR PRINCIPAL
+   Agrupa toda la pantalla del formulario.
+   ========================================================= */
+
+.personal-form-container {
+  width: 100%;
 }
 
-.form-header {
-    text-align: center;
-    margin-bottom: 35px;
-    padding-bottom: 20px;
-    border-bottom: 2px dashed #e2e8f0; /* Separador sutil */
+.personal-form-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 26px;
+  align-items: stretch;
 }
 
-.form-header i {
-    font-size: 3rem;
-    color: var(--primary-color, #3b82f6);
-    margin-bottom: 15px;
-    background: #eff6ff; /* Círculo de fondo para el ícono */
-    padding: 20px;
-    border-radius: 50%;
+
+/* =========================================================
+   3. PANEL INFORMATIVO
+   Bloque lateral con contexto del registro o edición.
+   ========================================================= */
+
+.personal-info-panel {
+  background: linear-gradient(145deg, #1e293b, #334155);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
 }
 
-.form-header h3 {
-    color: var(--secondary-color, #1e293b);
-    font-size: 1.6rem;
-    margin-bottom: 5px;
+.personal-info-panel::after {
+  content: "";
+  position: absolute;
+  right: -55px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
 }
 
-.form-header p {
-    color: var(--text-light, #64748b);
-    font-size: 0.95rem;
+.personal-info-icon {
+  width: 62px;
+  height: 62px;
+  background: rgba(198, 40, 40, 0.95);
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.7rem;
+  margin-bottom: 24px;
+}
+
+.personal-info-panel h3 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.personal-info-panel p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.personal-tips {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.personal-tips li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f8fafc;
+  font-size: 0.92rem;
+}
+
+.personal-tips i {
+  color: #86efac;
+  margin-top: 3px;
+}
+
+
+/* =========================================================
+   4. TARJETA PRINCIPAL DEL FORMULARIO
+   Contenedor donde se renderiza el form de Django.
+   ========================================================= */
+
+.personal-form-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.personal-form-header {
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+  background: #ffffff;
+}
+
+.personal-form-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.personal-form-header h3 i {
+  color: var(--primary-color);
+}
+
+.personal-form-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.personal-form-body {
+  padding: 30px;
+}
+
+
+/* =========================================================
+   5. GRID DEL FORMULARIO
+   Distribuye los campos en columnas en escritorio.
+   ========================================================= */
+
+.personal-form {
+  width: 100%;
 }
 
 .grid-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  min-width: 0;
 }
 
-.full-width { 
-    grid-column: span 2; 
+.form-group.full-width {
+  grid-column: 1 / -1;
 }
 
 .form-group label {
-    font-weight: 700;
-    color: #475569;
-    font-size: 0.9rem;
+  display: block;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
-/* INPUTS REDISEÑADOS */
-input, select, textarea {
-    padding: 14px;
-    background-color: #f8fafc; /* Fondo gris muy clarito */
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 1rem;
-    color: #334155;
-    transition: all 0.3s ease;
+.input-wrapper {
+  width: 100%;
 }
 
-input:focus, select:focus {
-    background-color: #ffffff; /* Se ilumina al hacer clic */
-    border-color: var(--primary-color, #3b82f6);
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); /* Anillo de enfoque suave */
+
+/* =========================================================
+   6. CAMPOS DEL FORMULARIO
+   Estilo general para inputs, selects y textareas generados por Django.
+   ========================================================= */
+
+.input-wrapper input,
+.input-wrapper select,
+.input-wrapper textarea,
+.personal-form input,
+.personal-form select,
+.personal-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: #ffffff;
+
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
 }
 
-.help-text { 
-    font-size: 0.8rem; 
-    color: #94a3b8;
-    margin-top: -3px; 
+.input-wrapper textarea,
+.personal-form textarea {
+  min-height: 110px;
+  resize: vertical;
 }
 
-.error-text { 
-    font-size: 0.85rem; 
-    color: #ef4444; 
-    font-weight: 600; 
-    margin-top: -3px;
+.input-wrapper input:focus,
+.input-wrapper select:focus,
+.input-wrapper textarea:focus,
+.personal-form input:focus,
+.personal-form select:focus,
+.personal-form textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
 }
 
-/* ÁREA DE BOTONES */
+.input-wrapper input::placeholder,
+.input-wrapper textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   7. AYUDAS Y ERRORES
+   Mensajes de apoyo y validaciones del formulario.
+   ========================================================= */
+
+.help-text {
+  display: block;
+  margin-top: 7px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.error-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+
+  margin-top: 8px;
+  padding: 9px 11px;
+
+  background: #fef2f2;
+  color: #991b1b;
+  border-left: 4px solid var(--danger-color);
+  border-radius: 8px;
+
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.error-text i {
+  color: var(--danger-color);
+  margin-top: 2px;
+}
+
+
+/* =========================================================
+   8. ACCIONES DEL FORMULARIO
+   Botones inferiores: cancelar y guardar.
+   ========================================================= */
+
 .form-actions {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
 }
 
+.btn-cancel,
 .btn-save {
-    background: var(--primary-color, #3b82f6);
-    color: white !important;
-    border: none;
-    padding: 16px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 18px;
 
-.btn-save:hover { 
-    background: var(--primary-hover, #2563eb); 
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
-}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
 
-.btn-save:disabled, .btn-save.loading {
-    background: #94a3b8 !important;
-    color: white !important;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-    opacity: 0.9;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-cancel {
-    text-align: center;
-    text-decoration: none;
-    color: #64748b;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.2s;
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .btn-cancel:hover {
-    background: #f1f5f9;
-    color: #334155;
+  background: #e2e8f0;
 }
 
-@media (max-width: 600px) {
-    .grid-form { grid-template-columns: 1fr; }
-    .full-width { grid-column: span 1; }
-    .form-card { padding: 25px; }
+.btn-save {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-save:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-save:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* =========================================================
+   9. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Ajusta el ancho del panel lateral.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .personal-form-layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .personal-info-panel {
+    padding: 28px 24px;
+  }
+
+  .personal-form-body {
+    padding: 26px;
+  }
+}
+
+
+/* =========================================================
+   10. RESPONSIVE - TABLETS
+   El panel informativo pasa arriba del formulario.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .personal-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .personal-info-panel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: start;
+  }
+
+  .personal-info-icon {
+    margin-bottom: 0;
+  }
+
+  .personal-info-panel p,
+  .personal-tips {
+    grid-column: 2;
+  }
+}
+
+
+/* =========================================================
+   11. RESPONSIVE - CELULARES
+   El formulario queda en una sola columna.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .personal-info-panel {
+    display: block;
+    padding: 26px 22px;
+  }
+
+  .personal-info-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .personal-info-panel h3 {
+    font-size: 1.25rem;
+  }
+
+  .personal-form-header {
+    padding: 24px 22px;
+  }
+
+  .personal-form-body {
+    padding: 24px 22px;
+  }
+
+  .grid-form {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   12. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce espacios para evitar desbordes.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .personal-info-panel {
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+
+  .personal-form-card {
+    border-radius: 14px;
+  }
+
+  .personal-form-header {
+    padding: 22px 18px;
+  }
+
+  .personal-form-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .personal-form-header p {
+    font-size: 0.86rem;
+  }
+
+  .personal-form-body {
+    padding: 22px 18px;
+  }
+
+  .form-group label {
+    font-size: 0.86rem;
+  }
+
+  .input-wrapper input,
+  .input-wrapper select,
+  .input-wrapper textarea,
+  .personal-form input,
+  .personal-form select,
+  .personal-form textarea {
+    font-size: 0.9rem;
+    padding: 11px 12px;
+  }
+
+  .help-text,
+  .error-text {
+    font-size: 0.8rem;
+  }
 }

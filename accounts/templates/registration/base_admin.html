@@ -4,64 +4,159 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>UE Jesus Maria | Panel de Administración</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="{% static 'accounts/css/base_admin.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'accounts/css/base_admin.css' %}?v=2"
+    />
   </head>
+
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
-        <i class="fa-solid fa-building-columns"></i> UE Jesus Maria
+        <i class="fa-solid fa-building-columns"></i>
+        <span>UE Jesus Maria</span>
       </div>
+
       <nav class="nav-menu">
-        <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fa-solid fa-chart-pie"></i> Panel Principal</a>
+        <a
+          href="{% url 'dashboard' %}"
+          class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+        >
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Panel Principal</span>
+        </a>
 
         {% if request.user.rol == 'director' %}
-          <a href="{% url 'list_personal' %}" class="nav-item {% if request.resolver_match.url_name == 'list_personal' or request.resolver_match.url_name == 'registrar_personal' %}active{% endif %}"><i class="fa-solid fa-user-tie"></i> Gestión de Personal</a>
+          <a
+            href="{% url 'list_personal' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'list_personal' or request.resolver_match.url_name == 'registrar_personal' %}active{% endif %}"
+          >
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Gestión de Personal</span>
+          </a>
         {% endif %}
 
         {% if request.user.rol == 'director' %}
-          <a href="{% url 'estructura_academica' %}" class="nav-item {% if request.resolver_match.url_name == 'estructura_academica' %}active{% endif %}"><i class="fa-solid fa-chalkboard"></i> Académico</a>
+          <a
+            href="{% url 'estructura_academica' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'estructura_academica' %}active{% endif %}"
+          >
+            <i class="fa-solid fa-chalkboard"></i>
+            <span>Académico</span>
+          </a>
         {% endif %}
 
         <div class="nav-group">
-          <a href="#" class="nav-item toggle-btn {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}active{% endif %}" onclick="toggleSubMenu(event, 'submenu-estudiantes')">
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-              <span><i class="fa-solid fa-graduation-cap"></i> Estudiantes</span>
+          <a
+            href="#"
+            class="nav-item toggle-btn {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}active{% endif %}"
+            onclick="toggleSubMenu(event, 'submenu-estudiantes')"
+          >
+            <div class="nav-item-content">
+              <span>
+                <i class="fa-solid fa-graduation-cap"></i>
+                Estudiantes
+              </span>
+
               <i class="fa-solid fa-chevron-down chevron-icon {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}rotate{% endif %}"></i>
             </div>
           </a>
 
-          <div id="submenu-estudiantes" class="sub-menu {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}open{% endif %}">
-            <a href="{% url 'registrar_tutor' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_tutor' %}active-sub{% endif %}"><i class="fa-solid fa-person-rays"></i> Registrar Tutor</a>
+          <div
+            id="submenu-estudiantes"
+            class="sub-menu {% if 'tutor' in request.resolver_match.url_name or 'estudiante' in request.resolver_match.url_name %}open{% endif %}"
+          >
+            <a
+              href="{% url 'registrar_tutor' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_tutor' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-person-rays"></i>
+              <span>Registrar Tutor</span>
+            </a>
 
-            <a href="{% url 'list_tutores' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_tutores' %}active-sub{% endif %}"><i class="fa-solid fa-users-line"></i> Lista de Tutores</a>
+            <a
+              href="{% url 'list_tutores' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'list_tutores' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-users-line"></i>
+              <span>Lista de Tutores</span>
+            </a>
 
-            <a href="{% url 'crear_estudiante' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'crear_estudiante' %}active-sub{% endif %}"><i class="fa-solid fa-child-reaching"></i> Registrar Estudiante</a>
+            <a
+              href="{% url 'crear_estudiante' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'crear_estudiante' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-child-reaching"></i>
+              <span>Registrar Estudiante</span>
+            </a>
 
-            <a href="{% url 'list_estudiantes' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_estudiantes' %}active-sub{% endif %}"><i class="fa-solid fa-children"></i> Lista de Estudiantes</a>
+            <a
+              href="{% url 'list_estudiantes' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'list_estudiantes' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-children"></i>
+              <span>Lista de Estudiantes</span>
+            </a>
           </div>
         </div>
 
         <div class="nav-group">
-          <a href="#" class="nav-item toggle-btn {% if 'inscripcion' in request.resolver_match.url_name %}active{% endif %}" onclick="toggleSubMenu(event, 'submenu-inscripciones')">
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-              <span><i class="fa-solid fa-file-signature"></i> Inscripciones</span>
+          <a
+            href="#"
+            class="nav-item toggle-btn {% if 'inscripcion' in request.resolver_match.url_name %}active{% endif %}"
+            onclick="toggleSubMenu(event, 'submenu-inscripciones')"
+          >
+            <div class="nav-item-content">
+              <span>
+                <i class="fa-solid fa-file-signature"></i>
+                Inscripciones
+              </span>
+
               <i class="fa-solid fa-chevron-down chevron-icon {% if 'inscripcion' in request.resolver_match.url_name %}rotate{% endif %}"></i>
             </div>
           </a>
 
-          <div id="submenu-inscripciones" class="sub-menu {% if 'inscripcion' in request.resolver_match.url_name %}open{% endif %}">
-            <a href="{% url 'registrar_inscripcion_view' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_inscripcion_view' %}active-sub{% endif %}"><i class="fa-solid fa-user-plus"></i> Registrar Inscripción</a>
+          <div
+            id="submenu-inscripciones"
+            class="sub-menu {% if 'inscripcion' in request.resolver_match.url_name %}open{% endif %}"
+          >
+            <a
+              href="{% url 'registrar_inscripcion_view' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'registrar_inscripcion_view' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Registrar Inscripción</span>
+            </a>
 
-            <a href="{% url 'list_inscripciones' %}" class="nav-item sub-item {% if request.resolver_match.url_name == 'list_inscripciones' %}active-sub{% endif %}"><i class="fa-solid fa-list-check"></i> Lista de Inscritos</a>
+            <a
+              href="{% url 'list_inscripciones' %}"
+              class="nav-item sub-item {% if request.resolver_match.url_name == 'list_inscripciones' %}active-sub{% endif %}"
+            >
+              <i class="fa-solid fa-list-check"></i>
+              <span>Lista de Inscritos</span>
+            </a>
           </div>
         </div>
-        <a href="{% url 'reportes' %}" class="nav-item {% if request.resolver_match.url_name == 'reportes' %}active{% endif %}">
-          <i class="fa-solid fa-chart-column"></i> Reportes
+
+        <a
+          href="{% url 'reportes' %}"
+          class="nav-item {% if request.resolver_match.url_name == 'reportes' %}active{% endif %}"
+        >
+          <i class="fa-solid fa-chart-column"></i>
+          <span>Reportes</span>
         </a>
       </nav>
     </aside>
@@ -75,15 +170,32 @@
             {% endblock %}
           </h2>
         </div>
+
         <div class="user-info">
-          <span style="font-size: 0.75rem; background: #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 20px; margin-right: 10px; font-weight: 700; text-transform: uppercase;">{{ request.user.get_rol_display }}</span>
-          <span><i class="fa-solid fa-user-circle"></i> Hola, {{ request.user.username }}</span>
-          <div class="user-info">
-            <a href="{% url 'password_change' %}" style="text-decoration: none; color: #475569; margin-right: 15px;" title="Configuración"><i class="fa-solid fa-gear"></i> Seguridad</a>
-          </div>
-          <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          <span class="user-role">
+            {{ request.user.get_rol_display }}
+          </span>
+
+          <span class="user-greeting">
+            <i class="fa-solid fa-user-circle"></i>
+            Hola, {{ request.user.username }}
+          </span>
+
+          <a
+            href="{% url 'password_change' %}"
+            class="security-link"
+            title="Configuración"
+          >
+            <i class="fa-solid fa-gear"></i>
+            Seguridad
+          </a>
+
+          <form method="post" action="{% url 'logout' %}" class="logout-form">
             {% csrf_token %}
-            <button type="submit" style="background:none; border:none; cursor:pointer;" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+            <button type="submit" class="btn-logout">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Salir
+            </button>
           </form>
         </div>
       </header>
@@ -92,27 +204,23 @@
         {% if messages %}
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
           <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      {% for message in messages %}
-        Swal.fire({
-          icon: '{% if message.tags == "error" %}error{% elif message.tags == "warning" %}warning{% elif message.tags == "success" %}success{% else %}info{% endif %}',
-          
-          title: '{% if message.tags == "success" %}¡Logrado!{% elif message.tags == "error" %}¡Atención!{% else %}Información{% endif %}',
-          
-          text: '{{ message|escapejs }}',
-          
-          confirmButtonText: 'Entendido',
-          confirmButtonColor: '#3b82f6', 
-          timer: 5000, 
-          timerProgressBar: true
-        });
-      {% endfor %}
-    });
-  </script>
+            document.addEventListener("DOMContentLoaded", function () {
+              {% for message in messages %}
+                Swal.fire({
+                  icon: '{% if message.tags == "error" %}error{% elif message.tags == "warning" %}warning{% elif message.tags == "success" %}success{% else %}info{% endif %}',
+                  title: '{% if message.tags == "success" %}¡Logrado!{% elif message.tags == "error" %}¡Atención!{% else %}Información{% endif %}',
+                  text: '{{ message|escapejs }}',
+                  confirmButtonText: 'Entendido',
+                  confirmButtonColor: '#3b82f6',
+                  timer: 5000,
+                  timerProgressBar: true
+                });
+              {% endfor %}
+            });
+          </script>
         {% endif %}
 
         {% block content %}
-
         {% endblock %}
       </main>
     </div>

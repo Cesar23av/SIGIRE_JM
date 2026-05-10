@@ -1,53 +1,142 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
 
-{% block page_title %}Registrar Nuevo Personal{% endblock %}
+{% block page_title %}
+  {% if edit_mode %}
+    Editar Personal
+  {% else %}
+    Registrar Nuevo Personal
+  {% endif %}
+{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'accounts/css/form_personal.css' %}?v=6">
 
-<div class="form-container">
-    <div class="form-card">
-        <div class="form-header">
-            <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-user-plus{% endif %}"></i>
-            <h3>{% if edit_mode %}Editar Personal: {{ usuario.get_full_name }}{% else %}Datos del Nuevo Usuario{% endif %}</h3>
-            
-            <p>{% if edit_mode %}Actualice la información del administrativo.{% else %}Complete la información para registrar un nuevo usuario administrativo. Se enviará un correo electrónico con sus credenciales de acceso.{% endif %}</p>
+<link rel="stylesheet" href="{% static 'accounts/css/form_personal.css' %}?v=8">
+
+<section class="personal-form-container">
+
+  <div class="personal-form-layout">
+
+    <aside class="personal-info-panel">
+      <div class="personal-info-icon">
+        <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-user-plus{% endif %}"></i>
+      </div>
+
+      <h3>
+        {% if edit_mode %}
+          Edición de Personal
+        {% else %}
+          Registro de Personal
+        {% endif %}
+      </h3>
+
+      <p>
+        {% if edit_mode %}
+          Actualiza los datos del usuario administrativo seleccionado.
+        {% else %}
+          Registra un nuevo usuario administrativo. El sistema generará sus credenciales y las enviará por correo electrónico.
+        {% endif %}
+      </p>
+
+      <ul class="personal-tips">
+        <li>
+          <i class="fa-solid fa-check"></i>
+          Verifica que el correo sea válido.
+        </li>
+        <li>
+          <i class="fa-solid fa-check"></i>
+          Revisa correctamente el rol asignado.
+        </li>
+        <li>
+          <i class="fa-solid fa-check"></i>
+          Los datos quedarán asociados al usuario registrado.
+        </li>
+      </ul>
+    </aside>
+
+    <section class="personal-form-card">
+      <div class="personal-form-header">
+        <div>
+          <h3>
+            <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-id-card{% endif %}"></i>
+
+            {% if edit_mode %}
+              Editar Personal
+            {% else %}
+              Datos del Nuevo Usuario
+            {% endif %}
+          </h3>
+
+          <p>
+            {% if edit_mode %}
+              Modifica la información necesaria y guarda los cambios.
+            {% else %}
+              Completa los campos requeridos para crear una cuenta administrativa.
+            {% endif %}
+          </p>
         </div>
+      </div>
 
-        <form method="post" novalidate id="form-personal">
-            {% csrf_token %}
-            
-            <div class="grid-form">
-                {% for field in form %}
-                    <div class="form-group {% if field.name == 'rol' or field.name == 'email' %}full-width{% endif %}">
-                        <label>{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.help_text %}
-                            <span class="help-text">{{ field.help_text }}</span>
-                        {% endif %}
-                        {% for error in field.errors %}
-                            <span class="error-text"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</span>
-                        {% endfor %}
-                    </div>
+      <div class="personal-form-body">
+        <form method="post" novalidate id="form-personal" class="personal-form">
+          {% csrf_token %}
+
+          <div class="grid-form">
+            {% for field in form %}
+              <div class="form-group {% if field.name == 'rol' or field.name == 'email' %}full-width{% endif %}">
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}
+                </label>
+
+                <div class="input-wrapper">
+                  {{ field }}
+                </div>
+
+                {% if field.help_text %}
+                  <span class="help-text">
+                    {{ field.help_text }}
+                  </span>
+                {% endif %}
+
+                {% for error in field.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
                 {% endfor %}
-            </div>
+              </div>
+            {% endfor %}
+          </div>
 
-            <div class="form-actions">
-                <button type="submit" 
-                        class="btn-save" 
-                        id="btn-submit" 
-                        {% if edit_mode %}disabled{% endif %}>
-                    <i class="fa-solid fa-check"></i> 
-                    {% if edit_mode %}Guardar Cambios{% else %}Finalizar Registro{% endif %}
-                </button>
-                <a href="{% url 'list_personal' %}" class="btn-cancel">
-                    Cancelar y Volver
-                </a>
-            </div>
+          <div class="form-actions">
+            <a href="{% url 'list_personal' %}" class="btn-cancel">
+              <i class="fa-solid fa-arrow-left"></i>
+              Cancelar y Volver
+            </a>
+
+            <button
+              type="submit"
+              class="btn-save"
+              id="btn-submit"
+              {% if edit_mode %}disabled{% endif %}
+            >
+              <i class="fa-solid fa-check"></i>
+
+              {% if edit_mode %}
+                Guardar Cambios
+              {% else %}
+                Finalizar Registro
+              {% endif %}
+            </button>
+          </div>
         </form>
-    </div>
-</div>
+      </div>
+    </section>
+
+  </div>
+
+</section>
 
 <script src="{% static 'accounts/js/form_personal.js' %}?v=2"></script>
+
 {% endblock %}

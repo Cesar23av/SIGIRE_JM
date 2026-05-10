@@ -1,505 +1,783 @@
-/* --- Variables base --- */
+/* =========================================================
+   LIST_TUTORES.CSS - LISTADO DE TUTORES
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
+
 :root {
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
-    --success: #10b981;
-    --success-hover: #059669;
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-    --warning: #f59e0b;
-    --warning-hover: #d97706;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --bg-light: #f8fafc;
-    --border: #e2e8f0;
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --yellow-soft: #fffbeb;
+  --yellow-main: #f59e0b;
+
+  --gray-soft: #f1f5f9;
+  --gray-main: #475569;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-/* --- Contenedor y Animación --- */
-.list-container-wrapper { 
-    max-width: 1200px; 
-    margin: 30px auto; 
-    padding: 0 20px; 
-    animation: fadeIn 0.4s ease-out forwards;
+
+/* =========================================================
+   2. CONTENEDOR GENERAL
+   Agrupa toda la vista del listado de tutores.
+   ========================================================= */
+
+.tutor-list-page {
+  width: 100%;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.tutor-list-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-/* --- Tarjeta Principal --- */
-.tutor-list-card { 
-    background: #ffffff; 
-    border-radius: 16px; 
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01); 
-    border: 1px solid var(--border); 
-    overflow: hidden; 
+
+/* =========================================================
+   3. CABECERA DEL LISTADO
+   Título, descripción, buscador y botón de registro.
+   ========================================================= */
+
+.tutor-list-header {
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 22px;
 }
 
-/* --- Encabezado --- */
-.list-header { 
-    padding: 24px 32px; 
-    background: #ffffff; 
-    border-bottom: 1px solid var(--border); 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
+.header-info h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-.header-info h3 { 
-    margin: 0; 
-    color: var(--text-main); 
-    font-size: 1.35rem; 
-    font-weight: 800; 
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .header-info h3 i {
-    color: var(--primary);
+  color: var(--primary-color);
 }
 
-.header-info p { 
-    margin: 6px 0 0; 
-    color: var(--text-muted); 
-    font-size: 0.9rem; 
-    font-weight: 500;
-}
-
-/* --- Botón Nuevo Tutor --- */
-.btn-add-tutor { 
-    background: var(--success); 
-    color: white; 
-    padding: 12px 24px; 
-    border-radius: 10px; 
-    text-decoration: none; 
-    font-weight: 700; 
-    font-size: 0.95rem; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    transition: all 0.3s ease; 
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-}
-
-.btn-add-tutor:hover { 
-    background: var(--success-hover); 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
-}
-
-/* --- Tabla --- */
-.list-body { 
-    padding: 0; 
-    overflow-x: auto; 
-}
-
-.tutor-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    text-align: left; 
-}
-
-.tutor-table thead th { 
-    background: var(--bg-light); 
-    padding: 16px 24px; 
-    color: var(--text-muted); 
-    font-size: 0.75rem; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid var(--border); 
-}
-
-.tutor-table tbody td { 
-    padding: 18px 24px; 
-    border-bottom: 1px solid #f1f5f9; 
-    color: var(--text-main); 
-    vertical-align: middle; 
-    font-size: 0.95rem;
-}
-
-.tutor-table tbody tr {
-    transition: background-color 0.2s;
-}
-
-.tutor-table tbody tr:hover { 
-    background-color: var(--bg-light); 
-}
-
-/* --- Elementos de Celda --- */
-.row-number { 
-    background: #e2e8f0; 
-    color: var(--text-muted); 
-    padding: 6px 10px; 
-    border-radius: 8px; 
-    font-weight: 700; 
-    font-size: 0.8rem; 
-}
-
-.tutor-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.tutor-name { 
-    font-weight: 700; 
-    color: var(--text-main); 
-    font-size: 1rem;
-}
-
-.tutor-sub { 
-    color: #94a3b8; 
-    font-size: 0.8rem; 
-    margin-top: 2px;
-}
-
-.ci-badge { 
-    font-family: 'Consolas', monospace; 
-    background: #eff6ff; 
-    color: var(--primary-hover); 
-    padding: 6px 12px; 
-    border-radius: 8px; 
-    font-weight: 700; 
-    font-size: 0.9rem; 
-    border: 1px solid #bfdbfe; 
-    display: inline-block;
-}
-
-.whatsapp-link { 
-    text-decoration: none; 
-    color: var(--success-hover); 
-    font-weight: 600; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px; 
-    background: #ecfdf5; 
-    padding: 6px 12px; 
-    border-radius: 20px; 
-    transition: all 0.2s ease; 
-    border: 1px solid #a7f3d0;
-}
-
-.whatsapp-link:hover { 
-    background: #d1fae5; 
-    transform: scale(1.02);
-}
-
-/* --- Acciones y Botones --- */
-.actions-cell { 
-    display: flex; 
-    justify-content: center; 
-    gap: 10px; 
-}
-
-.btn-action { 
-    width: 36px; 
-    height: 36px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border-radius: 10px; 
-    transition: all 0.2s ease; 
-    text-decoration: none; 
-    font-size: 1rem;
-}
-
-.btn-action.edit { 
-    color: var(--primary); 
-    background: #eff6ff; 
-}
-.btn-action.edit:hover { 
-    background: var(--primary); 
-    color: white; 
-    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
-}
-
-.btn-action.delete { 
-    color: var(--danger); 
-    background: #fef2f2; 
-}
-.btn-action.delete:hover { 
-    background: var(--danger); 
-    color: white; 
-    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
-}
-
-/* --- Botón Seleccionar (Modo Selección) --- */
-.btn-action.select {
-    transition: all 0.3s;
-    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.15);
-}
-
-.btn-action.select:hover {
-    background: var(--warning-hover) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
-}
-
-/* --- Banner de Información (Modo Selección) --- */
-.selection-banner {
-    background-color: #fffbeb; 
-    border-left: 4px solid var(--warning); 
-    color: #92400e; 
-    padding: 16px 20px; 
-    margin: 20px 30px; 
-    border-radius: 0 8px 8px 0;
-    display: flex; 
-    align-items: center; 
-    gap: 16px;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
-
-.selection-banner i {
-    color: var(--warning);
+.header-info p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
 }
 
 .header-actions {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   4. BUSCADOR Y FILTRO
+   Formulario de búsqueda por nombre, CI u ocupación.
+   ========================================================= */
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  min-width: 260px;
 }
 
 .search-icon {
-    position: absolute;
-    left: 15px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 0.95rem;
 }
 
 .search-box input {
-    padding: 10px 40px 10px 45px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    font-size: 0.9rem;
-    width: 300px;
-    background: var(--bg-light);
-    transition: all 0.3s ease;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px 10px 40px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
 }
 
 .search-box input:focus {
-    width: 350px;
-    border-color: var(--primary-color);
-    background: white;
-    outline: none;
-    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.05);
-}
-
-.clear-search {
-    position: absolute;
-    right: 15px;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.8rem;
-    transition: color 0.2s;
-}
-
-.clear-search:hover {
-    color: var(--primary-color);
-}
-
-.search-results-info {
-    padding: 12px 30px;
-    background: #f1f5f9;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
-    padding: 22px;
-    border-top: 1px solid #e2e8f0;
-    background: #f8fafc;
-}
-
-.pagination a {
-    background: #1e293b;
-    color: white;
-    padding: 9px 16px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-}
-
-.pagination a:hover {
-    background: #c62828;
-    transform: translateY(-2px);
-}
-
-.pagination span {
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 800;
-}
-
-.tutor-filter-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
 }
 
 .btn-filter-tutor,
-.btn-clear-tutor {
-    min-height: 44px;
-    border-radius: 12px;
-    border: none;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    white-space: nowrap;
+.btn-clear-tutor,
+.btn-add-tutor {
+  min-height: 42px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-filter-tutor {
-    background: #1e293b;
-    color: white;
-    padding: 0 16px;
+  padding: 10px 15px;
+  background: var(--secondary-color);
+  color: var(--white);
+  border: 1px solid var(--secondary-color);
 }
 
 .btn-filter-tutor:hover {
-    background: #c62828;
-    transform: translateY(-2px);
+  background: #0f172a;
 }
 
 .btn-clear-tutor {
-    width: 44px;
-    background: #f8fafc;
-    color: #64748b;
-    border: 1.5px solid #e2e8f0;
+  width: 42px;
+  background: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
 }
 
 .btn-clear-tutor:hover {
-    color: #c62828;
-    background: #fff1f2;
-    border-color: #fecaca;
-}
-
-@media (max-width: 800px) {
-    .tutor-filter-form {
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .btn-filter-tutor,
-    .btn-clear-tutor {
-        width: 100%;
-    }
-}
-
-/* --- Ajuste del header de tutores con filtro --- */
-.list-header {
-    gap: 20px;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 14px;
-    flex: 1;
-    min-width: 0;
-}
-
-.tutor-filter-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    max-width: 560px;
-    min-width: 0;
-}
-
-.tutor-filter-form .search-box {
-    flex: 1;
-    min-width: 260px;
-}
-
-.tutor-filter-form .search-box input {
-    width: 100%;
+  background: var(--red-soft);
 }
 
 .btn-add-tutor {
-    min-width: 175px;
-    height: 46px;
-    padding: 0 20px;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  padding: 10px 16px;
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
 }
 
-/* Ajuste para que el botón limpiar no se deforme */
-.btn-clear-tutor {
+.btn-add-tutor:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   5. MENSAJES INFORMATIVOS
+   Resultados de búsqueda y modo selección.
+   ========================================================= */
+
+.search-results-info {
+  margin: 20px 30px 0;
+  padding: 13px 15px;
+
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  border-left: 4px solid var(--blue-main);
+  border-radius: 10px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.selection-banner {
+  margin: 20px 30px 0;
+  padding: 16px 18px;
+
+  background: var(--yellow-soft);
+  color: #92400e;
+  border-left: 4px solid var(--yellow-main);
+  border-radius: 12px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.selection-banner i {
+  color: var(--yellow-main);
+  font-size: 1.5rem;
+  margin-top: 2px;
+}
+
+
+/* =========================================================
+   6. CUERPO Y TABLA
+   En escritorio funciona como tabla tradicional.
+   ========================================================= */
+
+.list-body {
+  padding: 24px 30px 30px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tutor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tutor-table thead {
+  background: var(--bg-soft);
+}
+
+.tutor-table th {
+  padding: 15px 16px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.tutor-table td {
+  padding: 16px;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.tutor-table tbody tr {
+  transition: var(--transition);
+}
+
+.tutor-table tbody tr:hover {
+  background: var(--bg-soft);
+}
+
+.number-column {
+  width: 50px;
+}
+
+.actions-column,
+.selection-column {
+  text-align: center;
+}
+
+.selection-column {
+  background: #fef3c7;
+}
+
+.selection-cell {
+  background: #fffbeb;
+  text-align: center;
+}
+
+
+/* =========================================================
+   7. DATOS DEL TUTOR
+   Nombre, CI, WhatsApp y ocupación.
+   ========================================================= */
+
+.row-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+
+  background: var(--gray-soft);
+  color: var(--gray-main);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.tutor-info {
+  display: grid;
+  gap: 3px;
+}
+
+.tutor-name {
+  color: var(--secondary-color);
+  font-weight: 900;
+}
+
+.tutor-sub {
+  color: var(--text-light);
+  font-size: 0.78rem;
+}
+
+.ci-badge {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.whatsapp-link {
+  color: var(--green-main);
+  background: var(--green-soft);
+  border-radius: 999px;
+  padding: 7px 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 900;
+
+  transition: var(--transition);
+}
+
+.whatsapp-link:hover {
+  background: #dcfce7;
+}
+
+
+/* =========================================================
+   8. BOTONES DE ACCIÓN
+   Editar, eliminar, bloquear y seleccionar.
+   ========================================================= */
+
+.actions-cell {
+  text-align: center;
+}
+
+.btn-action {
+  min-height: 36px;
+  min-width: 36px;
+  border-radius: 9px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 900;
+
+  transition: var(--transition);
+}
+
+.btn-action.edit {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+.btn-action.edit:hover {
+  background: #dbeafe;
+}
+
+.btn-action.delete {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+.btn-action.delete:hover {
+  background: #fee2e2;
+}
+
+.btn-action.locked {
+  background: var(--gray-soft);
+  color: var(--text-light);
+  cursor: not-allowed;
+}
+
+.btn-action.select {
+  width: auto;
+  min-height: 36px;
+  padding: 7px 12px;
+
+  background: var(--yellow-main);
+  color: var(--white);
+
+  border-radius: 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.btn-action.select:hover {
+  background: #d97706;
+}
+
+
+/* =========================================================
+   9. ESTADO VACÍO
+   Mensaje cuando no existen registros.
+   ========================================================= */
+
+.empty-state {
+  padding: 46px 20px !important;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  display: block;
+  color: #cbd5e1;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.empty-state span {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   10. PAGINACIÓN
+   Navegación entre páginas de tutores.
+   ========================================================= */
+
+.pagination {
+  margin-top: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.pagination-link,
+.pagination-current {
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 9px 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.pagination-link {
+  background: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.pagination-link:hover {
+  background: var(--red-soft);
+}
+
+.pagination-current {
+  background: var(--gray-soft);
+  color: var(--gray-main);
+}
+
+
+/* =========================================================
+   11. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Ajusta separación de cabecera y tabla.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .tutor-list-header,
+  .list-body {
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+
+  .tutor-table th,
+  .tutor-table td {
+    padding: 15px 14px;
+  }
+}
+
+
+/* =========================================================
+   12. RESPONSIVE - TABLETS
+   La cabecera y los filtros se apilan.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .tutor-list-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 220px;
+  }
+}
+
+
+/* =========================================================
+   13. RESPONSIVE - CELULARES
+   La tabla se convierte en tarjetas.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .tutor-list-header {
+    padding: 24px 22px;
+  }
+
+  .header-info h3 {
+    font-size: 1.18rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box,
+  .btn-filter-tutor,
+  .btn-clear-tutor,
+  .btn-add-tutor {
+    width: 100%;
+  }
+
+  .btn-clear-tutor {
+    width: 100%;
+  }
+
+  .search-results-info,
+  .selection-banner {
+    margin: 18px 22px 0;
+  }
+
+  .list-body {
+    padding: 22px;
+  }
+
+  .table-responsive {
+    overflow-x: visible;
+  }
+
+  .tutor-table,
+  .tutor-table thead,
+  .tutor-table tbody,
+  .tutor-table th,
+  .tutor-table td,
+  .tutor-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .tutor-table thead {
+    display: none;
+  }
+
+  .tutor-table tbody {
+    background: var(--bg-soft);
+    padding: 14px;
+  }
+
+  .tutor-table tr {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .tutor-table td {
+    border-bottom: none;
+    padding: 10px 0;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+
+    text-align: right;
+  }
+
+  .tutor-table td::before {
+    content: attr(data-label);
+    color: var(--text-muted);
+    font-weight: 900;
+    text-align: left;
     flex-shrink: 0;
+  }
+
+  .tutor-table td[data-label="Nombre Completo"] {
+    display: block;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 14px;
+    margin-bottom: 4px;
+  }
+
+  .tutor-table td[data-label="Nombre Completo"]::before {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .tutor-table td[data-label="Acciones"],
+  .tutor-table td[data-label="Seleccionar"] {
+    display: block;
+    text-align: left;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
+    margin-top: 6px;
+  }
+
+  .tutor-table td[data-label="Acciones"]::before,
+  .tutor-table td[data-label="Seleccionar"]::before {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .actions-cell,
+  .selection-cell {
+    background: transparent;
+    text-align: left;
+  }
+
+  .btn-action.select {
+    width: 100%;
+  }
+
+  .empty-state::before {
+    display: none;
+  }
 }
 
-.btn-filter-tutor {
-    flex-shrink: 0;
-}
 
-/* Responsive */
-@media (max-width: 1050px) {
-    .list-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
+/* =========================================================
+   14. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce espacios para evitar desbordes.
+   ========================================================= */
 
-    .header-actions {
-        width: 100%;
-        justify-content: stretch;
-    }
+@media (max-width: 480px) {
+  .tutor-list-card {
+    border-radius: 14px;
+  }
 
-    .tutor-filter-form {
-        max-width: none;
-    }
+  .tutor-list-header {
+    padding: 22px 18px;
+  }
 
-    .btn-add-tutor {
-        min-width: 160px;
-    }
-}
+  .header-info h3 {
+    font-size: 1.08rem;
+  }
 
-@media (max-width: 720px) {
-    .header-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .header-info p {
+    font-size: 0.86rem;
+  }
 
-    .tutor-filter-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .search-results-info,
+  .selection-banner {
+    margin: 16px 18px 0;
+    font-size: 0.84rem;
+  }
 
-    .tutor-filter-form .search-box {
-        min-width: 100%;
-    }
+  .list-body {
+    padding: 20px 18px;
+  }
 
-    .btn-filter-tutor,
-    .btn-clear-tutor,
-    .btn-add-tutor {
-        width: 100%;
-    }
+  .tutor-table tbody {
+    padding: 12px;
+  }
+
+  .tutor-table tr {
+    padding: 13px;
+  }
+
+  .tutor-table td {
+    font-size: 0.86rem;
+    gap: 12px;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .pagination-link,
+  .pagination-current {
+    width: 100%;
+  }
 }

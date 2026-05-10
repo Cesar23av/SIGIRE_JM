@@ -1,597 +1,817 @@
-/* --- Variables e Interfaz --- */
-.enroll-container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-    animation: fadeIn 0.4s ease;
+/* =========================================================
+   FORM_ENROLLMENT.CSS - FORMULARIO DE INSCRIPCIÓN
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES LOCALES
+   Mantienen coherencia visual con el panel administrativo.
+   ========================================================= */
+
+:root {
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --secondary-light: #334155;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+  --border-color: #e2e8f0;
+
+  --blue-soft: #eff6ff;
+  --blue-main: #2563eb;
+
+  --green-soft: #ecfdf5;
+  --green-main: #16a34a;
+
+  --red-soft: #fef2f2;
+  --red-main: #dc2626;
+
+  --orange-soft: #fff7ed;
+  --orange-main: #ea580c;
+
+  --yellow-soft: #fffbeb;
+  --yellow-main: #f59e0b;
+
+  --gray-soft: #f1f5f9;
+  --gray-main: #475569;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --transition: all 0.25s ease;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* =========================================================
+   2. CONTENEDOR GENERAL
+   Agrupa toda la pantalla del formulario de inscripción.
+   ========================================================= */
+
+.enroll-page {
+  width: 100%;
+}
+
+.enroll-container {
+  width: 100%;
 }
 
 .enroll-card {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
-    overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-/* --- Cabecera --- */
+
+/* =========================================================
+   3. CABECERA DEL FORMULARIO
+   Título, gestión actual y estado del proceso.
+   ========================================================= */
+
 .enroll-card-header {
-    background: #1e293b;
-    padding: 24px 35px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 4px solid #c62828;
-    color: white;
+  padding: 26px 30px;
+  border-bottom: 1px solid var(--border-color);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .header-text h3 {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.header-text h3 i {
+  color: var(--primary-color);
 }
 
 .header-text p {
-    margin: 4px 0 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.header-text strong {
+  color: var(--primary-color);
+}
+
+.header-badge {
+  flex-shrink: 0;
 }
 
 .badge-process {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--orange-soft);
+  color: var(--orange-main);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-/* --- Layout Grid --- */
+
+/* =========================================================
+   4. CUERPO DEL FORMULARIO
+   Layout principal en dos columnas.
+   ========================================================= */
+
+.enroll-form-body {
+  width: 100%;
+}
+
 .enroll-layout-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 35px;
-    padding: 35px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 26px;
+  padding: 30px;
+}
+
+.enroll-column-main,
+.enroll-column-side {
+  min-width: 0;
+}
+
+.form-section {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
 }
 
 .section-subtitle {
-    color: #334155;
-    font-size: 0.95rem;
-    font-weight: 800;
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--secondary-color);
+  font-size: 1rem;
+  font-weight: 900;
+  margin-bottom: 16px;
 }
 
 .section-subtitle i {
-    color: #c62828;
+  color: var(--primary-color);
 }
 
-/* --- Banner Estudiante --- */
+
+/* =========================================================
+   5. BANNER DEL ESTUDIANTE
+   Muestra el estudiante seleccionado o la falta de selección.
+   ========================================================= */
+
 .student-info-banner {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 15px 20px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 25px;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .student-avatar {
-    width: 45px;
-    height: 45px;
-    background: #c62828;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--primary-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.student-data {
+  display: grid;
+  gap: 5px;
 }
 
 .student-data strong {
-    display: block;
-    font-size: 1rem;
-    color: #1e293b;
+  color: var(--secondary-color);
+  font-size: 0.98rem;
+  font-weight: 900;
 }
 
 .student-data span {
-    font-size: 0.85rem;
-    color: #64748b;
-    font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
-/* --- Inputs y Grupos --- */
+
+/* =========================================================
+   6. CAMPOS DEL FORMULARIO
+   Selects, inputs, textarea y textos de ayuda.
+   ========================================================= */
+
 .input-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.form-group {
+  min-width: 0;
 }
 
 .form-group label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #64748b;
-    margin-bottom: 8px;
+  display: block;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
 .enroll-input,
 .enroll-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    background: #fcfcfc;
-    font-size: 0.9rem;
-    transition: all 0.3s;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+
+  transition: var(--transition);
+}
+
+.enroll-input {
+  min-height: 46px;
+  padding: 12px 14px;
+}
+
+.enroll-textarea {
+  min-height: 120px;
+  padding: 13px 14px;
+  resize: vertical;
 }
 
 .enroll-input:focus,
 .enroll-textarea:focus {
-    outline: none;
-    border-color: #c62828;
-    background: white;
-    box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.05);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+  outline: none;
 }
 
-.enroll-textarea {
-    height: 100px;
-    resize: none;
+.enroll-input::placeholder,
+.enroll-textarea::placeholder {
+  color: var(--text-light);
 }
 
-/* --- Checklist de Requisitos --- */
+.rude-manual-input {
+  margin-top: 10px;
+}
+
+.input-readonly,
+.enroll-input[readonly] {
+  background: var(--gray-soft);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.input-help {
+  display: block;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin-top: 7px;
+}
+
+
+/* =========================================================
+   7. CAJA DE APROBACIÓN Y SUGERENCIAS
+   Para estudiantes con inscripción previa.
+   ========================================================= */
+
+.approval-box {
+  background: var(--yellow-soft);
+  border: 1px solid #fde68a;
+  border-left: 4px solid var(--yellow-main);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+}
+
+.approval-check {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+  color: #92400e;
+  font-size: 0.88rem;
+  font-weight: 900;
+  margin-bottom: 8px !important;
+}
+
+.approval-check input {
+  margin-top: 3px;
+}
+
+.approval-box p {
+  color: #92400e;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.suggestion-info {
+  margin-top: 12px;
+}
+
+
+/* =========================================================
+   8. PANEL DE REQUISITOS
+   Checklist lateral de documentos.
+   ========================================================= */
+
 .requirements-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 25px;
-    border-radius: 15px;
-    height: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 96px;
 }
 
 .requirements-hint {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 15px;
-    font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
 .requirements-checklist {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
 .check-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    background: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 13px 14px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .check-item:hover {
-    border-color: #c62828;
-    transform: translateX(5px);
+  border-color: rgba(198, 40, 40, 0.35);
+  background: #fffafa;
 }
 
 .check-item input {
-    width: 18px;
-    height: 18px;
-    accent-color: #c62828;
-    cursor: pointer;
+  display: none;
+}
+
+.check-custom {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+
+  border: 2px solid #cbd5e1;
+  background: var(--white);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+  margin-top: 2px;
+
+  transition: var(--transition);
+}
+
+.check-item input:checked + .check-custom {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.check-item input:checked + .check-custom::after {
+  content: "✓";
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .check-text {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #334155;
-}
+  color: var(--text-main);
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.4;
 
-.requirements-info {
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px dashed #cbd5e1;
-    display: flex;
-    gap: 10px;
-    font-size: 0.75rem;
-    color: #94a3b8;
-    line-height: 1.4;
-}
-
-/* --- Footer --- */
-.enroll-form-footer {
-    padding: 25px 35px;
-    background: #f1f5f9;
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-}
-
-.btn-confirm-enroll {
-    background: #1e293b;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-confirm-enroll:hover {
-    background: #c62828;
-    transform: translateY(-2px);
-}
-
-.btn-cancel-enroll {
-    padding: 12px 25px;
-    color: #64748b;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-/* --- Modal inicial: tipo de inscripción --- */
-.modal-tipo-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(6px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-}
-
-.modal-tipo-overlay.show {
-    display: flex;
-    animation: modalFadeIn 0.25s ease-out;
-}
-
-body.modal-open {
-    overflow: hidden;
-}
-
-.modal-tipo-card {
-    width: 100%;
-    max-width: 520px;
-    background: #ffffff;
-    border-radius: 22px;
-    padding: 34px 32px;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.32);
-    animation: modalScaleIn 0.28s ease-out;
-}
-
-.modal-tipo-icon {
-    width: 76px;
-    height: 76px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    background: #fee2e2;
-    color: #c62828;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-}
-
-.modal-tipo-card h3 {
-    margin: 0;
-    color: #1e293b;
-    font-size: 1.5rem;
-    font-weight: 800;
-}
-
-.modal-tipo-card p {
-    margin: 14px 0 28px;
-    color: #64748b;
-    font-size: 0.95rem;
-    line-height: 1.55;
-}
-
-.modal-tipo-actions {
-    display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap: 16px;
-    align-items: stretch;
-}
-
-.btn-tipo {
-    min-height: 56px;
-    padding: 0 22px;
-    border-radius: 14px;
-    border: none;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 800;
-    line-height: 1.2;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    white-space: nowrap;
-    transition: all 0.25s ease;
-}
-
-.btn-tipo i {
-    flex-shrink: 0;
-    font-size: 1rem;
-}
-
-.btn-tipo.nuevo {
-    background: #10b981;
-    color: #ffffff;
-    box-shadow: 0 8px 18px rgba(16, 185, 129, 0.28);
-}
-
-.btn-tipo.nuevo:hover {
-    background: #059669;
-    transform: translateY(-2px);
-}
-
-.btn-tipo.previo {
-    background: #c62828;
-    color: #ffffff;
-    box-shadow: 0 8px 18px rgba(198, 40, 40, 0.28);
-}
-
-.btn-tipo.previo:hover {
-    background: #b71c1c;
-    transform: translateY(-2px);
-}
-
-@media (max-width: 720px) {
-    .modal-tipo-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .btn-tipo {
-        white-space: normal;
-        padding: 0 18px;
-    }
-}
-
-/* --- SweetAlert personalizado para inscripción --- */
-.swal-inscripcion-popup {
-    border-radius: 18px !important;
-    padding: 28px !important;
-}
-
-.swal2-title {
-    color: #1e293b !important;
-    font-weight: 800 !important;
-}
-
-.swal2-html-container {
-    color: #64748b !important;
-    font-weight: 500 !important;
-}
-
-.swal-inscripcion-actions {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
-    width: 100% !important;
-    margin-top: 24px !important;
-}
-
-.swal-btn-nuevo,
-.swal-btn-registrado,
-.swal-btn-previo {
-    width: 100% !important;
-    min-height: 48px !important;
-    padding: 12px 22px !important;
-    border-radius: 10px !important;
-    font-weight: 800 !important;
-    font-size: 0.9rem !important;
-    white-space: normal !important;
-    line-height: 1.2 !important;
-}
-
-@media (min-width: 760px) {
-    .swal-inscripcion-popup {
-        width: 620px !important;
-    }
-
-    .swal-inscripcion-actions {
-        grid-template-columns: 1fr 1.25fr 1.1fr !important;
-    }
-}
-
-/* --- Badges de requisitos: Obligatorio / Opcional --- */
-.check-text {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #334155;
-    line-height: 1.35;
+  display: grid;
+  gap: 5px;
 }
 
 .req-required,
 .req-optional {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    padding: 4px 9px;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    font-weight: 900;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    white-space: nowrap;
+  width: max-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .req-required {
-    background: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
+  background: var(--red-soft);
+  color: var(--red-main);
 }
 
 .req-optional {
-    background: #e0f2fe;
-    color: #0369a1;
-    border: 1px solid #bae6fd;
+  background: var(--blue-soft);
+  color: var(--blue-main);
 }
 
-/* Mejora visual de cada requisito */
-.check-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    background: #ffffff;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: 1.5px solid #e2e8f0;
-    transition: all 0.22s ease;
-}
-
-.check-item:hover {
-    border-color: #c62828;
-    background: #fffafa;
-    transform: translateX(4px);
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.05);
-}
-
-.check-item input {
-    width: 18px;
-    height: 18px;
-    accent-color: #c62828;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.check-item:has(input:checked) {
-    border-color: #c62828;
-    background: #fff7f7;
-}
-
-.check-item:has(input:checked) .check-text {
-    color: #1e293b;
-}
-
-/* Avisos informativos dentro del formulario */
 .requirements-info {
-    margin-top: 20px;
-    padding: 14px 15px;
-    border-top: none;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 0.78rem;
-    color: #64748b;
-    line-height: 1.45;
+  background: var(--blue-soft);
+  color: #1e40af;
+  border-left: 4px solid var(--blue-main);
+  border-radius: 10px;
+  padding: 12px 13px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .requirements-info i {
-    color: #c62828;
-    margin-top: 2px;
-    flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--blue-main);
 }
 
-/* Botón deshabilitado cuando no hay estudiante */
+
+/* =========================================================
+   9. PIE DEL FORMULARIO
+   Botones de cancelar y confirmar inscripción.
+   ========================================================= */
+
+.enroll-form-footer {
+  padding: 24px 30px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-soft);
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.btn-confirm-enroll,
+.btn-cancel-enroll {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cancel-enroll {
+  background: var(--white);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-cancel-enroll:hover {
+  background: #e2e8f0;
+}
+
+.btn-confirm-enroll {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-confirm-enroll:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
 .btn-confirm-enroll:disabled {
-    background: #94a3b8;
-    color: #f8fafc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-    opacity: 0.75;
+  background: #cbd5e1;
+  color: #64748b;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.btn-confirm-enroll:disabled:hover {
-    background: #94a3b8;
-    transform: none;
+
+/* =========================================================
+   10. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Reduce columna lateral y espacios.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .enroll-layout-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 22px;
+    padding: 26px;
+  }
+
+  .enroll-card-header,
+  .enroll-form-footer {
+    padding-left: 26px;
+    padding-right: 26px;
+  }
 }
 
-/* Responsive para requisitos */
-@media (max-width: 640px) {
-    .check-text {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
 
-    .req-required,
-    .req-optional {
-        font-size: 0.64rem;
-    }
+/* =========================================================
+   11. RESPONSIVE - TABLETS
+   El formulario pasa a una sola columna.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .enroll-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .requirements-box {
+    position: static;
+  }
 }
 
-.input-help {
-    display: block;
-    margin-top: 8px;
-    color: #64748b;
-    font-size: 0.75rem;
-    line-height: 1.35;
-    font-weight: 600;
+
+/* =========================================================
+   12. RESPONSIVE - CELULARES
+   Ajuste completo para pantallas pequeñas.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .enroll-card-header {
+    flex-direction: column;
+    padding: 24px 22px;
+  }
+
+  .header-text h3 {
+    font-size: 1.18rem;
+  }
+
+  .badge-process {
+    display: inline-flex;
+  }
+
+  .enroll-layout-grid {
+    padding: 22px;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-section,
+  .requirements-box {
+    padding: 20px;
+  }
+
+  .student-info-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .enroll-form-footer {
+    flex-direction: column-reverse;
+    padding: 22px;
+  }
+
+  .btn-confirm-enroll,
+  .btn-cancel-enroll {
+    width: 100%;
+  }
 }
 
-/* --- Caja de aprobación gestión anterior --- */
-.approval-box {
-    margin-top: 12px;
-    padding: 14px 15px;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
+
+/* =========================================================
+   13. RESPONSIVE - CELULARES PEQUEÑOS
+   Reduce espacios y tamaños para evitar desbordes.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .enroll-card {
+    border-radius: 14px;
+  }
+
+  .enroll-card-header {
+    padding: 22px 18px;
+  }
+
+  .header-text h3 {
+    font-size: 1.08rem;
+  }
+
+  .header-text p {
+    font-size: 0.86rem;
+  }
+
+  .enroll-layout-grid {
+    padding: 20px 18px;
+  }
+
+  .form-section,
+  .requirements-box {
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .student-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1.2rem;
+  }
+
+  .student-data strong {
+    font-size: 0.92rem;
+  }
+
+  .student-data span,
+  .requirements-hint,
+  .input-help,
+  .requirements-info {
+    font-size: 0.78rem;
+  }
+
+  .enroll-input,
+  .enroll-textarea {
+    font-size: 0.9rem;
+  }
+
+  .check-text {
+    font-size: 0.82rem;
+  }
+
+  .enroll-form-footer {
+    padding: 20px 18px;
+  }
 }
 
-.approval-check {
-    display: flex;
-    align-items: center;
+/* =========================================================
+   COMPLETAR_DOCUMENTOS - REGULARIZACIÓN DOCUMENTAL
+   Estilos específicos para completar documentos pendientes.
+   ========================================================= */
+
+
+/* =========================================================
+   1. BADGE DE ESTADO DOCUMENTAL
+   Cambia visualmente según el estado de la inscripción.
+   ========================================================= */
+
+.badge-document-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-document-status.completa {
+  background: var(--green-soft);
+  color: var(--green-main);
+}
+
+.badge-document-status.pendiente {
+  background: var(--yellow-soft);
+  color: #92400e;
+}
+
+.badge-document-status.vencida {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+
+/* =========================================================
+   2. RESUMEN DE INSCRIPCIÓN
+   Agrupa curso, RUDE y fecha límite.
+   ========================================================= */
+
+.documents-summary {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.documents-summary .requirements-info {
+  margin: 0;
+}
+
+.deadline-info {
+  background: var(--orange-soft);
+  color: #9a3412;
+  border-left-color: var(--orange-main);
+}
+
+.deadline-info i {
+  color: var(--orange-main);
+}
+
+
+/* =========================================================
+   3. CAJA DE CRITERIO DOCUMENTAL
+   Explica cómo se regulariza la documentación.
+   ========================================================= */
+
+.documents-policy-box {
+  background: var(--bg-soft);
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.documents-policy-box p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.documents-policy-box strong {
+  color: var(--green-main);
+}
+
+
+/* =========================================================
+   4. AJUSTES DEL CHECKLIST EN COMPLETAR DOCUMENTOS
+   Refuerza la lectura de documentos ya entregados.
+   ========================================================= */
+
+.documents-page .check-item input:checked + .check-custom + .check-text {
+  color: var(--green-main);
+}
+
+.documents-page .check-item input:checked + .check-custom + .check-text .req-required,
+.documents-page .check-item input:checked + .check-custom + .check-text .req-optional {
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   5. RESPONSIVE - COMPLETAR DOCUMENTOS
+   Ajustes finos para móvil.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .documents-summary {
     gap: 10px;
-    color: #1e293b;
-    font-size: 0.85rem;
-    font-weight: 800;
-    cursor: pointer;
+  }
+
+  .documents-policy-box {
+    padding: 16px;
+  }
 }
 
-.approval-check input {
-    width: 18px;
-    height: 18px;
-    accent-color: #c62828;
-    cursor: pointer;
-}
-
-.approval-box p {
-    margin: 10px 0 0;
-    color: #64748b;
-    font-size: 0.76rem;
-    line-height: 1.45;
-    font-weight: 600;
+@media (max-width: 480px) {
+  .documents-policy-box p {
+    font-size: 0.82rem;
+  }
 }

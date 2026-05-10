@@ -1,147 +1,644 @@
+/* =========================================================
+   BASE_ADMIN.CSS - LAYOUT ADMINISTRATIVO GENERAL
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+
+/* =========================================================
+   1. VARIABLES GLOBALES
+   Colores, sombras, tamaños base y transiciones.
+   Si quieres cambiar la identidad del panel, empieza aquí.
+   ========================================================= */
+
 :root {
-    --primary-color: #c62828;
-    --secondary-color: #1e293b;
-    --bg-color: #f8fafc;
-    --text-main: #334155;
-    --white: #ffffff;
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --secondary-light: #334155;
+
+  --bg-main: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-hover: #f1f5f9;
+
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --white: #ffffff;
+  --border-color: #e2e8f0;
+
+  --sidebar-width: 270px;
+  --topbar-height: 72px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+  --transition: all 0.25s ease;
 }
 
+
+/* =========================================================
+   2. RESETEO GENERAL
+   Normaliza el comportamiento básico del layout.
+   ========================================================= */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-    display: flex;
-    min-height: 100vh;
-    background-color: var(--bg-color);
-    color: var(--text-main);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  overflow-x: hidden;
 }
+
+a {
+  color: inherit;
+}
+
+
+/* =========================================================
+   3. SIDEBAR PRINCIPAL
+   Menú lateral fijo para navegación administrativa.
+   ========================================================= */
 
 .sidebar {
-    width: 260px;
-    background-color: var(--secondary-color);
-    color: var(--white);
-    display: flex;
-    flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+  z-index: 1000;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+
+/* =========================================================
+   4. CABECERA DEL SIDEBAR
+   Logo/nombre institucional del sistema.
+   ========================================================= */
 
 .sidebar-header {
-    padding: 20px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--white);
+  min-height: var(--topbar-height);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.2px;
 }
 
+.sidebar-header i {
+  font-size: 1.3rem;
+}
+
+
+/* =========================================================
+   5. MENÚ DE NAVEGACIÓN
+   Contenedor de enlaces principales y grupos desplegables.
+   ========================================================= */
+
 .nav-menu {
-    flex: 1;
-    padding: 20px 0;
+  padding: 18px 14px 24px;
 }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 25px;
-    color: #cbd5e1;
-    text-decoration: none;
-    transition: all 0.3s;
-    gap: 15px;
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.94rem;
+  font-weight: 700;
+  transition: var(--transition);
 }
 
-.nav-item:hover,
+.nav-item i {
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--primary-color);
+}
+
 .nav-item.active {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border-left: 4px solid var(--white);
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--primary-color);
 }
 
-.main-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.nav-item.active i {
+  color: var(--primary-color);
 }
 
-.topbar {
-    height: 70px;
-    background-color: var(--white);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 30px;
+
+/* =========================================================
+   6. GRUPOS Y SUBMENÚS
+   Secciones desplegables: Estudiantes, Inscripciones, etc.
+   ========================================================= */
+
+.nav-group {
+  width: 100%;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-weight: 600;
-}
-
-.btn-logout {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s;
-}
-
-.btn-logout:hover {
-    color: #b71c1c;
-}
-
-.content-area {
-    padding: 30px;
-    flex: 1;
-}
-
-.sub-menu {
-    display: none;
-    background: rgba(0, 0, 0, 0.15);
-    padding-left: 0;
-    margin-top: 5px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.sub-menu.open {
-    display: block;
-}
-
-.sub-item {
-    font-size: 0.85rem !important;
-    padding: 12px 20px 12px 45px !important;
-    opacity: 0.8;
-    display: block;
-    transition: all 0.2s;
-    color: #cbd5e1;
-    text-decoration: none;
-}
-
-.sub-item:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.active-sub {
-    opacity: 1;
-    color: #ffffff !important;
-    border-left: 3px solid var(--primary-color); 
-    background: rgba(198, 40, 40, 0.1);
+.toggle-btn {
+  cursor: pointer;
+  user-select: none;
 }
 
 .chevron-icon {
-    font-size: 0.75rem;
-    transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
+  font-size: 0.8rem;
 }
 
 .chevron-icon.rotate {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
-.stat-card {
-    border-left: 5px solid var(--primary-color); 
+.sub-menu {
+  display: none;
+  margin: 4px 0 10px 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-color);
+}
+
+.sub-menu.open {
+  display: block;
+}
+
+.sub-item {
+  min-height: 40px;
+  padding: 9px 12px;
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.sub-item i {
+  font-size: 0.9rem;
+}
+
+.sub-item:hover {
+  background: #fef2f2;
+  color: var(--primary-color);
+}
+
+.sub-item.active-sub {
+  background: #fef2f2;
+  color: var(--primary-color);
+}
+
+
+/* =========================================================
+   7. CONTENEDOR PRINCIPAL
+   Área que contiene topbar y contenido dinámico.
+   ========================================================= */
+
+.main-wrapper {
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   8. TOPBAR
+   Barra superior con título de página, usuario y acciones.
+   ========================================================= */
+
+.topbar {
+  min-height: var(--topbar-height);
+  background: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.page-title h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--secondary-color);
+}
+
+
+/* =========================================================
+   9. INFORMACIÓN DEL USUARIO
+   Usuario autenticado, rol, seguridad y botón de salida.
+   ========================================================= */
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.user-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-info a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.user-info a:hover {
+  color: var(--primary-color);
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.btn-logout:hover {
+  color: var(--primary-color);
+}
+
+
+/* =========================================================
+   10. ÁREA DE CONTENIDO
+   Aquí se renderizan los templates hijos mediante block content.
+   ========================================================= */
+
+.content-area {
+  flex: 1;
+  width: 100%;
+  padding: 30px;
+}
+
+
+/* =========================================================
+   11. SCROLL DEL SIDEBAR
+   Personalización ligera del scroll lateral.
+   ========================================================= */
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+/* =========================================================
+   12. UTILIDADES GENERALES
+   Clases reutilizables para contenidos administrativos.
+   ========================================================= */
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.hide {
+  display: none !important;
+}
+
+
+/* =========================================================
+   13. RESPONSIVE - LAPTOPS PEQUEÑAS
+   Reduce ligeramente espacios para pantallas medianas.
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  :root {
+    --sidebar-width: 250px;
+  }
+
+  .topbar {
+    padding: 0 22px;
+  }
+
+  .content-area {
+    padding: 26px;
+  }
+
+  .nav-item {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* =========================================================
+   14. RESPONSIVE - TABLETS
+   El sidebar deja de ser fijo y pasa arriba.
+   El sistema se vuelve de una sola columna.
+   ========================================================= */
+
+@media (max-width: 992px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar-header {
+    justify-content: center;
+    min-height: 64px;
+    padding: 18px 20px;
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px 18px;
+  }
+
+  .nav-item {
+    width: auto;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .nav-group {
+    width: auto;
+  }
+
+  .sub-menu {
+    width: 100%;
+    flex-basis: 100%;
+    padding-left: 0;
+    border-left: none;
+    margin: 2px 0 8px;
+    text-align: center;
+  }
+
+  .sub-menu.open {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .sub-item {
+    width: auto;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+
+  .topbar {
+    position: relative;
+    min-height: auto;
+    padding: 18px 22px;
+    gap: 16px;
+  }
+
+  .content-area {
+    padding: 24px;
+  }
+}
+
+
+/* =========================================================
+   15. RESPONSIVE - CELULARES GRANDES
+   Topbar y navegación se apilan verticalmente.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .sidebar-header {
+    font-size: 1rem;
+  }
+
+  .nav-menu {
+    align-items: stretch;
+  }
+
+  .nav-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .nav-group {
+    width: 100%;
+  }
+
+  .toggle-btn div {
+    width: 100%;
+  }
+
+  .sub-menu.open {
+    display: block;
+  }
+
+  .sub-item {
+    width: 100%;
+    padding-left: 34px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-title h2 {
+    font-size: 1.2rem;
+  }
+
+  .user-info {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .content-area {
+    padding: 20px;
+  }
+}
+
+
+/* =========================================================
+   16. RESPONSIVE - CELULARES PEQUEÑOS
+   Optimización para pantallas angostas.
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .sidebar-header {
+    font-size: 0.95rem;
+    padding: 16px;
+  }
+
+  .nav-menu {
+    padding: 12px;
+  }
+
+  .nav-item {
+    min-height: 42px;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+
+  .sub-item {
+    font-size: 0.84rem;
+  }
+
+  .topbar {
+    padding: 16px;
+  }
+
+  .page-title h2 {
+    font-size: 1.1rem;
+  }
+
+  .user-info {
+    font-size: 0.84rem;
+  }
+
+  .user-info span,
+  .user-info a,
+  .btn-logout {
+    font-size: 0.84rem;
+  }
+
+  .content-area {
+    padding: 16px;
+  }
+}
+
+
+/* =========================================================
+   17. RESPONSIVE - CELULARES MUY PEQUEÑOS
+   Último ajuste para evitar desbordes.
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .nav-item {
+    font-size: 0.82rem;
+  }
+
+  .nav-item i {
+    width: 18px;
+    font-size: 0.9rem;
+  }
+
+  .sidebar-header {
+    font-size: 0.9rem;
+  }
+
+  .content-area {
+    padding: 14px;
+  }
+}
+
+/* =========================================================
+   CLASES EXTRA PARA LIMPIAR EL HTML
+   Reemplazan estilos inline del base_admin.html.
+   ========================================================= */
+
+.nav-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-item-content span {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  background: #e2e8f0;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-right: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.user-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.security-link {
+  text-decoration: none;
+  color: #475569;
+  margin-right: 4px;
+}
+
+.logout-form {
+  display: inline;
+}
+
+.btn-logout {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

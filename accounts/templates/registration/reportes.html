@@ -1,65 +1,54 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
-
 {% block page_title %}Reportes{% endblock %}
-
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'accounts/css/reportes.css' %}">
-
-<div class="reports-container">
-    <div class="reports-header">
-        <h2>Centro de Reportes</h2>
-        <p>Consulta y genera reportes relacionados con estudiantes, inscripciones, gestiones académicas y documentación.</p>
+    <link rel="stylesheet" href="{% static 'accounts/css/reportes.css' %}">
+    <div class="reports-container">
+        <div class="reports-header">
+            <h2>Centro de Reportes</h2>
+            <p>Consulta y genera reportes relacionados con estudiantes, inscripciones, gestiones académicas y documentación.</p>
+        </div>
+        <div class="reports-grid">
+            <div class="report-card">
+                <div class="report-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="report-content">
+                    <h3>Reporte de Estudiantes</h3>
+                    <p>Listado general de estudiantes registrados en el sistema.</p>
+                    <a href="#" class="report-btn">Ver reporte</a>
+                </div>
+            </div>
+            <div class="report-card">
+                <div class="report-icon">
+                    <i class="fa-solid fa-file-signature"></i>
+                </div>
+                <div class="report-content">
+                    <h3>Reporte de Inscripciones</h3>
+                    <p>Resumen de inscripciones por gestión, grado, paralelo y estado.</p>
+                    <a href="#" class="report-btn">Ver reporte</a>
+                </div>
+            </div>
+            <div class="report-card">
+                <div class="report-icon">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <div class="report-content">
+                    <h3>Reporte Documental</h3>
+                    <p>Control de documentos entregados, pendientes y observados.</p>
+                    <a href="#" class="report-btn">Ver reporte</a>
+                </div>
+            </div>
+            <div class="report-card">
+                <div class="report-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div class="report-content">
+                    <h3>Reporte Académico</h3>
+                    <p>Distribución de estudiantes por nivel, grado, paralelo y gestión.</p>
+                    <a href="#" class="report-btn">Ver reporte</a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="reports-grid">
-
-        <div class="report-card">
-            <div class="report-icon">
-                <i class="fa-solid fa-users"></i>
-            </div>
-            <div class="report-content">
-                <h3>Reporte de Estudiantes</h3>
-                <p>Listado general de estudiantes registrados en el sistema.</p>
-                <a href="#" class="report-btn">Ver reporte</a>
-            </div>
-        </div>
-
-        <div class="report-card">
-            <div class="report-icon">
-                <i class="fa-solid fa-file-signature"></i>
-            </div>
-            <div class="report-content">
-                <h3>Reporte de Inscripciones</h3>
-                <p>Resumen de inscripciones por gestión, grado, paralelo y estado.</p>
-                <a href="#" class="report-btn">Ver reporte</a>
-            </div>
-        </div>
-
-        <div class="report-card">
-            <div class="report-icon">
-                <i class="fa-solid fa-folder-open"></i>
-            </div>
-            <div class="report-content">
-                <h3>Reporte Documental</h3>
-                <p>Control de documentos entregados, pendientes y observados.</p>
-                <a href="#" class="report-btn">Ver reporte</a>
-            </div>
-        </div>
-
-        <div class="report-card">
-            <div class="report-icon">
-                <i class="fa-solid fa-chart-pie"></i>
-            </div>
-            <div class="report-content">
-                <h3>Reporte Académico</h3>
-                <p>Distribución de estudiantes por nivel, grado, paralelo y gestión.</p>
-                <a href="#" class="report-btn">Ver reporte</a>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 {% endblock %}

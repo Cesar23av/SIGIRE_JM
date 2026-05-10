@@ -1,155 +1,182 @@
 {% extends 'registration/base_admin.html' %}
 {% load static %}
 
-{% block page_title %}
-  Completar Documentos
-{% endblock %}
+{% block page_title %}Completar Documentos{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=11" />
 
-<div class="enroll-container">
-    <div class="enroll-card">
+<link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=12" />
 
-        <div class="enroll-card-header">
-            <div class="header-text">
-                <h3>
-                    <i class="fa-solid fa-folder-open"></i>
-                    Regularización de Documentos
-                </h3>
-                <p>
-                    Gestión Escolar:
-                    <strong>{{ inscripcion.gestion.anio }}</strong>
-                </p>
+<section class="enroll-page documents-page">
+
+  <div class="enroll-card">
+
+    <div class="enroll-card-header">
+      <div class="header-text">
+        <h3>
+          <i class="fa-solid fa-folder-open"></i>
+          Regularización de Documentos
+        </h3>
+
+        <p>
+          Gestión Escolar:
+          <strong>{{ inscripcion.gestion.anio }}</strong>
+        </p>
+      </div>
+
+      <div class="header-badge">
+        <span class="badge-process badge-document-status {{ inscripcion.estado_documental }}">
+          {{ inscripcion.estado_documental|title }}
+        </span>
+      </div>
+    </div>
+
+    <form method="POST" class="enroll-form-body" novalidate>
+      {% csrf_token %}
+
+      <div class="enroll-layout-grid">
+
+        <div class="enroll-column-main">
+
+          <section class="form-section">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-user-graduate"></i>
+              Datos de la Inscripción
+            </h4>
+
+            <div class="student-info-banner">
+              <div class="student-avatar">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+
+              <div class="student-data">
+                <strong>
+                  {{ inscripcion.estudiante.apellido_paterno }}
+                  {{ inscripcion.estudiante.apellido_materno }},
+                  {{ inscripcion.estudiante.nombres }}
+                </strong>
+
+                <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
+              </div>
             </div>
 
-            <div class="header-badge">
-                <span class="badge-process">
-                    {{ inscripcion.estado_documental|title }}
+            <div class="documents-summary">
+              <div class="requirements-info">
+                <i class="fa-solid fa-school"></i>
+                <span>
+                  Curso:
+                  <strong>
+                    {{ inscripcion.paralelo.grado.nombre }}
+                    de {{ inscripcion.paralelo.grado.nivel.nombre }}
+                    - {{ inscripcion.paralelo.letra }}
+                  </strong>
                 </span>
+              </div>
+
+              <div class="requirements-info">
+                <i class="fa-solid fa-barcode"></i>
+                <span>
+                  RUDE:
+                  <strong>{{ inscripcion.rude }}</strong>
+                </span>
+              </div>
+
+              {% if inscripcion.fecha_limite_documentos %}
+                <div class="requirements-info deadline-info">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <span>
+                    Fecha límite para regularizar:
+                    <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
+                  </span>
+                </div>
+              {% endif %}
             </div>
+          </section>
+
+          <section class="form-section">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-circle-info"></i>
+              Criterio de Regularización
+            </h4>
+
+            <div class="documents-policy-box">
+              <p>
+                Marca únicamente los documentos que fueron entregados físicamente.
+                Cuando todos los documentos obligatorios estén entregados, el estado documental
+                de la inscripción pasará a <strong>completa</strong>.
+              </p>
+            </div>
+          </section>
+
         </div>
 
-        <form method="POST" class="enroll-form-body">
-            {% csrf_token %}
+        <aside class="enroll-column-side">
+          <div class="requirements-box">
+            <h4 class="section-subtitle">
+              <i class="fa-solid fa-file-circle-check"></i>
+              Documentos Pendientes
+            </h4>
 
-            <div class="enroll-layout-grid">
+            <p class="requirements-hint">
+              Marque los documentos que el tutor ya entregó físicamente.
+            </p>
 
-                <div class="enroll-column-main">
-                    <div class="form-section">
-                        <h4 class="section-subtitle">
-                            <i class="fa-solid fa-user-graduate"></i>
-                            Datos de la Inscripción
-                        </h4>
+            <div class="requirements-checklist">
+              {% for entrega in entregas %}
+                <label class="check-item">
+                  <input
+                    type="checkbox"
+                    name="documentos"
+                    value="{{ entrega.id }}"
+                    {% if entrega.estado %}checked{% endif %}
+                  >
 
-                        <div class="student-info-banner">
-                            <div class="student-avatar">
-                                <i class="fa-solid fa-user-tie"></i>
-                            </div>
+                  <span class="check-custom"></span>
 
-                            <div class="student-data">
-                                <strong>
-                                    {{ inscripcion.estudiante.apellido_paterno }}
-                                    {{ inscripcion.estudiante.apellido_materno }},
-                                    {{ inscripcion.estudiante.nombres }}
-                                </strong>
-                                <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
-                            </div>
-                        </div>
+                  <span class="check-text">
+                    {{ entrega.requisito.nombre_documento }}
 
-                        <div class="requirements-info">
-                            <i class="fa-solid fa-school"></i>
-                            <span>
-                                Curso:
-                                <strong>
-                                    {{ inscripcion.paralelo.grado.nombre }}
-                                    de {{ inscripcion.paralelo.grado.nivel.nombre }}
-                                    - {{ inscripcion.paralelo.letra }}
-                                </strong>
-                            </span>
-                        </div>
-
-                        <div class="requirements-info">
-                            <i class="fa-solid fa-barcode"></i>
-                            <span>
-                                RUDE:
-                                <strong>{{ inscripcion.rude }}</strong>
-                            </span>
-                        </div>
-
-                        {% if inscripcion.fecha_limite_documentos %}
-                            <div class="requirements-info">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                <span>
-                                    Fecha límite para regularizar:
-                                    <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
-                                </span>
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% if entrega.requisito.obligatorio %}
+                      <small class="req-required">Obligatorio</small>
+                    {% else %}
+                      <small class="req-optional">Opcional</small>
+                    {% endif %}
+                  </span>
+                </label>
+              {% empty %}
+                <div class="requirements-info">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>No hay documentos registrados para esta inscripción.</span>
                 </div>
-
-                <div class="enroll-column-side">
-                    <div class="requirements-box">
-                        <h4 class="section-subtitle">
-                            <i class="fa-solid fa-file-circle-check"></i>
-                            Documentos Pendientes
-                        </h4>
-
-                        <p class="requirements-hint">
-                            Marque los documentos que el tutor ya entregó físicamente.
-                        </p>
-
-                        <div class="requirements-checklist">
-                            {% for entrega in entregas %}
-                                <label class="check-item">
-                                    <input type="checkbox"
-                                           name="documentos"
-                                           value="{{ entrega.id }}"
-                                           {% if entrega.estado %}checked{% endif %}>
-
-                                    <span class="check-text">
-                                        {{ entrega.requisito.nombre_documento }}
-
-                                        {% if entrega.requisito.obligatorio %}
-                                            <small class="req-required">Obligatorio</small>
-                                        {% else %}
-                                            <small class="req-optional">Opcional</small>
-                                        {% endif %}
-                                    </span>
-                                </label>
-                            {% empty %}
-                                <div class="requirements-info">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                    <span>No hay documentos registrados para esta inscripción.</span>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <div class="requirements-info">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <span>
-                                Cuando todos los documentos obligatorios estén entregados,
-                                la inscripción pasará automáticamente a documentación completa.
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
+              {% endfor %}
             </div>
 
-            <div class="enroll-form-footer">
-                <button type="submit" class="btn-confirm-enroll">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    Guardar Documentos
-                </button>
-
-                <a href="{% url 'list_inscripciones' %}" class="btn-cancel-enroll">
-                    Cancelar
-                </a>
+            <div class="requirements-info">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>
+                Los documentos opcionales pueden registrarse, pero no bloquean el estado documental.
+              </span>
             </div>
-        </form>
+          </div>
+        </aside>
 
-    </div>
-</div>
+      </div>
+
+      <div class="enroll-form-footer">
+        <a href="{% url 'list_inscripciones' %}" class="btn-cancel-enroll">
+          <i class="fa-solid fa-arrow-left"></i>
+          Cancelar
+        </a>
+
+        <button type="submit" class="btn-confirm-enroll">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Guardar Documentos
+        </button>
+      </div>
+    </form>
+
+  </div>
+
+</section>
+
 {% endblock %}
