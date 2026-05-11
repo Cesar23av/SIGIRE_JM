@@ -5,14 +5,25 @@ from academic import views as academic_views
 from students import views as students_views
 from enrollment import views as enrollment_views
 from accounts.views import UserPasswordChangeView
+from django.contrib.auth.views import LoginView, LogoutView
+from accounts.forms import SecureAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    path('accounts/', include('django.contrib.auth.urls')),
+
+    path(
+        'login/',
+        LoginView.as_view(
+            template_name='registration/login.html',
+            authentication_form=SecureAuthenticationForm,
+            redirect_authenticated_user=True
+        ),
+        name='login'
+    ),
+
+    path('logout/', LogoutView.as_view(), name='logout'),
 
     path('', accounts_views.home, name='home'),
-
     path('dashboard/', accounts_views.dashboard, name='dashboard'),
 
     path('personal/', accounts_views.list_personal, name='list_personal'),

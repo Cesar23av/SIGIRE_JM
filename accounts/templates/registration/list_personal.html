@@ -39,7 +39,6 @@
               type="checkbox"
               id="toggleInactivos"
               {% if mostrar_inactivos %}checked{% endif %}
-              onchange="toggleVista(this)"
             >
             <span class="slider"></span>
           </label>
@@ -98,8 +97,11 @@
             <a
               href="?{% if mostrar_inactivos %}inactivos=true{% endif %}"
               class="btn-clear"
+              id="btnClearFilters"
               title="Limpiar búsqueda"
             >
+              <i class="fa-solid fa-eraser"></i>
+            </a>
               <i class="fa-solid fa-eraser"></i>
             </a>
           {% endif %}
@@ -234,6 +236,6 @@
 
 </section>
 
-<script src="{% static 'accounts/js/list_personal.js' %}?v=1"></script>
+<script src="{% static 'accounts/js/list_personal.js' %}?v=2"></script>
 
 {% endblock %}

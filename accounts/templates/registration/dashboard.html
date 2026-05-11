@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}?v=3">
 
 <section class="dashboard-container">
 
@@ -21,7 +21,7 @@
         Gestión {{ gestion_activa.anio }}
       </div>
     {% else %}
-      <div class="inactive-year-badge">
+      <div class="inactive-year-badge" id="noGestionBadge">
         <i class="fa-solid fa-triangle-exclamation"></i>
         Sin gestión activa
       </div>
@@ -30,45 +30,45 @@
 
   <div class="stats-grid">
 
-    <article class="stat-card">
+    <article class="stat-card dashboard-animate">
       <div class="stat-icon students-icon">
         <i class="fa-solid fa-users"></i>
       </div>
 
       <div class="stat-info">
         <h3>Total Estudiantes</h3>
-        <div class="number">{{ total_estudiantes }}</div>
+        <div class="number counter-number" data-target="{{ total_estudiantes }}">0</div>
         <p>Estudiantes activos registrados</p>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card dashboard-animate">
       <div class="stat-icon enrollments-icon">
         <i class="fa-solid fa-file-signature"></i>
       </div>
 
       <div class="stat-info">
         <h3>Inscripciones Activas</h3>
-        <div class="number">{{ inscripciones_activas }}</div>
+        <div class="number counter-number" data-target="{{ inscripciones_activas }}">0</div>
         <p>Inscripciones vigentes en el sistema</p>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card dashboard-animate">
       <div class="stat-icon capacity-icon">
         <i class="fa-solid fa-chair"></i>
       </div>
 
       <div class="stat-info">
         <h3>Cupos Disponibles</h3>
-        <div class="number">{{ cupos_disponibles }}</div>
+        <div class="number counter-number" data-target="{{ cupos_disponibles }}">0</div>
         <p>Cupos restantes en paralelos activos</p>
       </div>
     </article>
 
   </div>
 
-  <section class="welcome-panel">
+  <section class="welcome-panel dashboard-animate">
     <div class="welcome-icon">
       <i class="fa-solid fa-building-columns"></i>
     </div>
@@ -96,5 +96,7 @@
   </section>
 
 </section>
+
+<script src="{% static 'accounts/js/dashboard.js' %}?v=1"></script>
 
 {% endblock %}

@@ -505,3 +505,54 @@
     font-size: 0.8rem;
   }
 }
+
+/* =========================================================
+   FORM_PERSONAL - VALIDACIONES JS LIMPIAS
+   ========================================================= */
+
+.input-wrapper input.input-valid,
+.input-wrapper select.input-valid {
+  border-color: #22c55e;
+}
+
+.input-wrapper input.input-invalid,
+.input-wrapper select.input-invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.js-field-feedback {
+  display: none;
+  align-items: center;
+  gap: 6px;
+
+  width: fit-content;
+  max-width: 100%;
+
+  margin-top: 6px;
+  padding: 4px 9px;
+
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.js-field-feedback.show {
+  display: inline-flex;
+}
+
+.feedback-invalid {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.js-field-feedback i {
+  font-size: 0.68rem;
+}
+
+.btn-save.loading {
+  opacity: 0.85;
+  cursor: wait;
+}

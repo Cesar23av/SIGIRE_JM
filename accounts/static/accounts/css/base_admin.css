@@ -184,14 +184,19 @@ a {
 }
 
 .sub-menu {
-  display: none;
-  margin: 4px 0 10px 0;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0 0 0 0;
   padding-left: 12px;
   border-left: 2px solid var(--border-color);
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.2s ease;
 }
 
 .sub-menu.open {
-  display: block;
+  max-height: 320px;
+  opacity: 1;
+  margin: 4px 0 10px 0;
 }
 
 .sub-item {
@@ -434,11 +439,13 @@ a {
   }
 
   .sub-menu.open {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-  }
+  max-height: 420px;
+  opacity: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
 
   .sub-item {
     width: auto;
@@ -489,8 +496,10 @@ a {
   }
 
   .sub-menu.open {
-    display: block;
-  }
+  display: block;
+  max-height: 420px;
+  opacity: 1;
+}
 
   .sub-item {
     width: 100%;

@@ -640,3 +640,222 @@ footer {
         padding: 35px 16px 20px;
     }
 }
+
+/* =========================================================
+   HOME.CSS - JS INTERACTIONS
+   Estilos necesarios para las interacciones de home.js.
+   ========================================================= */
+
+
+/* =========================================================
+   1. HEADER CON ESTADO SCROLL
+   Se activa cuando el usuario baja en la página.
+   ========================================================= */
+
+.site-header.scrolled {
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.12);
+}
+
+
+/* =========================================================
+   2. ENLACE ACTIVO DEL MENÚ
+   Resalta la sección actual.
+   ========================================================= */
+
+.nav-links a.active {
+  color: var(--primary-color);
+}
+
+.nav-links a.active:not(.btn-login)::after {
+  width: 100%;
+}
+
+
+/* =========================================================
+   3. SUBRAYADO ANIMADO DEL MENÚ
+   Da feedback visual sin recargar la interfaz.
+   ========================================================= */
+
+.nav-links a:not(.btn-login) {
+  position: relative;
+}
+
+.nav-links a:not(.btn-login)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+
+  transition: width 0.25s ease;
+}
+
+.nav-links a:not(.btn-login):hover::after {
+  width: 100%;
+}
+
+
+/* =========================================================
+   4. BOTÓN DE MENÚ RESPONSIVE
+   Aparece en pantallas móviles.
+   ========================================================= */
+
+.menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: var(--primary-color);
+  color: var(--white);
+
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.menu-toggle:hover {
+  background: var(--primary-hover);
+}
+
+.menu-toggle.active {
+  background: var(--primary-hover);
+}
+
+
+/* =========================================================
+   5. ANIMACIONES DE ENTRADA
+   Se activan desde home.js con IntersectionObserver.
+   ========================================================= */
+
+.reveal-item {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   6. BOTÓN VOLVER ARRIBA
+   Ayuda en páginas largas.
+   ========================================================= */
+
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+
+  background: var(--primary-color);
+  color: var(--white);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1rem;
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+
+  box-shadow: 0 10px 25px rgba(198, 40, 40, 0.3);
+  transition: all 0.25s ease;
+  z-index: 1200;
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--primary-hover);
+}
+
+
+/* =========================================================
+   7. CONTACTO
+   Reemplaza el estilo inline anterior del título.
+   ========================================================= */
+
+.contact-title {
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   8. RESPONSIVE - MENÚ MÓVIL
+   El menú se abre/cierra con home.js.
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .main-nav {
+    position: relative;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-links {
+    display: none;
+    width: 100%;
+
+    background: var(--white);
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    text-align: center;
+  }
+
+  .nav-links a:not(.btn-login)::after {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   9. ACCESIBILIDAD
+   Reduce animaciones si el usuario lo tiene configurado.
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item,
+  .back-to-top,
+  .nav-links a:not(.btn-login)::after {
+    transition: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

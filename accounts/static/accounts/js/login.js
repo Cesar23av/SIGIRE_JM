@@ -1,33 +1,40 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordField = document.getElementById("id_password");
 
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('id_password'); 
+  const loginForm = document.getElementById("loginForm");
+  const submitBtn = document.getElementById("btnLogin");
 
-    if (togglePassword && passwordField) {
-        togglePassword.addEventListener('click', function () {
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            
-          
-            this.classList.toggle('bi-eye');
-            this.classList.toggle('bi-eye-slash');
-        });
+  if (togglePassword && passwordField) {
+    togglePassword.addEventListener("click", function () {
+      const icon = this.querySelector("i");
+      const isPassword = passwordField.type === "password";
+
+      passwordField.type = isPassword ? "text" : "password";
+
+      if (icon) {
+        icon.classList.toggle("bi-eye", isPassword);
+        icon.classList.toggle("bi-eye-slash", !isPassword);
+      }
+    });
+  }
+
+  if (loginForm && submitBtn) {
+    loginForm.addEventListener("submit", function () {
+      submitBtn.classList.add("loading");
+      submitBtn.disabled = true;
+    });
+  }
+
+  const loginError = document.querySelector(".login-error");
+
+  if (loginError) {
+    loginError.classList.add("show-error");
+
+    const usernameInput = document.getElementById("id_username");
+
+    if (usernameInput) {
+      usernameInput.focus();
     }
-
-    
-    const loginForm = document.querySelector('form');
-    const submitBtn = document.querySelector('.btn-login');
-
-    if (loginForm && submitBtn) {
-        loginForm.addEventListener('submit', function() {
-            
-            submitBtn.disabled = true;
-            
-            
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Iniciando...';
-            
-            
-            submitBtn.style.opacity = '0.8';
-        });
-    }
+  }
 });

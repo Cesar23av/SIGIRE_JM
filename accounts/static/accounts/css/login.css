@@ -325,3 +325,120 @@ body {
     padding-right: 38px;
   }
 }
+
+/* =========================================================
+   LOGIN - TEXTOS, ERRORES E INTERACCIONES JS
+   ========================================================= */
+
+.school-name {
+  text-align: center;
+  color: var(--texto-secundario);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.login-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-left: 4px solid var(--rojo-principal);
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.login-error.show-error {
+  animation: shakeLoginError 0.28s ease;
+}
+
+@keyframes shakeLoginError {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.field-error {
+  display: block;
+  color: #991b1b;
+  font-size: 0.82rem;
+  margin-top: 6px;
+}
+
+/* Botón del ojo */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  border: none;
+  background: transparent;
+  color: #64748b;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+}
+
+.password-toggle:hover {
+  color: var(--rojo-principal);
+}
+
+/* Reset específico para que el ícono del ojo no herede .input-wrapper i */
+.password-toggle i {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  pointer-events: auto;
+  font-size: 1.15rem;
+  color: inherit;
+}
+
+/* Estado de carga del botón */
+.btn-loading {
+  display: none;
+}
+
+.btn-login.loading .btn-text {
+  display: none;
+}
+
+.btn-login.loading .btn-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-login.loading {
+  opacity: 0.85;
+  cursor: wait;
+}

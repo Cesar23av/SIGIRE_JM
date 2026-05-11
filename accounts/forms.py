@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import PasswordChangeForm
-from .models import User
+from .models import User, LoginAttempt
 from django.core.exceptions import ValidationError
 import re
+from django.contrib.auth import authenticate
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -96,3 +97,61 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+            
+class SecureAuthenticationForm(AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        if username:
+            attempt, created = LoginAttempt.objects.get_or_create(
+                username=username
+            )
+
+            if attempt.disabled_by_attempts:
+                raise forms.ValidationError(
+                    "La cuenta fue bloqueada por demasiados intentos fallidos. Contacte al director o administrador."
+                )
+
+            if attempt.is_locked():
+                seconds = attempt.remaining_lock_seconds()
+                minutes = max(1, seconds // 60)
+
+                raise forms.ValidationError(
+                    f"Demasiados intentos fallidos. Intente nuevamente en {minutes} minuto(s)."
+                )
+
+        if username and password:
+            self.user_cache = authenticate(
+                self.request,
+                username=username,
+                password=password
+            )
+
+            if self.user_cache is None:
+                attempt, created = LoginAttempt.objects.get_or_create(
+                    username=username
+                )
+
+                attempt.register_failed_attempt()
+
+                if attempt.failed_attempts >= 12:
+                    try:
+                        user = User.objects.get(username=username)
+                        user.is_active = False
+                        user.save(update_fields=["is_active"])
+                    except User.DoesNotExist:
+                        pass
+
+                raise forms.ValidationError(
+                    "Usuario o contraseña incorrectos."
+                )
+
+            if not self.user_cache.is_active:
+                raise forms.ValidationError(
+                    "Esta cuenta está desactivada. Contacte al administrador."
+                )
+
+            LoginAttempt.objects.filter(username=username).delete()
+
+        return self.cleaned_data
