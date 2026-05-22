@@ -1,0 +1,13 @@
+.summary-card.doc-vencida { background: #fef2f2; border-left: 4px solid #dc2626; }
+.summary-card.doc-vencida .number { color: #dc2626; }
+
+.doc-badge i { margin-right: 4px; }
+
+@media print {
+  .sidebar, .topbar, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
+  .accordion-content { display: block !important; }
+  .main-wrapper, .content-area, .reports-container { margin: 0 !important; padding: 0 !important; }
+  body { background: white; }
+  .student-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr:nth-child(even) td { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

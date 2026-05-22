@@ -16,7 +16,7 @@ from .forms import CustomPasswordChangeForm
 from django.db.models import Sum
 from students.models import Estudiante
 from enrollment.models import Inscripcion
-from academic.models import Gestion, Paralelo
+from academic.models import Gestion, Paralelo, Nivel, Grado
 
 
 # 1. Vista Pública
@@ -342,6 +342,110 @@ def reportes(request):
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
+    from django.db.models import Count
+
+    gestiones = Gestion.objects.all().order_by('-anio')
+
+    niveles = Nivel.objects.filter(estado=True).annotate(
+        total_estudiantes=Count('grados__paralelos__inscripcion', filter=Q(grados__paralelos__inscripcion__estado=True))
+    )
+
+    grados = Grado.objects.filter(estado=True).annotate(
+        total_estudiantes=Count('paralelos__inscripcion', filter=Q(paralelos__inscripcion__estado=True))
+    ).select_related('nivel').order_by('nivel__nombre', 'nombre')
+
+    paralelos = Paralelo.objects.filter(estado=True).annotate(
+        total_estudiantes=Count('inscripcion', filter=Q(inscripcion__estado=True))
+    ).select_related('grado__nivel').order_by('grado__nivel__nombre', 'grado__nombre', 'letra')
+
+    data_niveles = {
+        'labels': [n.nombre for n in niveles],
+        'data': [n.total_estudiantes for n in niveles],
+    }
+
+    data_grados = {
+        'labels': [f"{g.nivel.nombre[:4]} - {g.nombre}" for g in grados],
+        'data': [g.total_estudiantes for g in grados],
+    }
+
+    paralelos_filtrados = [p for p in paralelos if p.total_estudiantes > 0]
+    data_paralelos = {
+        'labels': [f"{p.grado.nombre} '{p.letra}'" for p in paralelos_filtrados],
+        'data': [p.total_estudiantes for p in paralelos_filtrados],
+    }
+
+    insc_por_gestion = Inscripcion.objects.filter(estado=True).values('gestion__anio').annotate(
+        total=Count('id')
+    ).order_by('gestion__anio')
+
+    data_gestion = {
+        'labels': [str(i['gestion__anio']) for i in insc_por_gestion],
+        'data': [i['total'] for i in insc_por_gestion],
+    }
+
+    total_estudiantes_activos = Estudiante.objects.filter(estado=True).count()
+    total_hombres = Estudiante.objects.filter(estado=True, genero='M').count()
+    total_mujeres = Estudiante.objects.filter(estado=True, genero='F').count()
+
+    ins_query = request.GET.get('q_ins', '').strip()
+    gestion_filtro = request.GET.get('gestion', '')
+    estado_doc_filtro = request.GET.get('estado_doc', '')
+
+    inscripciones = Inscripcion.objects.filter(estado=True).select_related(
+        'estudiante', 'paralelo__grado__nivel', 'gestion', 'usuario'
+    ).order_by('-gestion__anio', 'paralelo__grado__nivel__nombre', 'paralelo__grado__nombre', 'paralelo__letra', 'estudiante__apellido_paterno')
+
+    if ins_query:
+        inscripciones = inscripciones.filter(
+            Q(estudiante__cedula_identidad__icontains=ins_query) |
+            Q(estudiante__nombres__icontains=ins_query) |
+            Q(estudiante__apellido_paterno__icontains=ins_query)
+        )
+    if gestion_filtro:
+        inscripciones = inscripciones.filter(gestion_id=gestion_filtro)
+    if estado_doc_filtro:
+        inscripciones = inscripciones.filter(estado_documental=estado_doc_filtro)
+
+    total_inscripciones = inscripciones.count()
+    doc_completa = inscripciones.filter(estado_documental='completa').count()
+    doc_pendiente = inscripciones.filter(estado_documental='pendiente').count()
+
+    insc_paginator = Paginator(inscripciones, 15)
+    insc_page = request.GET.get('page_ins', 1)
+    insc_page_obj = insc_paginator.get_page(insc_page)
+
+    gestiones_opciones = Gestion.objects.all().order_by('-anio')
+
+    doc_choices = Inscripcion.ESTADO_DOCUMENTAL_CHOICES
+
+    q_doc = request.GET.get('q_doc', '').strip()
+    gestion_doc_filtro = request.GET.get('gestion_doc', '')
+    estado_doc_filtro_doc = request.GET.get('estado_doc_doc', '')
+
+    docs = Inscripcion.objects.filter(estado=True).select_related(
+        'estudiante', 'paralelo__grado__nivel', 'gestion'
+    ).order_by('-gestion__anio', 'estudiante__apellido_paterno')
+
+    if q_doc:
+        docs = docs.filter(
+            Q(estudiante__cedula_identidad__icontains=q_doc) |
+            Q(estudiante__nombres__icontains=q_doc) |
+            Q(estudiante__apellido_paterno__icontains=q_doc)
+        )
+    if gestion_doc_filtro:
+        docs = docs.filter(gestion_id=gestion_doc_filtro)
+    if estado_doc_filtro_doc:
+        docs = docs.filter(estado_documental=estado_doc_filtro_doc)
+
+    total_docs = docs.count()
+    doc_ok = docs.filter(estado_documental='completa').count()
+    doc_pend = docs.filter(estado_documental='pendiente').count()
+    doc_venc = docs.filter(estado_documental='vencida').count()
+
+    doc_paginator = Paginator(docs, 15)
+    doc_page = request.GET.get('page_doc', 1)
+    doc_page_obj = doc_paginator.get_page(doc_page)
+
     context = {
         'filas': page_obj,
         'gestion_activa': gestion_activa,
@@ -353,6 +457,30 @@ def reportes(request):
         'estado_inscripcion': estado_inscripcion,
         'incluir_inactivos': incluir_inactivos,
         'page_obj': page_obj,
+        'data_niveles': data_niveles,
+        'data_grados': data_grados,
+        'data_paralelos': data_paralelos,
+        'data_gestion': data_gestion,
+        'total_estudiantes_activos': total_estudiantes_activos,
+        'total_hombres': total_hombres,
+        'total_mujeres': total_mujeres,
+        'inscripciones': insc_page_obj,
+        'total_inscripciones': total_inscripciones,
+        'doc_completa': doc_completa,
+        'doc_pendiente': doc_pendiente,
+        'ins_query': ins_query,
+        'gestion_filtro': gestion_filtro,
+        'estado_doc_filtro': estado_doc_filtro,
+        'gestiones_opciones': gestiones_opciones,
+        'doc_choices': doc_choices,
+        'docs': doc_page_obj,
+        'total_docs': total_docs,
+        'doc_ok': doc_ok,
+        'doc_pend': doc_pend,
+        'doc_venc': doc_venc,
+        'q_doc': q_doc,
+        'gestion_doc_filtro': gestion_doc_filtro,
+        'estado_doc_filtro_doc': estado_doc_filtro_doc,
     }
 
     return render(request, 'registration/reportes.html', context)
