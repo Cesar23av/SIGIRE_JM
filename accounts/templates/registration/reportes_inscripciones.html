@@ -1,0 +1,131 @@
+{% load static %}
+<div id="reporte-inscripciones" class="accordion-content">
+  <link rel="stylesheet" href="{% static 'accounts/css/reportes_inscripciones.css' %}">
+  <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+    <div>
+      <h2>Reporte de Inscripciones</h2>
+      <p>Resumen de inscripciones por gestión, grado, paralelo y estado documental.</p>
+    </div>
+    <button class="print-btn" onclick="window.print()">
+      <i class="fa-solid fa-print"></i> Imprimir / PDF
+    </button>
+  </div>
+
+  <div class="report-summary">
+    <div class="summary-card total">
+      <h4>Total Inscripciones</h4>
+      <div class="number">{{ total_inscripciones }}</div>
+    </div>
+    <div class="summary-card inscritos">
+      <h4>Documentación Completa</h4>
+      <div class="number">{{ doc_completa }}</div>
+    </div>
+    <div class="summary-card sin-inscripcion">
+      <h4>Documentación Pendiente</h4>
+      <div class="number">{{ doc_pendiente }}</div>
+    </div>
+  </div>
+
+  <form method="GET" action="{% url 'reportes' %}#reporte-inscripciones" class="filter-bar">
+    <input type="text" name="q_ins" placeholder="Buscar por CI, nombres o apellidos..." value="{{ ins_query }}">
+    <select name="gestion">
+      <option value="">Todas las gestiones</option>
+      {% for g in gestiones_opciones %}
+        <option value="{{ g.id }}" {% if gestion_filtro|slugify == g.id|slugify %}selected{% endif %}>{{ g.anio }}</option>
+      {% endfor %}
+    </select>
+    <select name="estado_doc">
+      <option value="">Todos los estados</option>
+      {% for val, label in doc_choices %}
+        <option value="{{ val }}" {% if estado_doc_filtro == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+    <a href="{% url 'reportes' %}" class="clear-btn" data-ajax-ins><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
+  </form>
+
+  <div class="table-responsive">
+    <table class="student-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estudiante</th>
+          <th>C.I.</th>
+          <th>Nivel</th>
+          <th>Grado</th>
+          <th>Paralelo</th>
+          <th>Gestión</th>
+          <th>Estado Doc.</th>
+          <th>Rude</th>
+          <th>F. Registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ins in inscripciones %}
+          <tr>
+            <td>{{ inscripciones.start_index|add:forloop.counter0 }}</td>
+            <td><strong>{{ ins.estudiante.apellido_paterno }} {{ ins.estudiante.apellido_materno }}, {{ ins.estudiante.nombres }}</strong></td>
+            <td>{{ ins.estudiante.cedula_identidad }}</td>
+            <td>{{ ins.paralelo.grado.nivel.nombre }}</td>
+            <td>{{ ins.paralelo.grado.nombre }}</td>
+            <td>{{ ins.paralelo.letra }}</td>
+            <td>{{ ins.gestion.anio }}</td>
+            <td>
+              {% if ins.estado_documental == 'completa' %}
+                <span class="doc-badge doc-completa">Completa</span>
+              {% elif ins.estado_documental == 'pendiente' %}
+                <span class="doc-badge doc-pendiente">Pendiente</span>
+              {% else %}
+                <span class="doc-badge doc-vencida">Vencida</span>
+              {% endif %}
+            </td>
+            <td>{{ ins.rude|default:"—" }}</td>
+            <td>{{ ins.fecha_registro|date:"d/m/Y" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="10" style="text-align:center;padding:40px;color:#94a3b8;">
+              <i class="fa-solid fa-file-circle-exclamation" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
+              No se encontraron inscripciones
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if inscripciones.paginator.num_pages > 1 %}
+  <div class="pagination">
+    {% if inscripciones.has_previous %}
+      <a href="?page_ins=1{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&laquo;</a>
+      <a href="?page_ins={{ inscripciones.previous_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&lsaquo;</a>
+    {% else %}
+      <span class="disabled">&laquo;</span>
+      <span class="disabled">&lsaquo;</span>
+    {% endif %}
+    {% for num in inscripciones.paginator.page_range %}
+      {% if num == inscripciones.number %}
+        <span class="current">{{ num }}</span>
+      {% elif num > inscripciones.number|add:"-3" and num < inscripciones.number|add:"3" %}
+        <a href="?page_ins={{ num }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if inscripciones.has_next %}
+      <a href="?page_ins={{ inscripciones.next_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&rsaquo;</a>
+      <a href="?page_ins={{ inscripciones.paginator.num_pages }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&raquo;</a>
+    {% else %}
+      <span class="disabled">&rsaquo;</span>
+      <span class="disabled">&raquo;</span>
+    {% endif %}
+  </div>
+  <div class="page-info">
+    Página {{ inscripciones.number }} de {{ inscripciones.paginator.num_pages }} ({{ total_inscripciones }} inscripción{{ total_inscripciones|pluralize:"es" }})
+  </div>
+  {% endif %}
+
+  {% if total_inscripciones > 0 %}
+    <p style="text-align:right;color:#94a3b8;font-size:0.85rem;margin-top:12px;">
+      Reporte generado el {% now "d/m/Y H:i" %}
+    </p>
+  {% endif %}
+</div>

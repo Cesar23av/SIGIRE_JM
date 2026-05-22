@@ -3,256 +3,73 @@
 {% block page_title %}Reportes{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'accounts/css/reportes.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_estudiantes.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_inscripciones.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_documental.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_academicos.css' %}">
 <link rel="stylesheet" href="{% static 'students/css/list_estudiantes.css' %}?v=10">
-
-<style>
-  .accordion-content { display: none; margin-top: 20px; }
-  .accordion-content.open { display: block; }
-  .report-summary { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-  .summary-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; min-width: 160px; flex: 1; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
-  .summary-card h4 { margin: 0 0 4px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
-  .summary-card .number { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
-  .summary-card.total .number { color: #2563eb; }
-  .summary-card.inscritos .number { color: #16a34a; }
-  .summary-card.sin-inscripcion .number { color: #dc2626; }
-  .print-btn { background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
-  .print-btn:hover { background: #1e293b; }
-
-  .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; }
-  .filter-bar input, .filter-bar select { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; background: white; }
-  .filter-bar input { flex: 1; min-width: 180px; }
-  .filter-bar label { font-size: 0.85rem; color: #475569; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-  .filter-bar label input { min-width: auto; }
-  .filter-btn { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
-  .filter-btn:hover { background: #1d4ed8; }
-  .clear-btn { background: transparent; color: #64748b; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-  .clear-btn:hover { background: #f1f5f9; }
-
-  .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 20px; flex-wrap: wrap; }
-  .pagination a, .pagination span { padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
-  .pagination a { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
-  .pagination a:hover { background: #e2e8f0; }
-  .pagination .current { background: #2563eb; color: white; border: 1px solid #2563eb; }
-  .pagination .disabled { color: #cbd5e1; background: #f8fafc; border: 1px solid #e2e8f0; cursor: default; }
-  .page-info { text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 8px; }
-
-  .filter-count { font-size: 0.8rem; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 20px; }
-
-  @media print {
-    .sidebar, .topbar, .reports-grid, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
-    .accordion-content { display: block !important; }
-    .main-wrapper, .content-area, .reports-container { margin: 0 !important; padding: 0 !important; }
-    body { background: white; }
-    .student-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    tr:nth-child(even) td { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  }
-</style>
 
 <div class="reports-container">
   <div class="reports-header">
-    <h2>Centro de Reportes</h2>
-    <p>Consulta y genera reportes relacionados con estudiantes, inscripciones, gestiones académicas y documentación.</p>
+    <h2>Reportes</h2>
+    <p>Selecciona un reporte para visualizar los datos.</p>
   </div>
 
-  <div class="reports-grid">
-    <div class="report-card">
-      <div class="report-icon"><i class="fa-solid fa-users"></i></div>
-      <div class="report-content">
-        <h3>Reporte de Estudiantes</h3>
-        <p>Listado general de estudiantes registrados en el sistema.</p>
-        <a href="#" class="report-btn" onclick="toggleReport(event)">Ver reporte</a>
-      </div>
-    </div>
-    <div class="report-card">
-      <div class="report-icon"><i class="fa-solid fa-file-signature"></i></div>
-      <div class="report-content">
-        <h3>Reporte de Inscripciones</h3>
-        <p>Resumen de inscripciones por gestión, grado, paralelo y estado.</p>
-        <a href="#" class="report-btn">Ver reporte</a>
-      </div>
-    </div>
-    <div class="report-card">
-      <div class="report-icon"><i class="fa-solid fa-folder-open"></i></div>
-      <div class="report-content">
-        <h3>Reporte Documental</h3>
-        <p>Control de documentos entregados, pendientes y observados.</p>
-        <a href="#" class="report-btn">Ver reporte</a>
-      </div>
-    </div>
-    <div class="report-card">
-      <div class="report-icon"><i class="fa-solid fa-chart-pie"></i></div>
-      <div class="report-content">
-        <h3>Reporte Académico</h3>
-        <p>Distribución de estudiantes por nivel, grado, paralelo y gestión.</p>
-        <a href="#" class="report-btn">Ver reporte</a>
-      </div>
-    </div>
+  <div class="reports-tabs">
+    <a href="#" class="tab active" data-tab="reporte-estudiantes" onclick="switchReport(event, 'reporte-estudiantes')">
+      <i class="fa-solid fa-users"></i>
+      <span class="tab-label">Estudiantes</span>
+      <span class="tab-desc">Listado general de estudiantes</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-inscripciones" onclick="switchReport(event, 'reporte-inscripciones')">
+      <i class="fa-solid fa-file-signature"></i>
+      <span class="tab-label">Inscripciones</span>
+      <span class="tab-desc">Resumen por gestión, grado y paralelo</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-documental" onclick="switchReport(event, 'reporte-documental')">
+      <i class="fa-solid fa-folder-open"></i>
+      <span class="tab-label">Documental</span>
+      <span class="tab-desc">Control de documentos entregados</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-academico" onclick="switchReport(event, 'reporte-academico')">
+      <i class="fa-solid fa-chart-pie"></i>
+      <span class="tab-label">Académico</span>
+      <span class="tab-desc">Distribución por nivel, grado y paralelo</span>
+    </a>
   </div>
 
-  <div id="reporte-estudiantes" class="accordion-content{% if query or genero_filtro or estado_inscripcion or incluir_inactivos %} open{% endif %}">
-    <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-      <div>
-        <h2>Reporte de Estudiantes</h2>
-        <p>Listado general de estudiantes registrados en el sistema.</p>
-      </div>
-      <button class="print-btn" onclick="window.print()">
-        <i class="fa-solid fa-print"></i> Imprimir / PDF
-      </button>
-    </div>
-
-    <div class="report-summary">
-      <div class="summary-card total">
-        <h4>Total Estudiantes</h4>
-        <div class="number">{{ total }}</div>
-      </div>
-      <div class="summary-card inscritos">
-        <h4>Inscritos {{ gestion_activa.anio|default:"" }}</h4>
-        <div class="number">{{ con_inscripcion }}</div>
-      </div>
-      <div class="summary-card sin-inscripcion">
-        <h4>Sin inscripción</h4>
-        <div class="number">{{ sin_inscripcion }}</div>
-      </div>
-    </div>
-
-    {% if gestion_activa %}
-      <p class="report-subtitle">Gestión activa: <strong>{{ gestion_activa.anio }}</strong></p>
-    {% else %}
-      <p class="report-subtitle" style="color:#dc2626;">No hay una gestión activa configurada.</p>
-    {% endif %}
-
-    <form method="GET" action="{% url 'reportes' %}#reporte-estudiantes" class="filter-bar">
-      <input type="text" name="q" placeholder="Buscar por CI, nombres o apellidos..." value="{{ query }}">
-      <select name="genero">
-        <option value="">Todos los géneros</option>
-        <option value="M" {% if genero_filtro == 'M' %}selected{% endif %}>Masculino</option>
-        <option value="F" {% if genero_filtro == 'F' %}selected{% endif %}>Femenino</option>
-      </select>
-      <select name="inscripcion">
-        <option value="">Todos (inscripción)</option>
-        <option value="con" {% if estado_inscripcion == 'con' %}selected{% endif %}>Con inscripción</option>
-        <option value="sin" {% if estado_inscripcion == 'sin' %}selected{% endif %}>Sin inscripción</option>
-      </select>
-      <label>
-        <input type="checkbox" name="inactivos" {% if incluir_inactivos %}checked{% endif %}> Incluir inactivos
-      </label>
-      <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
-      <a href="{% url 'reportes' %}" class="clear-btn" data-ajax><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
-    </form>
-
-    <div class="table-responsive">
-      <table class="student-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre Completo</th>
-            <th>C.I.</th>
-            <th>Género</th>
-            <th>F. Nacimiento</th>
-            <th>Contacto</th>
-            <th>Inscripción Actual</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for fila in page_obj %}
-            {% with estudiante=fila.estudiante inscripcion=fila.inscripcion %}
-            <tr>
-              <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
-              <td><strong>{{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}, {{ estudiante.nombres }}</strong></td>
-              <td>{{ estudiante.cedula_identidad }}</td>
-              <td>{{ estudiante.get_genero_display }}</td>
-              <td>{{ estudiante.fecha_nacimiento|date:"d/m/Y" }}</td>
-              <td>
-                {% if estudiante.correo_electronico %}{{ estudiante.correo_electronico }}<br>{% endif %}
-                <small>{{ estudiante.direccion|truncatechars:30 }}</small>
-              </td>
-              <td>
-                {% if inscripcion %}
-                  <span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:20px;font-size:0.8rem;white-space:nowrap;">
-                    {{ inscripcion.paralelo.grado.nivel.nombre|slice:":4" }} - {{ inscripcion.paralelo.grado.nombre }} "{{ inscripcion.paralelo.letra }}"
-                  </span>
-                {% else %}
-                  <span style="color:#94a3b8;">—</span>
-                {% endif %}
-              </td>
-              <td>
-                {% if estudiante.estado %}
-                  <span style="color:#16a34a;font-weight:700;">Activo</span>
-                {% else %}
-                  <span style="color:#dc2626;font-weight:700;">Inactivo</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endwith %}
-          {% empty %}
-            <tr>
-              <td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;">
-                <i class="fa-solid fa-users-slash" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-                No se encontraron estudiantes
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    {% if page_obj.paginator.num_pages > 1 %}
-    <div class="pagination">
-      {% if page_obj.has_previous %}
-        <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}#reporte-estudiantes">&laquo;</a>
-        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}#reporte-estudiantes">&lsaquo;</a>
-      {% else %}
-        <span class="disabled">&laquo;</span>
-        <span class="disabled">&lsaquo;</span>
-      {% endif %}
-
-      {% for num in page_obj.paginator.page_range %}
-        {% if num == page_obj.number %}
-          <span class="current">{{ num }}</span>
-        {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-          <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}#reporte-estudiantes">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}#reporte-estudiantes">&rsaquo;</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}#reporte-estudiantes">&raquo;</a>
-      {% else %}
-        <span class="disabled">&rsaquo;</span>
-        <span class="disabled">&raquo;</span>
-      {% endif %}
-    </div>
-    <div class="page-info">
-      Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} ({{ total }} estudiante{{ total|pluralize:"s" }})
-    </div>
-    {% endif %}
-
-    {% if total > 0 %}
-      <p style="text-align:right;color:#94a3b8;font-size:0.85rem;margin-top:12px;">
-        Reporte generado el {% now "d/m/Y H:i" %}
-      </p>
-    {% endif %}
+  <div class="reports-content">
+    {% include 'registration/reportes_estudiantes.html' %}
+    {% include 'registration/reportes_academicos.html' %}
+    {% include 'registration/reportes_inscripciones.html' %}
+    {% include 'registration/reportes_documental.html' %}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
-  function toggleReport(e) {
-    e.preventDefault();
-    var el = document.getElementById('reporte-estudiantes');
-    el.classList.toggle('open');
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function switchReport(e, id) {
+    if (e) e.preventDefault();
+    document.querySelectorAll('.tab').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.reports-content .accordion-content').forEach(function(el) { el.classList.remove('open'); });
+    var tab = document.querySelector('.tab[data-tab="' + id + '"]');
+    if (tab) tab.classList.add('active');
+    var content = document.getElementById(id);
+    if (content) content.classList.add('open');
+    if (id === 'reporte-academico') initCharts();
   }
 
-  function cargarReporte(url) {
-    url.hash = 'reporte-estudiantes';
+  function toggleReport(id, e) { switchReport(e, id); }
+
+  function cargarReporte(url, hash) {
+    url.hash = hash;
     fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
       .then(function(r) { return r.text(); })
       .then(function(html) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(html, 'text/html');
-        var nuevo = doc.querySelector('#reporte-estudiantes');
-        var actual = document.getElementById('reporte-estudiantes');
+        var nuevo = doc.querySelector('#' + hash);
+        var actual = document.getElementById(hash);
         if (nuevo && actual) {
           actual.innerHTML = nuevo.innerHTML;
         }
@@ -260,20 +77,76 @@
       });
   }
 
-  document.getElementById('reporte-estudiantes').addEventListener('submit', function(e) {
-    var form = e.target.closest('.filter-bar');
-    if (!form) return;
-    e.preventDefault();
-    var url = new URL(form.action || window.location.href);
-    url.search = new URLSearchParams(new FormData(form)).toString();
-    cargarReporte(url);
+  document.addEventListener('DOMContentLoaded', function() {
+    switchReport(null, 'reporte-estudiantes');
+    var est = document.getElementById('reporte-estudiantes');
+    if (est) {
+      est.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-estudiantes');
+      });
+      est.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-estudiantes');
+      });
+    }
+    var ins = document.getElementById('reporte-inscripciones');
+    if (ins) {
+      ins.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-inscripciones');
+      });
+      ins.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax-ins]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-inscripciones');
+      });
+    }
+    var doc = document.getElementById('reporte-documental');
+    if (doc) {
+      doc.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-documental');
+      });
+      doc.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax-doc]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-documental');
+      });
+    }
   });
 
-  document.getElementById('reporte-estudiantes').addEventListener('click', function(e) {
-    var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax]');
-    if (!link) return;
-    e.preventDefault();
-    cargarReporte(new URL(link.href));
-  });
+  var COLORS = ['#2563eb','#16a34a','#dc2626','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16','#06b6d4','#d946ef'];
+
+  function initCharts() {
+    if (window._chartsInited) return;
+    window._chartsInited = true;
+    var ctxN = document.getElementById('chartNiveles');
+    if (ctxN) { new Chart(ctxN, { type: 'doughnut', data: { labels: {{ data_niveles.labels|safe }}, datasets: [{ data: {{ data_niveles.data|safe }}, backgroundColor: COLORS.slice(0, {{ data_niveles.labels|length }}), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } } } } }); }
+    var ctxG = document.getElementById('chartGenero');
+    if (ctxG) { new Chart(ctxG, { type: 'pie', data: { labels: ['Masculino','Femenino'], datasets: [{ data: [{{ total_hombres }}, {{ total_mujeres }}], backgroundColor: ['#2563eb','#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', padding: 16, labels: { font: { size: 12 } } } } } }); }
+    var ctxGr = document.getElementById('chartGrados');
+    if (ctxGr) { new Chart(ctxGr, { type: 'bar', data: { labels: {{ data_grados.labels|safe }}, datasets: [{ label: 'Estudiantes', data: {{ data_grados.data|safe }}, backgroundColor: '#2563eb', borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { ticks: { font: { size: 10 } } } } } }); }
+    var ctxP = document.getElementById('chartParalelos');
+    if (ctxP) { new Chart(ctxP, { type: 'bar', data: { labels: {{ data_paralelos.labels|safe }}, datasets: [{ label: 'Estudiantes', data: {{ data_paralelos.data|safe }}, backgroundColor: ['#14b8a6','#06b6d4','#0ea5e9','#3b82f6','#6366f1','#8b5cf6','#a855f7'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 9 } } } } } }); }
+    var ctxGes = document.getElementById('chartGestion');
+    if (ctxGes) { new Chart(ctxGes, { type: 'line', data: { labels: {{ data_gestion.labels|safe }}, datasets: [{ label: 'Inscripciones', data: {{ data_gestion.data|safe }}, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.3, pointBackgroundColor: '#2563eb', pointRadius: 5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }); }
+  }
 </script>
 {% endblock %}
