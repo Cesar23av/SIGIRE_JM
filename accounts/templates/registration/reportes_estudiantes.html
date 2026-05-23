@@ -4,9 +4,15 @@
       <h2>Reporte de Estudiantes</h2>
       <p>Listado general de estudiantes registrados en el sistema.</p>
     </div>
-    <button class="print-btn" onclick="window.print()">
-      <i class="fa-solid fa-print"></i> Imprimir / PDF
-    </button>
+    <div style="display:flex;gap:8px;">
+      {% url 'reporte_estudiantes_pdf' as pdf_url %}
+      <button class="print-btn" data-pdf="{{ pdf_url }}{% if query %}?q={{ query }}{% endif %}{% if genero_filtro %}&genero={{ genero_filtro }}{% endif %}{% if estado_inscripcion %}&inscripcion={{ estado_inscripcion }}{% endif %}{% if incluir_inactivos %}&inactivos=on{% endif %}" onclick="event.stopPropagation(); descargarPDF(this);">
+        <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+      </button>
+      <button class="print-btn" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> Imprimir
+      </button>
+    </div>
   </div>
 
   <div class="report-summary">

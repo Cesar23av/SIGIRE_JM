@@ -3,6 +3,10 @@
 
 .doc-badge i { margin-right: 4px; }
 
+@media (max-width: 768px) {
+  .summary-card.doc-vencida { min-width: unset; }
+}
+
 @media print {
   .sidebar, .topbar, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
   .accordion-content { display: block !important; }
