@@ -77,25 +77,6 @@
       });
   }
 
-  function descargarPDF(btn) {
-    fetch(btn.dataset.pdf)
-      .then(function(r) {
-        if (!r.ok) throw new Error('Error ' + r.status);
-        return r.blob();
-      })
-      .then(function(blob) {
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'reporte_estudiantes.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
-      })
-      .catch(function(e) { alert('Error al descargar PDF: ' + e.message); });
-  }
-
   document.addEventListener('DOMContentLoaded', function() {
     switchReport(null, 'reporte-estudiantes');
     var est = document.getElementById('reporte-estudiantes');

@@ -8,12 +8,6 @@
 .clear-btn { background: transparent; color: #64748b; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: background 0.2s; }
 .clear-btn:hover { background: #f1f5f9; }
 
-.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.student-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.student-table th { background: #f1f5f9; padding: 10px 8px; text-align: left; font-weight: 700; color: #475569; font-size: 0.8rem; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-.student-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; }
-.student-table tr:hover td { background: #f8fafc; }
-
 .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 20px; flex-wrap: wrap; }
 .pagination a, .pagination span { padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
 .pagination a { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
@@ -21,14 +15,6 @@
 .pagination .current { background: #2563eb; color: white; border: 1px solid #2563eb; }
 .pagination .disabled { color: #cbd5e1; background: #f8fafc; border: 1px solid #e2e8f0; cursor: default; }
 .page-info { text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 8px; }
-
-@media (max-width: 768px) {
-  .filter-bar { flex-direction: column; align-items: stretch; }
-  .filter-bar input, .filter-bar select { width: 100%; min-width: unset; }
-  .filter-bar label { justify-content: center; }
-  .filter-btn, .clear-btn { text-align: center; justify-content: center; }
-  .pagination a, .pagination span { padding: 6px 10px; font-size: 0.8rem; }
-}
 
 @media print {
   .sidebar, .topbar, .reports-grid, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }

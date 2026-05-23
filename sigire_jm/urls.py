@@ -87,6 +87,4 @@ urlpatterns = [
 
     path('reportes/', accounts_views.reportes, name='reportes'),
 
-    path('reportes/pdf/estudiantes/', accounts_views.reporte_estudiantes_pdf, name='reporte_estudiantes_pdf'),
-
 ]
