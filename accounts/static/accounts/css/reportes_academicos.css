@@ -7,14 +7,6 @@
 .stat-chip { background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: #334155; display: inline-flex; align-items: center; gap: 6px; }
 .stat-chip strong { color: #0f172a; }
 
-@media (max-width: 768px) {
-  .charts-grid { grid-template-columns: 1fr; }
-  .chart-card .chart-container { height: 200px; }
-  .chart-card { padding: 14px; }
-  .stats-row { gap: 8px; }
-  .stat-chip { font-size: 0.78rem; padding: 4px 10px; }
-}
-
 @media print {
   .charts-grid { break-inside: avoid; }
 }

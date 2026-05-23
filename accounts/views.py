@@ -17,9 +17,6 @@ from django.db.models import Sum
 from students.models import Estudiante
 from enrollment.models import Inscripcion
 from academic.models import Gestion, Paralelo, Nivel, Grado
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from xhtml2pdf import pisa
 
 
 # 1. Vista Pública
@@ -487,85 +484,4 @@ def reportes(request):
     }
 
     return render(request, 'registration/reportes.html', context)
-
-@login_required
-@only_administrative
-def reporte_estudiantes_pdf(request):
-    from django.db.models import OuterRef, Exists, Q
-    from io import BytesIO
-
-    gestion_activa = Gestion.objects.filter(estado=True).first()
-
-    query = request.GET.get('q', '').strip()
-    genero_filtro = request.GET.get('genero', '')
-    estado_inscripcion = request.GET.get('inscripcion', '')
-    incluir_inactivos = request.GET.get('inactivos') == 'on'
-
-    estudiantes = Estudiante.objects.all().order_by('apellido_paterno', 'apellido_materno', 'nombres')
-
-    if not incluir_inactivos:
-        estudiantes = estudiantes.filter(estado=True)
-
-    if query:
-        estudiantes = estudiantes.filter(
-            Q(cedula_identidad__icontains=query) |
-            Q(nombres__icontains=query) |
-            Q(apellido_paterno__icontains=query) |
-            Q(apellido_materno__icontains=query)
-        )
-
-    if genero_filtro:
-        estudiantes = estudiantes.filter(genero=genero_filtro)
-
-    inscripcion_actual = Inscripcion.objects.filter(
-        estudiante=OuterRef('pk'),
-        estado=True
-    )
-    if gestion_activa:
-        inscripcion_actual = inscripcion_actual.filter(gestion=gestion_activa)
-
-    estudiantes = estudiantes.annotate(
-        tiene_inscripcion=Exists(inscripcion_actual)
-    )
-
-    if estado_inscripcion == 'con':
-        estudiantes = estudiantes.filter(tiene_inscripcion=True)
-    elif estado_inscripcion == 'sin':
-        estudiantes = estudiantes.filter(tiene_inscripcion=False)
-
-    inscripciones = Inscripcion.objects.filter(
-        estudiante__in=estudiantes,
-        estado=True
-    ).select_related('paralelo__grado__nivel', 'gestion')
-
-    insc_por_estudiante = {i.estudiante_id: i for i in inscripciones}
-
-    filas = []
-    for est in estudiantes:
-        filas.append({
-            'estudiante': est,
-            'inscripcion': insc_por_estudiante.get(est.cedula_identidad),
-        })
-
-    total = estudiantes.count()
-    con_inscripcion = sum(1 for e in estudiantes if e.tiene_inscripcion)
-    sin_inscripcion = total - con_inscripcion
-
-    context = {
-        'filas': filas,
-        'gestion_activa': gestion_activa,
-        'total': total,
-        'con_inscripcion': con_inscripcion,
-        'sin_inscripcion': sin_inscripcion,
-    }
-
-    html_string = render_to_string('registration/reportes_estudiantes_pdf.html', context)
-    result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html_string.encode('UTF-8')), result)
-    if pdf.err:
-        return HttpResponse('Error al generar el PDF', status=500)
-    response = HttpResponse(result.getvalue(), content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="reporte_estudiantes.pdf"'
-    response['Content-Type'] = 'application/pdf'
-    return response
 

@@ -3,10 +3,6 @@
 .doc-pendiente { background: #fef9c3; color: #854d0e; }
 .doc-vencida { background: #fee2e2; color: #991b1b; }
 
-@media (max-width: 768px) {
-  .doc-badge { font-size: 0.7rem; padding: 2px 8px; }
-}
-
 @media print {
   .sidebar, .topbar, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
   .accordion-content { display: block !important; }
