@@ -227,5 +227,59 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'accounts/js/base_admin.js' %}?v=2"></script>
+    <script>
+      var inactividadTimer;
+      var TIEMPO_LIMITE = 600000; // 10 minutos en ms
+      var TIEMPO_AVISO = 480000;  // 8 minutos en ms (aviso 2 min antes)
+      var avisoActivo = false;
+
+      function reiniciarTimer() {
+        if (avisoActivo) {
+          Swal.close();
+          avisoActivo = false;
+        }
+        clearTimeout(inactividadTimer);
+        inactividadTimer = setTimeout(mostrarAviso, TIEMPO_AVISO);
+      }
+
+      function mostrarAviso() {
+        avisoActivo = true;
+        Swal.fire({
+          title: '\u00bfTodav\u00eda est\u00e1s ah\u00ed?',
+          text: 'Tu sesi\u00f3n expirar\u00e1 en 2 minutos por inactividad.',
+          icon: 'warning',
+          timer: 120000,
+          timerProgressBar: true,
+          showCancelButton: true,
+          confirmButtonText: 'S\u00ed, continuar',
+          cancelButtonText: 'Cerrar sesi\u00f3n',
+          confirmButtonColor: '#2563eb',
+          cancelButtonColor: '#dc2626',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then(function(result) {
+          avisoActivo = false;
+          if (result.isConfirmed) {
+            reiniciarTimer();
+          } else if (result.dismiss === Swal.DismissReason.timer) {
+            window.location.href = "{% url 'logout' %}";
+          } else {
+            document.querySelector('.logout-form button')?.click();
+          }
+        });
+        // Si se acaba el tiempo sin respuesta, cerrar sesi\u00f3n
+        setTimeout(function() {
+          if (avisoActivo) {
+            window.location.href = "{% url 'logout' %}";
+          }
+        }, 120000);
+      }
+
+      ['mousemove', 'mousedown', 'click', 'keydown', 'keypress', 'scroll', 'touchstart', 'touchmove'].forEach(function(ev) {
+        document.addEventListener(ev, reiniciarTimer);
+      });
+
+      reiniciarTimer();
+    </script>
   </body>
 </html>
