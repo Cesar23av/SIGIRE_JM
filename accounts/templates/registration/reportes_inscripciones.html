@@ -40,8 +40,15 @@
         <option value="{{ val }}" {% if estado_doc_filtro == val %}selected{% endif %}>{{ label }}</option>
       {% endfor %}
     </select>
+    <span style="color:#64748b;font-size:0.8rem;white-space:nowrap;">Inicio:</span>
+    <input type="date" name="fecha_desde" value="{{ fecha_desde }}" title="Fecha de inicio" style="width:140px;">
+    <span style="color:#64748b;font-size:0.8rem;white-space:nowrap;">Fin:</span>
+    <input type="date" name="fecha_hasta" value="{{ fecha_hasta }}" title="Fecha de fin" style="width:140px;">
     <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
     <a href="{% url 'reportes' %}" class="clear-btn" data-ajax-ins><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
+    <span style="color:#94a3b8;font-size:0.8rem;margin-left:auto;">
+      F. Registro
+    </span>
   </form>
 
   <div class="table-responsive">
@@ -97,8 +104,8 @@
   {% if inscripciones.paginator.num_pages > 1 %}
   <div class="pagination">
     {% if inscripciones.has_previous %}
-      <a href="?page_ins=1{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&laquo;</a>
-      <a href="?page_ins={{ inscripciones.previous_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&lsaquo;</a>
+      <a href="?page_ins=1{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&laquo;</a>
+      <a href="?page_ins={{ inscripciones.previous_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&lsaquo;</a>
     {% else %}
       <span class="disabled">&laquo;</span>
       <span class="disabled">&lsaquo;</span>
@@ -107,12 +114,12 @@
       {% if num == inscripciones.number %}
         <span class="current">{{ num }}</span>
       {% elif num > inscripciones.number|add:"-3" and num < inscripciones.number|add:"3" %}
-        <a href="?page_ins={{ num }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">{{ num }}</a>
+        <a href="?page_ins={{ num }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">{{ num }}</a>
       {% endif %}
     {% endfor %}
     {% if inscripciones.has_next %}
-      <a href="?page_ins={{ inscripciones.next_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&rsaquo;</a>
-      <a href="?page_ins={{ inscripciones.paginator.num_pages }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}#reporte-inscripciones">&raquo;</a>
+      <a href="?page_ins={{ inscripciones.next_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&rsaquo;</a>
+      <a href="?page_ins={{ inscripciones.paginator.num_pages }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&raquo;</a>
     {% else %}
       <span class="disabled">&rsaquo;</span>
       <span class="disabled">&raquo;</span>

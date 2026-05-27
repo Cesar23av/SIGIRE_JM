@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{% static 'accounts/css/reportes_inscripciones.css' %}">
 <link rel="stylesheet" href="{% static 'accounts/css/reportes_documental.css' %}">
 <link rel="stylesheet" href="{% static 'accounts/css/reportes_academicos.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_cursos.css' %}">
 <link rel="stylesheet" href="{% static 'students/css/list_estudiantes.css' %}?v=10">
 
 <div class="reports-container">
@@ -36,6 +37,11 @@
       <span class="tab-label">Académico</span>
       <span class="tab-desc">Distribución por nivel, grado y paralelo</span>
     </a>
+    <a href="#" class="tab" data-tab="reporte-cursos" onclick="switchReport(event, 'reporte-cursos')">
+      <i class="fa-solid fa-school"></i>
+      <span class="tab-label">Cursos</span>
+      <span class="tab-desc">Listado de cursos y ocupación</span>
+    </a>
   </div>
 
   <div class="reports-content">
@@ -43,6 +49,7 @@
     {% include 'registration/reportes_academicos.html' %}
     {% include 'registration/reportes_inscripciones.html' %}
     {% include 'registration/reportes_documental.html' %}
+    {% include 'registration/reportes_cursos.html' %}
   </div>
 </div>
 
@@ -128,6 +135,23 @@
         if (!link) return;
         e.preventDefault();
         cargarReporte(new URL(link.href), 'reporte-documental');
+      });
+    }
+    var cur = document.getElementById('reporte-cursos');
+    if (cur) {
+      cur.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-cursos');
+      });
+      cur.addEventListener('click', function(e) {
+        var link = e.target.closest('a[data-ajax-cur]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-cursos');
       });
     }
   });

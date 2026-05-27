@@ -390,6 +390,8 @@ def reportes(request):
     ins_query = request.GET.get('q_ins', '').strip()
     gestion_filtro = request.GET.get('gestion', '')
     estado_doc_filtro = request.GET.get('estado_doc', '')
+    fecha_desde = request.GET.get('fecha_desde', '').strip()
+    fecha_hasta = request.GET.get('fecha_hasta', '').strip()
 
     inscripciones = Inscripcion.objects.filter(estado=True).select_related(
         'estudiante', 'paralelo__grado__nivel', 'gestion', 'usuario'
@@ -405,6 +407,10 @@ def reportes(request):
         inscripciones = inscripciones.filter(gestion_id=gestion_filtro)
     if estado_doc_filtro:
         inscripciones = inscripciones.filter(estado_documental=estado_doc_filtro)
+    if fecha_desde:
+        inscripciones = inscripciones.filter(fecha_registro__gte=fecha_desde)
+    if fecha_hasta:
+        inscripciones = inscripciones.filter(fecha_registro__lte=fecha_hasta)
 
     total_inscripciones = inscripciones.count()
     doc_completa = inscripciones.filter(estado_documental='completa').count()
@@ -446,6 +452,28 @@ def reportes(request):
     doc_page = request.GET.get('page_doc', 1)
     doc_page_obj = doc_paginator.get_page(doc_page)
 
+    curso_gestion_filtro = request.GET.get('curso_gestion', '')
+    cursos_nivel = Nivel.objects.filter(estado=True).order_by('nombre')
+    cursos_data = []
+    for nivel in cursos_nivel:
+        grados = Grado.objects.filter(estado=True, nivel=nivel).order_by('nombre')
+        for grado in grados:
+            paralelos = Paralelo.objects.filter(estado=True, grado=grado).order_by('letra')
+            for paralelo in paralelos:
+                qs = Inscripcion.objects.filter(paralelo=paralelo, estado=True)
+                if curso_gestion_filtro:
+                    qs = qs.filter(gestion_id=curso_gestion_filtro)
+                insc_count = qs.count()
+                cupo = paralelo.cupo_max
+                cursos_data.append({
+                    'nivel': nivel.nombre,
+                    'grado': grado.nombre,
+                    'paralelo': paralelo.letra,
+                    'inscritos': insc_count,
+                    'cupo': cupo,
+                    'disponibles': max(cupo - insc_count, 0),
+                })
+
     context = {
         'filas': page_obj,
         'gestion_activa': gestion_activa,
@@ -471,6 +499,8 @@ def reportes(request):
         'ins_query': ins_query,
         'gestion_filtro': gestion_filtro,
         'estado_doc_filtro': estado_doc_filtro,
+        'fecha_desde': fecha_desde,
+        'fecha_hasta': fecha_hasta,
         'gestiones_opciones': gestiones_opciones,
         'doc_choices': doc_choices,
         'docs': doc_page_obj,
@@ -481,6 +511,11 @@ def reportes(request):
         'q_doc': q_doc,
         'gestion_doc_filtro': gestion_doc_filtro,
         'estado_doc_filtro_doc': estado_doc_filtro_doc,
+        'cursos_data': cursos_data,
+        'curso_gestion_filtro': curso_gestion_filtro,
+        'total_cursos': len(cursos_data),
+        'total_inscritos_cursos': sum(c['inscritos'] for c in cursos_data),
+        'total_disponibles_cursos': sum(c['disponibles'] for c in cursos_data),
     }
 
     return render(request, 'registration/reportes.html', context)
