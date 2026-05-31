@@ -1,0 +1,131 @@
+{% load static %}
+<div id="reporte-documental" class="accordion-content">
+  <link rel="stylesheet" href="{% static 'accounts/css/reportes_documental.css' %}">
+  <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+    <div>
+      <h2>Reporte Documental</h2>
+      <p>Control de documentos entregados, pendientes y observados.</p>
+    </div>
+    <button class="print-btn" onclick="window.print()">
+      <i class="fa-solid fa-print"></i> Imprimir / PDF
+    </button>
+  </div>
+
+  <div class="report-summary">
+    <div class="summary-card total">
+      <h4>Total Registros</h4>
+      <div class="number">{{ total_docs }}</div>
+    </div>
+    <div class="summary-card inscritos">
+      <h4>Documentación Completa</h4>
+      <div class="number">{{ doc_ok }}</div>
+    </div>
+    <div class="summary-card sin-inscripcion">
+      <h4>Documentación Pendiente</h4>
+      <div class="number">{{ doc_pend }}</div>
+    </div>
+    <div class="summary-card doc-vencida">
+      <h4>Documentación Vencida</h4>
+      <div class="number">{{ doc_venc }}</div>
+    </div>
+  </div>
+
+  <form method="GET" action="{% url 'reportes' %}#reporte-documental" class="filter-bar">
+    <input type="text" name="q_doc" placeholder="Buscar por CI, nombres o apellidos..." value="{{ q_doc }}">
+    <select name="gestion_doc">
+      <option value="">Todas las gestiones</option>
+      {% for g in gestiones_opciones %}
+        <option value="{{ g.id }}" {% if gestion_doc_filtro|slugify == g.id|slugify %}selected{% endif %}>{{ g.anio }}</option>
+      {% endfor %}
+    </select>
+    <select name="estado_doc_doc">
+      <option value="">Todos los estados</option>
+      {% for val, label in doc_choices %}
+        <option value="{{ val }}" {% if estado_doc_filtro_doc == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+    <a href="{% url 'reportes' %}" class="clear-btn" data-ajax-doc><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
+  </form>
+
+  <div class="table-responsive">
+    <table class="student-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estudiante</th>
+          <th>C.I.</th>
+          <th>Nivel - Grado</th>
+          <th>Gestión</th>
+          <th>Estado Documental</th>
+          <th>Fecha Límite</th>
+          <th>Observación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in docs %}
+          <tr>
+            <td>{{ docs.start_index|add:forloop.counter0 }}</td>
+            <td><strong>{{ d.estudiante.apellido_paterno }} {{ d.estudiante.apellido_materno }}, {{ d.estudiante.nombres }}</strong></td>
+            <td>{{ d.estudiante.cedula_identidad }}</td>
+            <td>{{ d.paralelo.grado.nivel.nombre|slice:":4" }} - {{ d.paralelo.grado.nombre }} "{{ d.paralelo.letra }}"</td>
+            <td>{{ d.gestion.anio }}</td>
+            <td>
+              {% if d.estado_documental == 'completa' %}
+                <span class="doc-badge doc-completa"><i class="fa-solid fa-check-circle"></i> Completa</span>
+              {% elif d.estado_documental == 'pendiente' %}
+                <span class="doc-badge doc-pendiente"><i class="fa-solid fa-clock"></i> Pendiente</span>
+              {% else %}
+                <span class="doc-badge doc-vencida"><i class="fa-solid fa-exclamation-circle"></i> Vencida</span>
+              {% endif %}
+            </td>
+            <td>{{ d.fecha_limite_documentos|date:"d/m/Y"|default:"—" }}</td>
+            <td style="max-width:200px;">{{ d.observacion|default:"—"|truncatechars:60 }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;">
+              <i class="fa-solid fa-folder-open" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
+              No se encontraron registros documentales
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if docs.paginator.num_pages > 1 %}
+  <div class="pagination">
+    {% if docs.has_previous %}
+      <a href="?page_doc=1{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&laquo;</a>
+      <a href="?page_doc={{ docs.previous_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&lsaquo;</a>
+    {% else %}
+      <span class="disabled">&laquo;</span>
+      <span class="disabled">&lsaquo;</span>
+    {% endif %}
+    {% for num in docs.paginator.page_range %}
+      {% if num == docs.number %}
+        <span class="current">{{ num }}</span>
+      {% elif num > docs.number|add:"-3" and num < docs.number|add:"3" %}
+        <a href="?page_doc={{ num }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if docs.has_next %}
+      <a href="?page_doc={{ docs.next_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&rsaquo;</a>
+      <a href="?page_doc={{ docs.paginator.num_pages }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&raquo;</a>
+    {% else %}
+      <span class="disabled">&rsaquo;</span>
+      <span class="disabled">&raquo;</span>
+    {% endif %}
+  </div>
+  <div class="page-info">
+    Página {{ docs.number }} de {{ docs.paginator.num_pages }} ({{ total_docs }} registro{{ total_docs|pluralize:"s" }})
+  </div>
+  {% endif %}
+
+  {% if total_docs > 0 %}
+    <p style="text-align:right;color:#94a3b8;font-size:0.85rem;margin-top:12px;">
+      Reporte generado el {% now "d/m/Y H:i" %}
+    </p>
+  {% endif %}
+</div>

@@ -100,6 +100,10 @@ WSGI_APPLICATION = 'sigire_jm.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 
+# Session timeout: 10 minutos de inactividad
+SESSION_COOKIE_AGE = 600
+SESSION_SAVE_EVERY_REQUEST = True
+
 #Configuracion de la base de datos para Supabase
 
 DATABASES = {

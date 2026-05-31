@@ -97,4 +97,5 @@ urlpatterns = [
     path('inscripciones/<int:pk>/imprimir/', enrollment_views.imprimir_inscripcion, name='imprimir_inscripcion'),
 
     path('reportes/', accounts_views.reportes, name='reportes'),
+
 ]

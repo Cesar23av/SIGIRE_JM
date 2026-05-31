@@ -1,0 +1,12 @@
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-top: 20px; }
+.chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
+.chart-card h4 { margin: 0 0 16px; color: #0f172a; font-size: 1rem; font-weight: 800; }
+.chart-card .chart-container { position: relative; height: 260px; }
+.chart-card.full { grid-column: 1 / -1; }
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.stat-chip { background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: #334155; display: inline-flex; align-items: center; gap: 6px; }
+.stat-chip strong { color: #0f172a; }
+
+@media print {
+  .charts-grid { break-inside: avoid; }
+}

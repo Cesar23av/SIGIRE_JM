@@ -2,53 +2,175 @@
 {% load static %}
 {% block page_title %}Reportes{% endblock %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'accounts/css/reportes.css' %}">
-    <div class="reports-container">
-        <div class="reports-header">
-            <h2>Centro de Reportes</h2>
-            <p>Consulta y genera reportes relacionados con estudiantes, inscripciones, gestiones académicas y documentación.</p>
-        </div>
-        <div class="reports-grid">
-            <div class="report-card">
-                <div class="report-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="report-content">
-                    <h3>Reporte de Estudiantes</h3>
-                    <p>Listado general de estudiantes registrados en el sistema.</p>
-                    <a href="#" class="report-btn">Ver reporte</a>
-                </div>
-            </div>
-            <div class="report-card">
-                <div class="report-icon">
-                    <i class="fa-solid fa-file-signature"></i>
-                </div>
-                <div class="report-content">
-                    <h3>Reporte de Inscripciones</h3>
-                    <p>Resumen de inscripciones por gestión, grado, paralelo y estado.</p>
-                    <a href="#" class="report-btn">Ver reporte</a>
-                </div>
-            </div>
-            <div class="report-card">
-                <div class="report-icon">
-                    <i class="fa-solid fa-folder-open"></i>
-                </div>
-                <div class="report-content">
-                    <h3>Reporte Documental</h3>
-                    <p>Control de documentos entregados, pendientes y observados.</p>
-                    <a href="#" class="report-btn">Ver reporte</a>
-                </div>
-            </div>
-            <div class="report-card">
-                <div class="report-icon">
-                    <i class="fa-solid fa-chart-pie"></i>
-                </div>
-                <div class="report-content">
-                    <h3>Reporte Académico</h3>
-                    <p>Distribución de estudiantes por nivel, grado, paralelo y gestión.</p>
-                    <a href="#" class="report-btn">Ver reporte</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<link rel="stylesheet" href="{% static 'accounts/css/reportes.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_estudiantes.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_inscripciones.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_documental.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_academicos.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/css/reportes_cursos.css' %}">
+<link rel="stylesheet" href="{% static 'students/css/list_estudiantes.css' %}?v=10">
+
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>Reportes</h2>
+    <p>Selecciona un reporte para visualizar los datos.</p>
+  </div>
+
+  <div class="reports-tabs">
+    <a href="#" class="tab active" data-tab="reporte-estudiantes" onclick="switchReport(event, 'reporte-estudiantes')">
+      <i class="fa-solid fa-users"></i>
+      <span class="tab-label">Estudiantes</span>
+      <span class="tab-desc">Listado general de estudiantes</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-inscripciones" onclick="switchReport(event, 'reporte-inscripciones')">
+      <i class="fa-solid fa-file-signature"></i>
+      <span class="tab-label">Inscripciones</span>
+      <span class="tab-desc">Resumen por gestión, grado y paralelo</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-documental" onclick="switchReport(event, 'reporte-documental')">
+      <i class="fa-solid fa-folder-open"></i>
+      <span class="tab-label">Documental</span>
+      <span class="tab-desc">Control de documentos entregados</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-academico" onclick="switchReport(event, 'reporte-academico')">
+      <i class="fa-solid fa-chart-pie"></i>
+      <span class="tab-label">Académico</span>
+      <span class="tab-desc">Distribución por nivel, grado y paralelo</span>
+    </a>
+    <a href="#" class="tab" data-tab="reporte-cursos" onclick="switchReport(event, 'reporte-cursos')">
+      <i class="fa-solid fa-school"></i>
+      <span class="tab-label">Cursos</span>
+      <span class="tab-desc">Listado de cursos y ocupación</span>
+    </a>
+  </div>
+
+  <div class="reports-content">
+    {% include 'registration/reportes_estudiantes.html' %}
+    {% include 'registration/reportes_academicos.html' %}
+    {% include 'registration/reportes_inscripciones.html' %}
+    {% include 'registration/reportes_documental.html' %}
+    {% include 'registration/reportes_cursos.html' %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+  function switchReport(e, id) {
+    if (e) e.preventDefault();
+    document.querySelectorAll('.tab').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.reports-content .accordion-content').forEach(function(el) { el.classList.remove('open'); });
+    var tab = document.querySelector('.tab[data-tab="' + id + '"]');
+    if (tab) tab.classList.add('active');
+    var content = document.getElementById(id);
+    if (content) content.classList.add('open');
+    if (id === 'reporte-academico') initCharts();
+  }
+
+  function toggleReport(id, e) { switchReport(e, id); }
+
+  function cargarReporte(url, hash) {
+    url.hash = hash;
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function(r) { return r.text(); })
+      .then(function(html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var nuevo = doc.querySelector('#' + hash);
+        var actual = document.getElementById(hash);
+        if (nuevo && actual) {
+          actual.innerHTML = nuevo.innerHTML;
+        }
+        window.history.pushState({}, '', url.toString());
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    switchReport(null, 'reporte-estudiantes');
+    var est = document.getElementById('reporte-estudiantes');
+    if (est) {
+      est.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-estudiantes');
+      });
+      est.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-estudiantes');
+      });
+    }
+    var ins = document.getElementById('reporte-inscripciones');
+    if (ins) {
+      ins.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-inscripciones');
+      });
+      ins.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax-ins]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-inscripciones');
+      });
+    }
+    var doc = document.getElementById('reporte-documental');
+    if (doc) {
+      doc.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-documental');
+      });
+      doc.addEventListener('click', function(e) {
+        var link = e.target.closest('.pagination a') || e.target.closest('a[data-ajax-doc]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-documental');
+      });
+    }
+    var cur = document.getElementById('reporte-cursos');
+    if (cur) {
+      cur.addEventListener('submit', function(e) {
+        var form = e.target.closest('.filter-bar');
+        if (!form) return;
+        e.preventDefault();
+        var url = new URL(form.action || window.location.href);
+        url.search = new URLSearchParams(new FormData(form)).toString();
+        cargarReporte(url, 'reporte-cursos');
+      });
+      cur.addEventListener('click', function(e) {
+        var link = e.target.closest('a[data-ajax-cur]');
+        if (!link) return;
+        e.preventDefault();
+        cargarReporte(new URL(link.href), 'reporte-cursos');
+      });
+    }
+  });
+
+  var COLORS = ['#2563eb','#16a34a','#dc2626','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16','#06b6d4','#d946ef'];
+
+  function initCharts() {
+    if (window._chartsInited) return;
+    window._chartsInited = true;
+    var ctxN = document.getElementById('chartNiveles');
+    if (ctxN) { new Chart(ctxN, { type: 'doughnut', data: { labels: {{ data_niveles.labels|safe }}, datasets: [{ data: {{ data_niveles.data|safe }}, backgroundColor: COLORS.slice(0, {{ data_niveles.labels|length }}), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } } } } }); }
+    var ctxG = document.getElementById('chartGenero');
+    if (ctxG) { new Chart(ctxG, { type: 'pie', data: { labels: ['Masculino','Femenino'], datasets: [{ data: [{{ total_hombres }}, {{ total_mujeres }}], backgroundColor: ['#2563eb','#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', padding: 16, labels: { font: { size: 12 } } } } } }); }
+    var ctxGr = document.getElementById('chartGrados');
+    if (ctxGr) { new Chart(ctxGr, { type: 'bar', data: { labels: {{ data_grados.labels|safe }}, datasets: [{ label: 'Estudiantes', data: {{ data_grados.data|safe }}, backgroundColor: '#2563eb', borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { ticks: { font: { size: 10 } } } } } }); }
+    var ctxP = document.getElementById('chartParalelos');
+    if (ctxP) { new Chart(ctxP, { type: 'bar', data: { labels: {{ data_paralelos.labels|safe }}, datasets: [{ label: 'Estudiantes', data: {{ data_paralelos.data|safe }}, backgroundColor: ['#14b8a6','#06b6d4','#0ea5e9','#3b82f6','#6366f1','#8b5cf6','#a855f7'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 9 } } } } } }); }
+    var ctxGes = document.getElementById('chartGestion');
+    if (ctxGes) { new Chart(ctxGes, { type: 'line', data: { labels: {{ data_gestion.labels|safe }}, datasets: [{ label: 'Inscripciones', data: {{ data_gestion.data|safe }}, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.3, pointBackgroundColor: '#2563eb', pointRadius: 5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }); }
+  }
+</script>
 {% endblock %}
