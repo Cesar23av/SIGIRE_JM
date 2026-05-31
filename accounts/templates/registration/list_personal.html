@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'accounts/css/list_personal.css' %}?v=14">
+<link rel="stylesheet" href="{% static 'accounts/css/list_personal.css' %}?v=17">
 
 <section class="personal-list-container">
 
@@ -13,6 +13,11 @@
 
     <div class="personal-list-header">
       <div class="header-title">
+        <span class="section-label">
+          <i class="fa-solid fa-user-shield"></i>
+          Administración de usuarios
+        </span>
+
         <h3>
           <i class="fa-solid fa-user-tie"></i>
           Personal Administrativo
@@ -31,10 +36,19 @@
           </a>
         {% endif %}
 
-        <div class="toggle-container">
-          <span class="toggle-text">Ver Inactivos</span>
+        <div class="toggle-container {% if mostrar_inactivos %}showing-inactive{% endif %}">
+          <div class="toggle-label">
+            <strong>Vista actual</strong>
+            <span>
+              {% if mostrar_inactivos %}
+                Personal inactivo
+              {% else %}
+                Personal activo
+              {% endif %}
+            </span>
+          </div>
 
-          <label class="switch">
+          <label class="switch" title="Cambiar entre activos e inactivos">
             <input
               type="checkbox"
               id="toggleInactivos"
@@ -46,6 +60,34 @@
       </div>
     </div>
 
+    <div class="list-status-panel">
+      <div class="status-panel-icon">
+        {% if mostrar_inactivos %}
+          <i class="fa-solid fa-box-archive"></i>
+        {% else %}
+          <i class="fa-solid fa-users-gear"></i>
+        {% endif %}
+      </div>
+
+      <div>
+        <strong>
+          {% if mostrar_inactivos %}
+            Estás revisando usuarios inactivos
+          {% else %}
+            Estás revisando usuarios activos
+          {% endif %}
+        </strong>
+
+        <span>
+          {% if query_busqueda or rol_filtro %}
+            Hay filtros aplicados sobre el listado.
+          {% else %}
+            Usa los filtros para encontrar personal por nombre, C.I., celular o cargo.
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
     <div class="search-container">
       <form method="GET" action="" class="search-form">
         {% if mostrar_inactivos %}
@@ -54,7 +96,7 @@
 
         <div class="search-group text-search">
           <label class="search-label" for="search-q">
-            Buscar por C.I., nombre o celular:
+            Buscar personal
           </label>
 
           <div class="input-with-icon">
@@ -66,14 +108,25 @@
               name="q"
               value="{{ query_busqueda|default:'' }}"
               class="search-input"
-              placeholder="Ej. 12345678, Juan, 70000000"
+              placeholder="C.I., nombre, apellido o celular"
+              autocomplete="off"
             >
+
+            <button
+              type="button"
+              class="btn-clear-input"
+              id="btnClearSearchInput"
+              title="Limpiar texto"
+              aria-label="Limpiar búsqueda"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
         </div>
 
         <div class="search-group select-search">
           <label class="search-label" for="search-rol">
-            Filtrar por cargo:
+            Cargo
           </label>
 
           <select name="rol" id="search-rol" class="search-select">
@@ -98,15 +151,44 @@
               href="?{% if mostrar_inactivos %}inactivos=true{% endif %}"
               class="btn-clear"
               id="btnClearFilters"
-              title="Limpiar búsqueda"
+              title="Limpiar filtros"
             >
               <i class="fa-solid fa-eraser"></i>
-            </a>
-              <i class="fa-solid fa-eraser"></i>
+              Limpiar
             </a>
           {% endif %}
         </div>
       </form>
+    </div>
+
+    {% if query_busqueda or rol_filtro %}
+      <div class="active-filters">
+        <span>
+          <i class="fa-solid fa-filter-circle-dollar"></i>
+          Filtros aplicados:
+        </span>
+
+        {% if query_busqueda %}
+          <strong>Búsqueda: “{{ query_busqueda }}”</strong>
+        {% endif %}
+
+        {% if rol_filtro %}
+          <strong>Cargo: {{ rol_filtro|title }}</strong>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="table-toolbar">
+      <div>
+        <strong>Resultado del listado</strong>
+        <span>
+          {% if mostrar_inactivos %}
+            Usuarios desactivados o pendientes de reactivación.
+          {% else %}
+            Usuarios habilitados para ingresar al sistema.
+          {% endif %}
+        </span>
+      </div>
     </div>
 
     <div class="table-responsive">
@@ -125,24 +207,35 @@
 
         <tbody>
           {% for usuario in personal %}
-            <tr>
+            <tr class="personal-row">
               <td data-label="#">
                 {{ forloop.counter }}
               </td>
 
               <td data-label="Nombre Completo">
-                <strong>{{ usuario.get_full_name|default:usuario.username }}</strong>
-                <br>
-                <small class="username-text">@{{ usuario.username }}</small>
+                <div class="person-cell">
+                  <div class="person-avatar">
+                    {{ usuario.first_name|default:usuario.username|first|upper }}
+                  </div>
+
+                  <div>
+                    <strong>{{ usuario.get_full_name|default:usuario.username }}</strong>
+                    <br>
+                    <small class="username-text">@{{ usuario.username }}</small>
+                  </div>
+                </div>
               </td>
 
               <td data-label="C.I. / Exp.">
-                {{ usuario.cedula_identidad }} {{ usuario.complemento|default:"" }}
+                <strong>{{ usuario.cedula_identidad }} {{ usuario.complemento|default:"" }}</strong>
                 <span class="muted-text">{{ usuario.expedido }}</span>
               </td>
 
               <td data-label="Celular">
-                {{ usuario.celular }}
+                <span class="phone-text">
+                  <i class="fa-solid fa-mobile-screen-button"></i>
+                  {{ usuario.celular }}
+                </span>
               </td>
 
               <td data-label="Rol / Cargo">
@@ -218,13 +311,17 @@
           {% empty %}
             <tr>
               <td colspan="7" class="empty-state">
-                <i class="fa-solid fa-info-circle"></i>
+                <div class="empty-box">
+                  <i class="fa-solid fa-circle-info"></i>
 
-                {% if mostrar_inactivos %}
-                  <span>No hay personal inactivo en la papelera.</span>
-                {% else %}
-                  <span>No hay personal registrado en el sistema.</span>
-                {% endif %}
+                  {% if mostrar_inactivos %}
+                    <strong>No hay personal inactivo</strong>
+                    <span>No se encontraron usuarios en la papelera.</span>
+                  {% else %}
+                    <strong>No hay personal registrado</strong>
+                    <span>Cuando registres personal administrativo aparecerá en este listado.</span>
+                  {% endif %}
+                </div>
               </td>
             </tr>
           {% endfor %}
@@ -236,6 +333,6 @@
 
 </section>
 
-<script src="{% static 'accounts/js/list_personal.js' %}?v=2"></script>
+<script src="{% static 'accounts/js/list_personal.js' %}?v=3"></script>
 
 {% endblock %}

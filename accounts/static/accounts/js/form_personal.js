@@ -1,5 +1,5 @@
 /* =========================================================
-   FORM_PERSONAL.JS - VALIDACIÓN LIMPIA DE PERSONAL
+   FORM_PERSONAL.JS - VALIDACIÓN MEJORADA DE PERSONAL
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
@@ -9,67 +9,115 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!form || !btnSubmit) return;
 
-  const firstNameInput = document.querySelector('input[name="first_name"]');
-  const lastNameInput = document.querySelector('input[name="last_name"]');
-  const ciInput = document.querySelector('input[name="cedula_identidad"]');
-  const complementoInput = document.querySelector('input[name="complemento"]');
-  const celularInput = document.querySelector('input[name="celular"]');
-  const emailInput = document.querySelector('input[name="email"]');
+  const fields = {
+    firstName: document.querySelector('input[name="first_name"]'),
+    lastName: document.querySelector('input[name="last_name"]'),
+    ci: document.querySelector('input[name="cedula_identidad"]'),
+    complemento: document.querySelector('input[name="complemento"]'),
+    celular: document.querySelector('input[name="celular"]'),
+    email: document.querySelector('input[name="email"]'),
+  };
+
+  const statusCard = document.getElementById("form-status-card");
+  const statusTitle = document.getElementById("form-status-title");
+  const statusText = document.getElementById("form-status-text");
+  const progressBar = document.getElementById("form-progress-bar");
 
   const isEditMode = form.dataset.editMode === "true";
-
   const touchedFields = new Set();
+  const snapshot = getFormSnapshot();
 
-  let snapshot = {};
-  const initialData = new FormData(form);
-
-  for (const [key, value] of initialData.entries()) {
-    snapshot[key] = value;
-  }
+  const validators = [
+    {
+      input: fields.firstName,
+      normalizer: normalizeName,
+      validator: validateFirstName,
+    },
+    {
+      input: fields.lastName,
+      normalizer: normalizeName,
+      validator: validateLastName,
+    },
+    {
+      input: fields.ci,
+      normalizer: normalizeCI,
+      validator: validateCI,
+    },
+    {
+      input: fields.complemento,
+      normalizer: normalizeComplement,
+      validator: validateComplemento,
+    },
+    {
+      input: fields.celular,
+      normalizer: normalizeCelular,
+      validator: validateCelular,
+    },
+    {
+      input: fields.email,
+      normalizer: normalizeEmail,
+      validator: validateEmail,
+    },
+  ];
 
   initInputs();
-  updateSubmitState(false);
   initSubmitConfirmation();
+  refreshUI(false);
 
   /* =========================================================
-     1. EVENTOS DE CAMPOS
+     1. INICIALIZACIÓN
      ========================================================= */
 
   function initInputs() {
-    bindTextInput(firstNameInput, normalizeName, validateFirstName);
-    bindTextInput(lastNameInput, normalizeName, validateLastName);
-    bindTextInput(ciInput, normalizeCI, validateCI);
-    bindTextInput(complementoInput, normalizeComplement, validateComplemento);
-    bindTextInput(celularInput, normalizeCelular, validateCelular);
-    bindTextInput(emailInput, normalizeEmail, validateEmail);
+    validators.forEach(({ input, normalizer, validator }) => {
+      bindInput(input, normalizer, validator);
+    });
 
     form.addEventListener("change", function () {
-      updateSubmitState(false);
+      refreshUI(false);
     });
   }
 
-  function bindTextInput(input, normalizer, validator) {
+  function bindInput(input, normalizer, validator) {
     if (!input) return;
 
     input.addEventListener("input", function () {
       touchedFields.add(input.name);
 
+      const cursorPosition = input.selectionStart;
       input.value = normalizer(input.value);
 
+      try {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+      } catch (error) {
+        // Algunos campos no permiten manipular cursor. No afecta la validación.
+      }
+
       validator(true);
-      updateSubmitState(false);
+      refreshUI(false);
     });
 
     input.addEventListener("blur", function () {
       touchedFields.add(input.name);
 
-      if (input === firstNameInput || input === lastNameInput) {
+      if (input === fields.firstName || input === fields.lastName) {
         input.value = cleanSpaces(input.value);
       }
 
       validator(true);
-      updateSubmitState(false);
+      refreshUI(false);
     });
+  }
+
+  function getFormSnapshot() {
+    const data = {};
+    const formData = new FormData(form);
+
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+
+    return data;
   }
 
   /* =========================================================
@@ -79,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function normalizeName(value) {
     return value
       .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "")
+      .replace(/\s{2,}/g, " ")
       .split(" ")
       .map((word) => {
         if (!word) return "";
@@ -92,11 +141,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function normalizeCI(value) {
-    return value.replace(/[^0-9]/g, "").slice(0, 10);
+    return value.replace(/\D/g, "").slice(0, 10);
   }
 
   function normalizeCelular(value) {
-    return value.replace(/[^0-9]/g, "").slice(0, 8);
+    return value.replace(/\D/g, "").slice(0, 8);
   }
 
   function normalizeEmail(value) {
@@ -104,19 +153,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function normalizeComplement(value) {
-    let cleaned = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 2);
+    const cleaned = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 2);
+
+    if (cleaned.length === 0) return "";
 
     if (cleaned.length === 1) {
       return cleaned.replace(/[^A-Z]/g, "");
     }
 
-    if (cleaned.length === 2) {
-      const first = cleaned.charAt(0).replace(/[^A-Z]/g, "");
-      const second = cleaned.charAt(1).replace(/[^0-9]/g, "");
-      return first + second;
-    }
+    const first = cleaned.charAt(0).replace(/[^A-Z]/g, "");
+    const second = cleaned.charAt(1).replace(/[^0-9]/g, "");
 
-    return cleaned;
+    return first + second;
   }
 
   /* =========================================================
@@ -124,155 +172,147 @@ document.addEventListener("DOMContentLoaded", function () {
      ========================================================= */
 
   function validateFirstName(showFeedback = false) {
-    if (!firstNameInput) return true;
+    const input = fields.firstName;
+    if (!input) return true;
 
-    const value = cleanSpaces(firstNameInput.value);
+    const value = cleanSpaces(input.value);
 
     if (!value) {
-      setFieldState(firstNameInput, false, "Los nombres son obligatorios.", showFeedback);
-      return false;
+      return setInvalid(input, "Los nombres son obligatorios.", showFeedback);
     }
 
     if (value.length < 2) {
-      setFieldState(firstNameInput, false, "Ingrese un nombre válido.", showFeedback);
-      return false;
+      return setInvalid(input, "Ingrese un nombre válido.", showFeedback);
     }
 
-    setFieldState(firstNameInput, true, "", showFeedback);
-    return true;
+    return setValid(input, "Nombre válido.");
   }
 
   function validateLastName(showFeedback = false) {
-    if (!lastNameInput) return true;
+    const input = fields.lastName;
+    if (!input) return true;
 
-    const value = cleanSpaces(lastNameInput.value);
+    const value = cleanSpaces(input.value);
 
     if (!value) {
-      setFieldState(lastNameInput, false, "Los apellidos son obligatorios.", showFeedback);
-      return false;
+      return setInvalid(input, "Los apellidos son obligatorios.", showFeedback);
     }
 
     if (value.length < 2) {
-      setFieldState(lastNameInput, false, "Ingrese apellidos válidos.", showFeedback);
-      return false;
+      return setInvalid(input, "Ingrese apellidos válidos.", showFeedback);
     }
 
-    setFieldState(lastNameInput, true, "", showFeedback);
-    return true;
+    return setValid(input, "Apellido válido.");
   }
 
   function validateCI(showFeedback = false) {
-    if (!ciInput || ciInput.disabled || ciInput.readOnly) return true;
+    const input = fields.ci;
+    if (!input || input.disabled || input.readOnly) return true;
 
-    const value = ciInput.value.trim();
+    const value = input.value.trim();
 
     if (!value) {
-      setFieldState(ciInput, false, "La cédula de identidad es obligatoria.", showFeedback);
-      return false;
+      return setInvalid(input, "La cédula de identidad es obligatoria.", showFeedback);
     }
 
     if (!/^\d{5,10}$/.test(value)) {
-      setFieldState(ciInput, false, "La CI debe tener entre 5 y 10 dígitos.", showFeedback);
-      return false;
+      return setInvalid(input, "La CI debe tener entre 5 y 10 dígitos.", showFeedback);
     }
 
-    setFieldState(ciInput, true, "", showFeedback);
-    return true;
+    return setValid(input, "CI válida.");
   }
 
   function validateComplemento(showFeedback = false) {
-    if (!complementoInput) return true;
+    const input = fields.complemento;
+    if (!input) return true;
 
-    const value = complementoInput.value.trim();
+    const value = input.value.trim();
 
     if (!value) {
-      clearFieldState(complementoInput);
+      clearFieldState(input);
       return true;
     }
 
     if (!/^[A-Z][0-9]$/.test(value)) {
-      setFieldState(complementoInput, false, "Formato válido: A1.", showFeedback);
-      return false;
+      return setInvalid(input, "Formato válido: A1.", showFeedback);
     }
 
-    setFieldState(complementoInput, true, "", showFeedback);
-    return true;
+    return setValid(input, "Complemento válido.");
   }
 
   function validateCelular(showFeedback = false) {
-    if (!celularInput) return true;
+    const input = fields.celular;
+    if (!input) return true;
 
-    const value = celularInput.value.trim();
+    const value = input.value.trim();
 
     if (!value) {
-      setFieldState(celularInput, false, "El celular es obligatorio.", showFeedback);
-      return false;
+      return setInvalid(input, "El celular es obligatorio.", showFeedback);
     }
 
     if (!/^[67]\d{7}$/.test(value)) {
-      setFieldState(celularInput, false, "Debe empezar con 6 o 7 y tener 8 dígitos.", showFeedback);
-      return false;
+      return setInvalid(input, "Debe empezar con 6 o 7 y tener 8 dígitos.", showFeedback);
     }
 
-    setFieldState(celularInput, true, "", showFeedback);
-    return true;
+    return setValid(input, "Celular válido.");
   }
 
   function validateEmail(showFeedback = false) {
-    if (!emailInput) return true;
+    const input = fields.email;
+    if (!input) return true;
 
-    const value = emailInput.value.trim();
-
-    if (!value) {
-      setFieldState(emailInput, false, "El correo electrónico es obligatorio.", showFeedback);
-      return false;
-    }
-
+    const value = input.value.trim();
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    if (!emailPattern.test(value)) {
-      setFieldState(emailInput, false, "Correo inválido. Ej: usuario@correo.com", showFeedback);
-      return false;
+    if (!value) {
+      return setInvalid(input, "El correo electrónico es obligatorio.", showFeedback);
     }
 
-    setFieldState(emailInput, true, "", showFeedback);
-    return true;
+    if (!emailPattern.test(value)) {
+      return setInvalid(input, "Correo inválido. Ej: usuario@correo.com", showFeedback);
+    }
+
+    return setValid(input, "Correo válido.");
   }
 
   /* =========================================================
-     4. ESTADO VISUAL
+     4. ESTADO VISUAL DE CAMPOS
      ========================================================= */
 
-  function setFieldState(input, isValid, message, showFeedback = false) {
+  function setValid(input, message = "") {
     const group = input.closest(".form-group");
-    if (!group) return;
+    if (!group) return true;
 
-    let feedback = group.querySelector(".js-field-feedback");
+    const feedback = getOrCreateFeedback(group);
 
-    if (!feedback) {
-      feedback = document.createElement("span");
-      feedback.classList.add("js-field-feedback");
-      group.appendChild(feedback);
-    }
+    input.classList.remove("input-invalid");
+    input.classList.add("input-valid");
 
-    input.classList.remove("input-valid", "input-invalid");
-    feedback.classList.remove("show", "feedback-invalid");
+    feedback.className = "js-field-feedback feedback-valid show";
+    feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
 
-    if (isValid) {
-      input.classList.add("input-valid");
-      feedback.innerHTML = "";
-      return;
-    }
+    return true;
+  }
 
+  function setInvalid(input, message, showFeedback = false) {
+    const group = input.closest(".form-group");
+    if (!group) return false;
+
+    const feedback = getOrCreateFeedback(group);
+
+    input.classList.remove("input-valid");
     input.classList.add("input-invalid");
 
-    if (!showFeedback) {
+    if (!showFeedback && !touchedFields.has(input.name)) {
+      feedback.className = "js-field-feedback";
       feedback.innerHTML = "";
-      return;
+      return false;
     }
 
-    feedback.classList.add("show", "feedback-invalid");
+    feedback.className = "js-field-feedback feedback-invalid show";
     feedback.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+
+    return false;
   }
 
   function clearFieldState(input) {
@@ -284,9 +324,21 @@ document.addEventListener("DOMContentLoaded", function () {
     input.classList.remove("input-valid", "input-invalid");
 
     if (feedback) {
-      feedback.classList.remove("show", "feedback-invalid");
+      feedback.className = "js-field-feedback";
       feedback.innerHTML = "";
     }
+  }
+
+  function getOrCreateFeedback(group) {
+    let feedback = group.querySelector(".js-field-feedback");
+
+    if (!feedback) {
+      feedback = document.createElement("span");
+      feedback.classList.add("js-field-feedback");
+      group.appendChild(feedback);
+    }
+
+    return feedback;
   }
 
   /* =========================================================
@@ -294,16 +346,24 @@ document.addEventListener("DOMContentLoaded", function () {
      ========================================================= */
 
   function validateForm(showFeedback = false) {
-    const validations = [
-      validateFirstName(showFeedback),
-      validateLastName(showFeedback),
-      validateCI(showFeedback),
-      validateComplemento(showFeedback),
-      validateCelular(showFeedback),
-      validateEmail(showFeedback),
-    ];
+    return validators.every(({ validator }) => validator(showFeedback));
+  }
 
-    return validations.every(Boolean);
+  function getValidCount() {
+    let count = 0;
+
+    validators.forEach(({ input, validator }) => {
+      if (!input) return;
+
+      const isOptionalEmpty =
+        input === fields.complemento && input.value.trim() === "";
+
+      if (isOptionalEmpty || validator(false)) {
+        count++;
+      }
+    });
+
+    return count;
   }
 
   function hasChanges() {
@@ -318,14 +378,53 @@ document.addEventListener("DOMContentLoaded", function () {
     return false;
   }
 
-  function updateSubmitState(showFeedback = false) {
+  function refreshUI(showFeedback = false) {
     const formIsValid = validateForm(showFeedback);
+    const changed = hasChanges();
 
     if (isEditMode) {
-      btnSubmit.disabled = !(formIsValid && hasChanges());
+      btnSubmit.disabled = !(formIsValid && changed);
     } else {
       btnSubmit.disabled = !formIsValid;
     }
+
+    updateStatusCard(formIsValid, changed);
+  }
+
+  function updateStatusCard(formIsValid, changed) {
+    if (!statusCard || !statusTitle || !statusText || !progressBar) return;
+
+    const totalFields = validators.filter(({ input }) => input).length;
+    const validCount = getValidCount();
+    const progress = Math.round((validCount / totalFields) * 100);
+
+    progressBar.style.width = `${progress}%`;
+
+    statusCard.classList.remove(
+      "status-pending",
+      "status-success",
+      "status-warning"
+    );
+
+    if (formIsValid && (!isEditMode || changed)) {
+      statusCard.classList.add("status-success");
+      statusTitle.textContent = "Formulario listo";
+      statusText.textContent = isEditMode
+        ? "Los datos son válidos y existen cambios para guardar."
+        : "Los datos son válidos. Ya puedes finalizar el registro.";
+      return;
+    }
+
+    if (isEditMode && formIsValid && !changed) {
+      statusCard.classList.add("status-warning");
+      statusTitle.textContent = "Sin cambios detectados";
+      statusText.textContent = "Modifica al menos un dato para habilitar el guardado.";
+      return;
+    }
+
+    statusCard.classList.add("status-pending");
+    statusTitle.textContent = "Formulario pendiente";
+    statusText.textContent = `Campos validados: ${validCount} de ${totalFields}.`;
   }
 
   /* =========================================================
@@ -337,41 +436,53 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
 
       if (!validateForm(true)) {
-        updateSubmitState(true);
+        refreshUI(true);
         showValidationAlert();
+        focusFirstInvalidField();
         return;
       }
 
-      const title = isEditMode ? "¿Guardar cambios?" : "¿Confirmar registro?";
-      const text = isEditMode
-        ? "Se actualizarán los datos de este administrativo en el sistema."
-        : "Se creará el usuario y se le enviarán sus credenciales por correo electrónico.";
-
-      const confirmText = isEditMode
-        ? '<i class="fa-solid fa-floppy-disk"></i> Sí, guardar cambios'
-        : '<i class="fa-solid fa-envelope-circle-check"></i> Sí, registrar y enviar';
-
-      if (typeof Swal === "undefined") {
-        const accepted = window.confirm(`${title}\n\n${text}`);
-        if (accepted) submitForm();
+      if (isEditMode && !hasChanges()) {
+        showNoChangesAlert();
         return;
       }
 
-      Swal.fire({
-        title: title,
-        text: text,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3b82f6",
-        cancelButtonColor: "#64748b",
-        confirmButtonText: confirmText,
-        cancelButtonText: "Cancelar",
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          submitForm();
-        }
-      });
+      showConfirmAlert();
+    });
+  }
+
+  function showConfirmAlert() {
+    const title = isEditMode ? "¿Guardar cambios?" : "¿Confirmar registro?";
+
+    const text = isEditMode
+      ? "Se actualizarán los datos del personal administrativo seleccionado."
+      : "Se creará el usuario administrativo y se enviarán sus credenciales por correo electrónico.";
+
+    const confirmText = isEditMode
+      ? '<i class="fa-solid fa-floppy-disk"></i> Guardar cambios'
+      : '<i class="fa-solid fa-envelope-circle-check"></i> Registrar y enviar';
+
+    if (typeof Swal === "undefined") {
+      const accepted = window.confirm(`${title}\n\n${text}`);
+      if (accepted) submitForm();
+      return;
+    }
+
+    Swal.fire({
+      title,
+      text,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: confirmText,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#2563eb",
+      cancelButtonColor: "#64748b",
+      reverseButtons: true,
+      focusCancel: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        submitForm();
+      }
     });
   }
 
@@ -383,17 +494,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     Swal.fire({
       title: "Formulario incompleto",
-      text: "Revise los campos marcados antes de registrar o guardar cambios.",
+      text: "Revisa los campos marcados antes de continuar.",
       icon: "warning",
       confirmButtonColor: "#c62828",
       confirmButtonText: "Entendido",
     });
   }
 
+  function showNoChangesAlert() {
+    if (typeof Swal === "undefined") {
+      alert("No se detectaron cambios para guardar.");
+      return;
+    }
+
+    Swal.fire({
+      title: "Sin cambios",
+      text: "Modifica al menos un dato antes de guardar.",
+      icon: "info",
+      confirmButtonColor: "#2563eb",
+      confirmButtonText: "Entendido",
+    });
+  }
+
+  function focusFirstInvalidField() {
+    const invalidInput = form.querySelector(".input-invalid");
+
+    if (invalidInput) {
+      invalidInput.focus();
+      invalidInput.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+
   function submitForm() {
     btnSubmit.innerHTML = isEditMode
       ? '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando cambios...'
-      : '<i class="fa-solid fa-circle-notch fa-spin"></i> Procesando y enviando correo...';
+      : '<i class="fa-solid fa-circle-notch fa-spin"></i> Registrando y enviando...';
 
     btnSubmit.classList.add("loading");
     btnSubmit.disabled = true;

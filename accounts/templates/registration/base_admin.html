@@ -8,7 +8,7 @@
     <title>UE Jesus Maria | Panel de Administración</title>
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -19,18 +19,37 @@
 
     <link
       rel="stylesheet"
-      href="{% static 'accounts/css/base_admin.css' %}?v=3"
+      href="{% static 'accounts/css/base_admin.css' %}?v=4"
     />
   </head>
 
   <body>
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <i class="fa-solid fa-building-columns"></i>
-        <span>UE Jesus Maria</span>
+        <div class="brand-icon">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+
+        <div class="brand-text">
+          <span>UE Jesus Maria</span>
+          <small>Panel Administrativo</small>
+        </div>
+
+        <button
+          type="button"
+          class="sidebar-close"
+          id="sidebarClose"
+          aria-label="Cerrar menú"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
-      <nav class="nav-menu">
+      <nav class="nav-menu" aria-label="Menú principal">
+        <span class="nav-section-title">Principal</span>
+
         <a
           href="{% url 'dashboard' %}"
           class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
@@ -40,6 +59,8 @@
         </a>
 
         {% if request.user.rol == 'director' %}
+          <span class="nav-section-title">Administración</span>
+
           <a
             href="{% url 'list_personal' %}"
             class="nav-item {% if request.resolver_match.url_name == 'list_personal' or request.resolver_match.url_name == 'registrar_personal' %}active{% endif %}"
@@ -47,9 +68,7 @@
             <i class="fa-solid fa-user-tie"></i>
             <span>Gestión de Personal</span>
           </a>
-        {% endif %}
 
-        {% if request.user.rol == 'director' %}
           <a
             href="{% url 'estructura_academica' %}"
             class="nav-item {% if request.resolver_match.url_name == 'estructura_academica' %}active{% endif %}"
@@ -58,6 +77,8 @@
             <span>Académico</span>
           </a>
         {% endif %}
+
+        <span class="nav-section-title">Operaciones</span>
 
         <div class="nav-group">
           <a
@@ -153,6 +174,8 @@
           </div>
         </div>
 
+        <span class="nav-section-title">Análisis</span>
+
         <a
           href="{% url 'reportes' %}"
           class="nav-item {% if request.resolver_match.url_name == 'reportes' %}active{% endif %}"
@@ -161,16 +184,38 @@
           <span>Reportes</span>
         </a>
       </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user-mini">
+          <i class="fa-solid fa-user-shield"></i>
+          <div>
+            <strong>{{ request.user.username }}</strong>
+            <span>{{ request.user.get_rol_display }}</span>
+          </div>
+        </div>
+      </div>
     </aside>
 
     <div class="main-wrapper">
       <header class="topbar">
-        <div class="page-title">
-          <h2>
-            {% block page_title %}
-              Dashboard
-            {% endblock %}
-          </h2>
+        <div class="topbar-left">
+          <button
+            type="button"
+            class="menu-toggle"
+            id="menuToggle"
+            aria-label="Abrir menú"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <div class="page-title">
+            <span>Panel Administrativo</span>
+            <h2>
+              {% block page_title %}
+                Dashboard
+              {% endblock %}
+            </h2>
+          </div>
         </div>
 
         <div class="user-info">
@@ -186,7 +231,7 @@
           <a
             href="{% url 'password_change' %}"
             class="security-link"
-            title="Configuración"
+            title="Configuración de seguridad"
           >
             <i class="fa-solid fa-gear"></i>
             Seguridad
@@ -204,7 +249,6 @@
 
       <main class="content-area">
         {% if messages %}
-          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
           <script>
             document.addEventListener("DOMContentLoaded", function () {
               {% for message in messages %}
@@ -226,7 +270,8 @@
         {% endblock %}
       </main>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{% static 'accounts/js/base_admin.js' %}?v=4"></script>
+    <script src="{% static 'accounts/js/base_admin.js' %}?v=5"></script>
   </body>
 </html>

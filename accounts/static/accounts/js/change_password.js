@@ -1,5 +1,5 @@
 /* =========================================================
-   CHANGE_PASSWORD.JS - SEGURIDAD DE CONTRASEÑA
+   CHANGE_PASSWORD.JS - SEGURIDAD DE CONTRASEÑA MEJORADA
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
@@ -26,10 +26,17 @@ function initPasswordVisibility() {
       if (!input || !icon) return;
 
       const isPassword = input.type === "password";
+
       input.type = isPassword ? "text" : "password";
 
-      icon.classList.toggle("fa-eye", isPassword);
-      icon.classList.toggle("fa-eye-slash", !isPassword);
+      icon.className = isPassword
+        ? "fa-solid fa-eye"
+        : "fa-solid fa-eye-slash";
+
+      button.setAttribute(
+        "aria-label",
+        isPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+      );
     });
   });
 }
@@ -37,36 +44,37 @@ function initPasswordVisibility() {
 
 /* =========================================================
    2. MEDIDOR DE SEGURIDAD
-   Evalúa la nueva contraseña en tiempo real.
    ========================================================= */
 
 function initPasswordStrength() {
   const password1 = document.getElementById("id_new_password1");
   const password2 = document.getElementById("id_new_password2");
+
   const strengthFill = document.getElementById("strengthFill");
   const strengthText = document.getElementById("strengthText");
   const matchMessage = document.getElementById("passwordMatchMessage");
   const submitButton = document.getElementById("btnUpdatePassword");
 
+  const statusCard = document.getElementById("passwordStatusCard");
+  const statusTitle = document.getElementById("passwordStatusTitle");
+  const statusText = document.getElementById("passwordStatusText");
+
   if (!password1 || !strengthFill || !strengthText) return;
 
   function updateState() {
-    const value = password1.value;
-    const confirmation = password2 ? password2.value : "";
+    const password = password1.value.trim();
+    const confirmation = password2 ? password2.value.trim() : "";
 
-    const result = evaluatePassword(value);
+    const result = evaluatePassword(password);
+    const passwordsMatch = password2
+      ? password.length > 0 && confirmation.length > 0 && password === confirmation
+      : true;
 
     updateStrengthBar(result, strengthFill, strengthText);
     updateRules(result.rules);
-
-    const passwordsMatch = password2 ? value && confirmation && value === confirmation : true;
-    updateMatchMessage(value, confirmation, passwordsMatch, matchMessage);
-
-    if (submitButton) {
-      const canSubmit = result.score >= 5 && passwordsMatch;
-      submitButton.disabled = !canSubmit;
-      submitButton.classList.toggle("disabled", !canSubmit);
-    }
+    updateMatchMessage(password, confirmation, passwordsMatch, matchMessage);
+    updateStatusCard(result, password, confirmation, passwordsMatch, statusCard, statusTitle, statusText);
+    updateSubmitButton(result, passwordsMatch, submitButton);
   }
 
   password1.addEventListener("input", updateState);
@@ -96,7 +104,9 @@ function evaluatePassword(password) {
     "jesusmaria",
     "colegio",
     "sistema",
-    "usuario"
+    "usuario",
+    "director",
+    "secretaria"
   ];
 
   const lowerPassword = password.toLowerCase();
@@ -107,7 +117,9 @@ function evaluatePassword(password) {
     lowercase: /[a-záéíóúñ]/.test(password),
     number: /\d/.test(password),
     symbol: /[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(password),
-    common: password.length > 0 && !commonPasswords.some((word) => lowerPassword.includes(word))
+    common:
+      password.length > 0 &&
+      !commonPasswords.some((word) => lowerPassword.includes(word)),
   };
 
   let score = Object.values(rules).filter(Boolean).length;
@@ -116,10 +128,21 @@ function evaluatePassword(password) {
     score += 1;
   }
 
+  if (hasRepeatedPattern(password)) {
+    score -= 1;
+  }
+
   return {
-    score: Math.min(score, 6),
-    rules
+    score: Math.max(0, Math.min(score, 6)),
+    percentage: Math.round((Math.max(0, Math.min(score, 6)) / 6) * 100),
+    rules,
   };
+}
+
+function hasRepeatedPattern(password) {
+  if (!password) return false;
+
+  return /(.)\1{2,}/.test(password) || /1234|abcd|qwer/i.test(password);
 }
 
 
@@ -131,27 +154,29 @@ function updateStrengthBar(result, strengthFill, strengthText) {
   const score = result.score;
 
   strengthFill.className = "strength-fill";
+  strengthFill.style.width = `${result.percentage}%`;
+
+  if (score === 0) {
+    strengthFill.style.width = "0%";
+    strengthText.textContent = "0%";
+    return;
+  }
 
   if (score <= 1) {
-    strengthFill.style.width = "16%";
     strengthFill.classList.add("very-weak");
-    strengthText.textContent = "Muy débil";
+    strengthText.textContent = `${result.percentage}% - Muy débil`;
   } else if (score <= 2) {
-    strengthFill.style.width = "33%";
     strengthFill.classList.add("weak");
-    strengthText.textContent = "Débil";
+    strengthText.textContent = `${result.percentage}% - Débil`;
   } else if (score <= 4) {
-    strengthFill.style.width = "66%";
     strengthFill.classList.add("medium");
-    strengthText.textContent = "Media";
+    strengthText.textContent = `${result.percentage}% - Media`;
   } else if (score === 5) {
-    strengthFill.style.width = "85%";
     strengthFill.classList.add("strong");
-    strengthText.textContent = "Fuerte";
+    strengthText.textContent = `${result.percentage}% - Fuerte`;
   } else {
-    strengthFill.style.width = "100%";
     strengthFill.classList.add("very-strong");
-    strengthText.textContent = "Muy fuerte";
+    strengthText.textContent = `${result.percentage}% - Muy fuerte`;
   }
 }
 
@@ -169,11 +194,12 @@ function updateRules(rules) {
     const icon = item.querySelector("i");
 
     item.classList.toggle("valid", isValid);
+    item.classList.toggle("invalid", !isValid);
 
     if (icon) {
       icon.className = isValid
-        ? "fa-solid fa-check-circle"
-        : "fa-solid fa-circle";
+        ? "fa-solid fa-circle-check"
+        : "fa-regular fa-circle";
     }
   });
 }
@@ -187,23 +213,102 @@ function updateMatchMessage(password, confirmation, passwordsMatch, matchMessage
   if (!matchMessage) return;
 
   if (!confirmation) {
-    matchMessage.textContent = "";
+    matchMessage.innerHTML = "";
     matchMessage.className = "password-match-message";
     return;
   }
 
   if (passwordsMatch) {
-    matchMessage.textContent = "Las contraseñas coinciden.";
+    matchMessage.innerHTML =
+      '<i class="fa-solid fa-circle-check"></i> Las contraseñas coinciden.';
     matchMessage.className = "password-match-message valid";
   } else {
-    matchMessage.textContent = "Las contraseñas no coinciden.";
+    matchMessage.innerHTML =
+      '<i class="fa-solid fa-circle-exclamation"></i> Las contraseñas no coinciden.';
     matchMessage.className = "password-match-message invalid";
   }
 }
 
 
 /* =========================================================
-   7. LOADING AL ENVIAR
+   7. ESTADO GENERAL
+   ========================================================= */
+
+function updateStatusCard(
+  result,
+  password,
+  confirmation,
+  passwordsMatch,
+  statusCard,
+  statusTitle,
+  statusText
+) {
+  if (!statusCard || !statusTitle || !statusText) return;
+
+  statusCard.classList.remove(
+    "status-empty",
+    "status-danger",
+    "status-warning",
+    "status-success"
+  );
+
+  if (!password) {
+    statusCard.classList.add("status-empty");
+    statusTitle.textContent = "Contraseña pendiente";
+    statusText.textContent = "Ingresa una nueva contraseña para evaluar su seguridad.";
+    return;
+  }
+
+  if (result.score < 3) {
+    statusCard.classList.add("status-danger");
+    statusTitle.textContent = "Contraseña débil";
+    statusText.textContent = "Aumenta la longitud y combina letras, números y símbolos.";
+    return;
+  }
+
+  if (result.score < 5) {
+    statusCard.classList.add("status-warning");
+    statusTitle.textContent = "Contraseña aceptable";
+    statusText.textContent = "Todavía puedes fortalecerla para proteger mejor la cuenta.";
+    return;
+  }
+
+  if (!confirmation) {
+    statusCard.classList.add("status-warning");
+    statusTitle.textContent = "Confirma la contraseña";
+    statusText.textContent = "La contraseña es segura, pero falta repetirla.";
+    return;
+  }
+
+  if (!passwordsMatch) {
+    statusCard.classList.add("status-danger");
+    statusTitle.textContent = "Las contraseñas no coinciden";
+    statusText.textContent = "Revisa ambos campos antes de continuar.";
+    return;
+  }
+
+  statusCard.classList.add("status-success");
+  statusTitle.textContent = "Contraseña lista";
+  statusText.textContent = "La contraseña cumple los criterios de seguridad.";
+}
+
+
+/* =========================================================
+   8. BOTÓN DE ENVÍO
+   ========================================================= */
+
+function updateSubmitButton(result, passwordsMatch, submitButton) {
+  if (!submitButton) return;
+
+  const canSubmit = result.score >= 5 && passwordsMatch;
+
+  submitButton.disabled = !canSubmit;
+  submitButton.classList.toggle("disabled", !canSubmit);
+}
+
+
+/* =========================================================
+   9. LOADING AL ENVIAR
    ========================================================= */
 
 function initSubmitLoading() {
@@ -212,7 +317,12 @@ function initSubmitLoading() {
 
   if (!form || !button) return;
 
-  form.addEventListener("submit", function () {
+  form.addEventListener("submit", function (event) {
+    if (button.disabled) {
+      event.preventDefault();
+      return;
+    }
+
     button.classList.add("loading");
     button.disabled = true;
   });

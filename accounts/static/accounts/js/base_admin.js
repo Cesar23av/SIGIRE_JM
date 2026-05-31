@@ -4,15 +4,65 @@
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
+  initSidebarMobile();
   initSubmenus();
   initConfirmActions();
   initLogoutButton();
+  initActiveNavigation();
 });
 
 
 /* =========================================================
-   1. SUBMENÚS DEL SIDEBAR
-   Abre/cierra Estudiantes, Inscripciones, etc.
+   1. SIDEBAR RESPONSIVE
+   ========================================================= */
+
+function initSidebarMobile() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebarClose = document.getElementById("sidebarClose");
+
+  if (!sidebar || !overlay || !menuToggle) return;
+
+  function openSidebar() {
+    sidebar.classList.add("show");
+    overlay.classList.add("show");
+    document.body.classList.add("sidebar-open");
+    menuToggle.setAttribute("aria-expanded", "true");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove("show");
+    overlay.classList.remove("show");
+    document.body.classList.remove("sidebar-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+
+  menuToggle.addEventListener("click", openSidebar);
+  overlay.addEventListener("click", closeSidebar);
+
+  if (sidebarClose) {
+    sidebarClose.addEventListener("click", closeSidebar);
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      closeSidebar();
+    }
+  });
+
+  document.querySelectorAll(".sidebar a:not(.toggle-btn)").forEach((link) => {
+    link.addEventListener("click", function () {
+      if (window.innerWidth <= 980) {
+        closeSidebar();
+      }
+    });
+  });
+}
+
+
+/* =========================================================
+   2. SUBMENÚS DEL SIDEBAR
    ========================================================= */
 
 function initSubmenus() {
@@ -22,9 +72,9 @@ function initSubmenus() {
     button.addEventListener("click", function (event) {
       event.preventDefault();
 
-      const submenuId = this.dataset.submenuTarget;
+      const submenuId = button.dataset.submenuTarget;
       const submenu = document.getElementById(submenuId);
-      const icon = this.querySelector(".chevron-icon");
+      const icon = button.querySelector(".chevron-icon");
 
       if (!submenu) return;
 
@@ -33,7 +83,7 @@ function initSubmenus() {
       closeOtherSubmenus(submenuId);
 
       submenu.classList.toggle("open", !isOpen);
-      this.setAttribute("aria-expanded", String(!isOpen));
+      button.setAttribute("aria-expanded", String(!isOpen));
 
       if (icon) {
         icon.classList.toggle("rotate", !isOpen);
@@ -46,31 +96,29 @@ function closeOtherSubmenus(activeSubmenuId) {
   const allSubmenus = document.querySelectorAll(".sub-menu.open");
 
   allSubmenus.forEach((submenu) => {
-    if (submenu.id !== activeSubmenuId) {
-      submenu.classList.remove("open");
+    if (submenu.id === activeSubmenuId) return;
 
-      const relatedButton = document.querySelector(
-        `[data-submenu-target="${submenu.id}"]`
-      );
+    submenu.classList.remove("open");
 
-      if (relatedButton) {
-        relatedButton.setAttribute("aria-expanded", "false");
+    const relatedButton = document.querySelector(
+      `[data-submenu-target="${submenu.id}"]`
+    );
 
-        const relatedIcon = relatedButton.querySelector(".chevron-icon");
+    if (!relatedButton) return;
 
-        if (relatedIcon) {
-          relatedIcon.classList.remove("rotate");
-        }
-      }
+    relatedButton.setAttribute("aria-expanded", "false");
+
+    const relatedIcon = relatedButton.querySelector(".chevron-icon");
+
+    if (relatedIcon) {
+      relatedIcon.classList.remove("rotate");
     }
   });
 }
 
 
 /* =========================================================
-   2. CONFIRMACIONES GENERALES
-   Para eliminar, desactivar, reactivar o acciones delicadas.
-   Usa enlaces con clase .alerta-eliminar.
+   3. CONFIRMACIONES GENERALES
    ========================================================= */
 
 function initConfirmActions() {
@@ -96,7 +144,7 @@ function initConfirmActions() {
       text: message,
       icon: "warning",
       confirmText: '<i class="fa-solid fa-check"></i> Sí, proceder',
-      confirmColor: "#ef4444",
+      confirmColor: "#dc2626",
       onConfirm: function () {
         window.location.href = actionUrl;
       },
@@ -106,8 +154,7 @@ function initConfirmActions() {
 
 
 /* =========================================================
-   3. CONFIRMACIÓN DE CIERRE DE SESIÓN
-   Evita salidas accidentales.
+   4. CONFIRMACIÓN DE CIERRE DE SESIÓN
    ========================================================= */
 
 function initLogoutButton() {
@@ -118,37 +165,53 @@ function initLogoutButton() {
   logoutForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    if (typeof Swal === "undefined") {
-      alert("SweetAlert no está cargando. Revisa el script CDN.");
-      return;
-    }
-
-    Swal.fire({
+    showConfirmDialog({
       title: "¿Cerrar sesión?",
       text: "Se cerrará tu sesión actual en el sistema.",
       icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#c62828",
-      cancelButtonColor: "#64748b",
-      confirmButtonText: '<i class="fa-solid fa-right-from-bracket"></i> Sí, salir',
-      cancelButtonText: "Cancelar",
-      reverseButtons: true,
+      confirmText:
+        '<i class="fa-solid fa-right-from-bracket"></i> Sí, salir',
+      confirmColor: "#c62828",
       focusCancel: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
+      onConfirm: function () {
         logoutForm.submit();
-      }
+      },
     });
   });
 }
 
 
 /* =========================================================
-   4. SWEETALERT CON FALLBACK
-   Si SweetAlert no carga, usa confirm() tradicional.
+   5. RESALTAR NAVEGACIÓN ACTIVA
    ========================================================= */
 
-function showConfirmDialog({ title, text, icon, confirmText, confirmColor, onConfirm }) {
+function initActiveNavigation() {
+  const activeItem =
+    document.querySelector(".nav-item.active") ||
+    document.querySelector(".nav-item.active-sub");
+
+  if (!activeItem) return;
+
+  activeItem.scrollIntoView({
+    block: "nearest",
+    behavior: "smooth",
+  });
+}
+
+
+/* =========================================================
+   6. SWEETALERT CON FALLBACK
+   ========================================================= */
+
+function showConfirmDialog({
+  title,
+  text,
+  icon,
+  confirmText,
+  confirmColor,
+  focusCancel,
+  onConfirm,
+}) {
   if (typeof Swal === "undefined") {
     const accepted = window.confirm(`${title}\n\n${text}`);
 
@@ -169,6 +232,7 @@ function showConfirmDialog({ title, text, icon, confirmText, confirmColor, onCon
     confirmButtonText: confirmText || "Sí, proceder",
     cancelButtonText: "Cancelar",
     reverseButtons: true,
+    focusCancel: Boolean(focusCancel),
   }).then((result) => {
     if (result.isConfirmed && typeof onConfirm === "function") {
       onConfirm();
@@ -178,9 +242,7 @@ function showConfirmDialog({ title, text, icon, confirmText, confirmColor, onCon
 
 
 /* =========================================================
-   5. COMPATIBILIDAD TEMPORAL
-   Permite que templates antiguos con onclick sigan funcionando.
-   Cuando ya actualices todo el HTML, puedes borrar esta función.
+   7. COMPATIBILIDAD TEMPORAL
    ========================================================= */
 
 function toggleSubMenu(event, submenuId) {

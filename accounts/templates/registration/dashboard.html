@@ -5,64 +5,127 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}?v=3">
+<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}?v=4">
 
 <section class="dashboard-container">
 
-  <div class="dashboard-header">
-    <div>
+  <div class="dashboard-header dashboard-animate">
+    <div class="dashboard-title-block">
+      <span class="dashboard-label">
+        <i class="fa-solid fa-chart-line"></i>
+        Resumen institucional
+      </span>
+
       <h2>Panel de Control</h2>
       <p>Resumen general del sistema de inscripciones y gestión académica.</p>
     </div>
 
     {% if gestion_activa %}
       <div class="active-year-badge">
-        <i class="fa-solid fa-calendar-check"></i>
-        Gestión {{ gestion_activa.anio }}
+        <div class="badge-icon">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+
+        <div>
+          <span>Gestión activa</span>
+          <strong>{{ gestion_activa.anio }}</strong>
+        </div>
       </div>
     {% else %}
       <div class="inactive-year-badge" id="noGestionBadge">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        Sin gestión activa
+        <div class="badge-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <div>
+          <span>Estado requerido</span>
+          <strong>Sin gestión activa</strong>
+        </div>
       </div>
     {% endif %}
   </div>
 
+  {% if not gestion_activa %}
+    <section class="dashboard-warning-panel dashboard-animate">
+      <div class="warning-icon">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+
+      <div>
+        <h3>Configuración pendiente</h3>
+        <p>
+          No existe una gestión académica activa. Para operar correctamente con inscripciones,
+          primero habilita una gestión desde el módulo correspondiente.
+        </p>
+      </div>
+    </section>
+  {% endif %}
+
   <div class="stats-grid">
 
     <article class="stat-card dashboard-animate">
-      <div class="stat-icon students-icon">
-        <i class="fa-solid fa-users"></i>
+      <div class="stat-card-header">
+        <div class="stat-icon students-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+
+        <span class="stat-chip">Estudiantes</span>
       </div>
 
       <div class="stat-info">
         <h3>Total Estudiantes</h3>
+
         <div class="number counter-number" data-target="{{ total_estudiantes }}">0</div>
+
         <p>Estudiantes activos registrados</p>
+
+        <div class="stat-progress">
+          <div class="stat-progress-fill students-progress" data-progress="100"></div>
+        </div>
       </div>
     </article>
 
     <article class="stat-card dashboard-animate">
-      <div class="stat-icon enrollments-icon">
-        <i class="fa-solid fa-file-signature"></i>
+      <div class="stat-card-header">
+        <div class="stat-icon enrollments-icon">
+          <i class="fa-solid fa-file-signature"></i>
+        </div>
+
+        <span class="stat-chip">Inscripciones</span>
       </div>
 
       <div class="stat-info">
         <h3>Inscripciones Activas</h3>
+
         <div class="number counter-number" data-target="{{ inscripciones_activas }}">0</div>
+
         <p>Inscripciones vigentes en el sistema</p>
+
+        <div class="stat-progress">
+          <div class="stat-progress-fill enrollments-progress" data-progress="85"></div>
+        </div>
       </div>
     </article>
 
     <article class="stat-card dashboard-animate">
-      <div class="stat-icon capacity-icon">
-        <i class="fa-solid fa-chair"></i>
+      <div class="stat-card-header">
+        <div class="stat-icon capacity-icon">
+          <i class="fa-solid fa-chair"></i>
+        </div>
+
+        <span class="stat-chip">Capacidad</span>
       </div>
 
       <div class="stat-info">
         <h3>Cupos Disponibles</h3>
+
         <div class="number counter-number" data-target="{{ cupos_disponibles }}">0</div>
+
         <p>Cupos restantes en paralelos activos</p>
+
+        <div class="stat-progress">
+          <div class="stat-progress-fill capacity-progress" data-progress="65"></div>
+        </div>
       </div>
     </article>
 
@@ -74,6 +137,8 @@
     </div>
 
     <div class="welcome-content">
+      <span class="welcome-label">Estado operativo</span>
+
       <h2>Bienvenido al Sistema de Inscripciones</h2>
 
       {% if gestion_activa %}
@@ -83,7 +148,8 @@
         </p>
       {% else %}
         <p class="warning-text">
-          No existe una gestión activa configurada. Para operar correctamente, primero habilita una gestión académica.
+          No existe una gestión activa configurada. Para operar correctamente,
+          primero habilita una gestión académica.
         </p>
       {% endif %}
 
@@ -97,6 +163,6 @@
 
 </section>
 
-<script src="{% static 'accounts/js/dashboard.js' %}?v=1"></script>
+<script src="{% static 'accounts/js/dashboard.js' %}?v=2"></script>
 
 {% endblock %}

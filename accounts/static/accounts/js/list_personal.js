@@ -1,17 +1,18 @@
 /* =========================================================
-   LIST_PERSONAL.JS - LISTADO DE PERSONAL
+   LIST_PERSONAL.JS - LISTADO DE PERSONAL MEJORADO
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
   initInactiveToggle();
   initSearchForm();
+  initClearSearchInput();
+  initTableAnimation();
 });
 
 
 /* =========================================================
    1. TOGGLE ACTIVOS / INACTIVOS
-   Cambia la vista sin perder filtros innecesariamente.
    ========================================================= */
 
 function initInactiveToggle() {
@@ -29,24 +30,17 @@ function initInactiveToggle() {
       params.delete("inactivos");
     }
 
-    /*
-      Conservamos filtros existentes:
-      - q
-      - rol
-
-      Pero eliminamos página si después agregas paginación,
-      porque al cambiar vista conviene volver al inicio.
-    */
     params.delete("page");
 
-    window.location.href = `${url.pathname}?${params.toString()}`;
+    window.location.href = params.toString()
+      ? `${url.pathname}?${params.toString()}`
+      : url.pathname;
   });
 }
 
 
 /* =========================================================
    2. FORMULARIO DE BÚSQUEDA
-   Normaliza búsqueda y evita envíos vacíos sucios.
    ========================================================= */
 
 function initSearchForm() {
@@ -58,11 +52,19 @@ function initSearchForm() {
 
   if (searchInput) {
     searchInput.addEventListener("input", function () {
-      this.value = this.value.replace(/\s+/g, " ");
+      this.value = normalizeSearchText(this.value);
+      toggleClearButton();
     });
 
     searchInput.addEventListener("blur", function () {
       this.value = this.value.trim();
+      toggleClearButton();
+    });
+  }
+
+  if (rolSelect) {
+    rolSelect.addEventListener("change", function () {
+      searchForm.requestSubmit();
     });
   }
 
@@ -74,7 +76,6 @@ function initSearchForm() {
 
     const queryValue = searchInput ? searchInput.value.trim() : "";
     const rolValue = rolSelect ? rolSelect.value : "";
-
     const currentParams = new URLSearchParams(window.location.search);
 
     if (currentParams.get("inactivos") === "true") {
@@ -95,4 +96,58 @@ function initSearchForm() {
       ? `${url.pathname}?${queryString}`
       : url.pathname;
   });
+}
+
+
+/* =========================================================
+   3. LIMPIAR INPUT DE BÚSQUEDA
+   ========================================================= */
+
+function initClearSearchInput() {
+  const clearButton = document.getElementById("btnClearSearchInput");
+  const searchInput = document.getElementById("search-q");
+
+  if (!clearButton || !searchInput) return;
+
+  clearButton.addEventListener("click", function () {
+    searchInput.value = "";
+    searchInput.focus();
+    toggleClearButton();
+  });
+
+  toggleClearButton();
+}
+
+function toggleClearButton() {
+  const clearButton = document.getElementById("btnClearSearchInput");
+  const searchInput = document.getElementById("search-q");
+
+  if (!clearButton || !searchInput) return;
+
+  clearButton.classList.toggle("show", searchInput.value.trim().length > 0);
+}
+
+
+/* =========================================================
+   4. ANIMACIÓN DE FILAS
+   ========================================================= */
+
+function initTableAnimation() {
+  const rows = document.querySelectorAll(".personal-row");
+
+  rows.forEach((row, index) => {
+    row.style.animationDelay = `${index * 45}ms`;
+    row.classList.add("row-animate");
+  });
+}
+
+
+/* =========================================================
+   5. UTILIDADES
+   ========================================================= */
+
+function normalizeSearchText(value) {
+  return value
+    .replace(/\s+/g, " ")
+    .replace(/[<>]/g, "");
 }
