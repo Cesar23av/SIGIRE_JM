@@ -11,7 +11,7 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'accounts/css/form_personal.css' %}?v=8">
+<link rel="stylesheet" href="{% static 'accounts/css/form_personal.css' %}?v=11">
 
 <section class="personal-form-container">
 
@@ -78,7 +78,28 @@
       </div>
 
       <div class="personal-form-body">
-        <form method="post" novalidate id="form-personal" class="personal-form">
+        <div class="form-status-card" id="form-status-card">
+  <div class="form-status-info">
+    <i class="fa-solid fa-circle-info"></i>
+    <div>
+      <strong id="form-status-title">Formulario pendiente</strong>
+      <span id="form-status-text">
+        Completa los campos requeridos para continuar.
+      </span>
+    </div>
+  </div>
+
+  <div class="form-progress">
+    <div class="form-progress-bar" id="form-progress-bar"></div>
+  </div>
+</div>
+        <form
+          method="post"
+          novalidate
+          id="form-personal"
+          class="personal-form"
+          data-edit-mode="{% if edit_mode %}true{% else %}false{% endif %}"
+        >
           {% csrf_token %}
 
           <div class="grid-form">
@@ -137,6 +158,6 @@
 
 </section>
 
-<script src="{% static 'accounts/js/form_personal.js' %}?v=2"></script>
+<script src="{% static 'accounts/js/form_personal.js' %}?v=6"></script>
 
 {% endblock %}

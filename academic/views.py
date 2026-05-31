@@ -8,11 +8,10 @@ from django.utils import timezone
 from enrollment.models import Inscripcion, Requisito
 from django.db import transaction
 
-
-
 @login_required
 @only_director
 def estructura_academica(request):
+    
     gestiones = Gestion.objects.all().order_by('-anio')
     niveles = Nivel.objects.filter(estado=True)
     grados = Grado.objects.filter(estado=True).select_related('nivel')

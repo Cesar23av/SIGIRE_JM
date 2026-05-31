@@ -23,16 +23,6 @@ from academic.models import Gestion, Paralelo, Nivel, Grado
 def home(request):
     return render(request, 'registration/home.html') 
 
-# 2. Vista de Login
-def login_view(request):
-    return render(request, 'registration/login.html')
-
-# 3. Dashboard Unificado (RF1)
-@login_required
-@only_administrative
-def dashboard(request):
-    return render(request, 'registration/dashboard.html')
-
 # 4. Listado de Personal (RF1 - Solo Director)
 @login_required
 @only_director

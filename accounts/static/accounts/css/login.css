@@ -3,31 +3,35 @@
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
-
 /* =========================================================
-   1. VARIABLES GLOBALES
-   Colores principales del login.
-   Cambia aquí la identidad visual si lo necesitas.
+   1. VARIABLES Y BASE
    ========================================================= */
 
 :root {
-  --blanco: #ffffff;
-  --fondo: #e9ecef;
-  --rojo-principal: #d32f2f;
-  --rojo-oscuro: #b71c1c;
-  --azul-acento: #1d3557;
-  --texto-principal: #334155;
-  --texto-secundario: #64748b;
-  --borde-input: #ced4da;
-  --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --transition: all 0.3s ease;
+  --white: #ffffff;
+  --bg-soft: #f8fafc;
+
+  --primary-color: #c62828;
+  --primary-hover: #b71c1c;
+
+  --secondary-color: #1e293b;
+  --blue-dark: #0f172a;
+
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --border-color: #e2e8f0;
+
+  --red-soft: #fef2f2;
+  --red-border: #fecaca;
+  --red-text: #991b1b;
+
+  --shadow-card: 0 24px 60px rgba(15, 23, 42, 0.14);
+  --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.08);
+
+  --transition: all 0.25s ease;
 }
-
-
-/* =========================================================
-   2. RESETEO GENERAL
-   Limpieza base para evitar comportamientos raros entre navegadores.
-   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -38,290 +42,478 @@ html {
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--fondo);
-  color: var(--texto-principal);
+
+  font-family: "Poppins", sans-serif;
+  color: var(--text-main);
+
+  background:
+    radial-gradient(circle at top left, rgba(198, 40, 40, 0.16), transparent 30%),
+    linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* =========================================================
+   2. LAYOUT
+   ========================================================= */
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(420px, 1fr);
+}
+
+.login-info-panel {
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+
+  padding: 3rem;
+
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 28%),
+    linear-gradient(135deg, #7f1d1d 0%, #991b1b 45%, #1e293b 100%);
+
+  color: var(--white);
+}
+
+.login-info-panel::after {
+  content: "";
+  position: absolute;
+  right: -120px;
+  bottom: -120px;
+
+  width: 340px;
+  height: 340px;
+
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-content {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 100%);
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 1rem;
+  padding: 0.38rem 0.8rem;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.info-content h1 {
+  margin: 0;
+
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+.info-content p {
+  margin: 1rem 0 0;
+
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.75;
+}
+
+.info-items {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.8rem;
+}
+
+.info-items div {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  gap: 0.65rem;
+
+  padding: 0.8rem;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.info-items i {
+  color: #fecaca;
+}
 
 /* =========================================================
-   3. TARJETA PRINCIPAL DEL LOGIN
-   Contenedor central donde está el formulario.
+   3. TARJETA LOGIN
    ========================================================= */
+
+.login-container {
+  display: grid;
+  place-items: center;
+
+  padding: 2rem;
+}
 
 .login-card {
-  background-color: var(--blanco);
-  width: 100%;
-  max-width: 420px;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: var(--sombra-card);
-  border-top: 5px solid var(--rojo-principal);
+  width: min(440px, 100%);
+  padding: 2.2rem;
+
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
 }
-
-
-/* =========================================================
-   4. MARCA / ÍCONO INSTITUCIONAL
-   Ícono superior del login.
-   ========================================================= */
 
 .brand-icon {
-  text-align: center;
-  font-size: 3.5rem;
-  color: var(--azul-acento);
-  margin-bottom: 10px;
-  line-height: 1;
+  width: 68px;
+  height: 68px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 1rem;
+  border-radius: 22px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+
+  font-size: 2.4rem;
 }
 
-
-/* =========================================================
-   5. TÍTULO DEL LOGIN
-   Texto principal de la pantalla.
-   ========================================================= */
+.login-heading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
 .login-title {
-  color: var(--azul-acento);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 1.5rem;
+  margin: 0;
+
+  color: var(--blue-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
 }
 
+.school-name {
+  margin: 0.35rem 0 0;
+
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
 
 /* =========================================================
-   6. GRUPOS DEL FORMULARIO
-   Labels y separación de campos.
+   4. FORMULARIO
    ========================================================= */
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
-  font-weight: 500;
-  color: #495057;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+
+  margin-bottom: 0.45rem;
+
+  color: var(--text-main);
+  font-size: 0.86rem;
+  font-weight: 700;
 }
-
-
-/* =========================================================
-   7. INPUTS CON ÍCONOS
-   Contenedor relativo para colocar íconos dentro de los campos.
-   ========================================================= */
 
 .input-wrapper {
   position: relative;
 }
 
-.input-wrapper i {
+.input-wrapper > i {
   position: absolute;
-  left: 15px;
+  left: 0.95rem;
   top: 50%;
+
+  color: var(--text-light);
+  font-size: 1.05rem;
+
   transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: var(--texto-secundario);
   pointer-events: none;
 }
 
 .input-wrapper input[type="text"],
 .input-wrapper input[type="password"] {
   width: 100%;
-  padding: 12px 45px 12px 45px;
-  border: 1px solid var(--borde-input);
-  border-radius: 8px;
-  font-size: 1rem;
+  min-height: 48px;
+
+  padding: 0.75rem 3rem 0.75rem 2.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+
+  background: var(--white);
+  color: var(--text-main);
+
+  font-size: 0.95rem;
+  font-family: "Poppins", sans-serif;
+
   transition: var(--transition);
-  font-family: 'Poppins', sans-serif;
-  color: var(--texto-principal);
-  background-color: var(--blanco);
 }
 
-.input-wrapper input[type="text"]::placeholder,
-.input-wrapper input[type="password"]::placeholder {
-  color: #9ca3af;
+.input-wrapper input::placeholder {
+  color: #a1a1aa;
 }
 
-.input-wrapper input[type="text"]:focus,
-.input-wrapper input[type="password"]:focus {
-  border-color: var(--rojo-principal);
-  box-shadow: 0 0 0 0.25rem rgba(211, 47, 47, 0.15);
+.input-wrapper input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
   outline: none;
 }
 
+.input-wrapper-invalid input,
+.input-invalid {
+  border-color: var(--primary-color) !important;
+  background: var(--red-soft) !important;
+}
 
 /* =========================================================
-   8. BOTÓN DE INICIO DE SESIÓN
-   Botón principal del formulario.
+   5. BOTÓN OJO
+   ========================================================= */
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--text-muted);
+
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: var(--transition);
+}
+
+.password-toggle:hover {
+  background: var(--red-soft);
+  color: var(--primary-color);
+}
+
+.password-toggle i {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  font-size: 1.1rem;
+}
+
+/* =========================================================
+   6. BOTÓN LOGIN
    ========================================================= */
 
 .btn-login {
-  background-color: var(--rojo-principal);
-  color: var(--blanco);
   width: 100%;
-  padding: 12px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  border-radius: 8px;
+  min-height: 50px;
+
+  margin-top: 0.35rem;
+  padding: 0.8rem 1rem;
   border: none;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  margin-top: 10px;
-  font-family: 'Poppins', sans-serif;
+  border-radius: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--primary-color);
+  color: var(--white);
+
+  font-size: 0.98rem;
+  font-weight: 800;
+
   cursor: pointer;
+  box-shadow: 0 12px 24px rgba(198, 40, 40, 0.22);
+  transition: var(--transition);
 }
 
 .btn-login:hover {
-  background-color: var(--rojo-oscuro);
-  color: var(--blanco);
+  background: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
-.btn-login:active {
-  transform: scale(0.98);
+.btn-login:disabled {
+  opacity: 0.82;
+  cursor: wait;
+  transform: none;
 }
 
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-loading {
+  display: none;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.btn-login.loading .btn-text {
+  display: none;
+}
+
+.btn-login.loading .btn-loading {
+  display: inline-flex;
+}
+
+.login-spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: var(--white);
+  border-radius: 999px;
+
+  animation: spinLogin 0.8s linear infinite;
+}
+
+@keyframes spinLogin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* =========================================================
-   9. MENSAJES DE ERROR O ALERTA
-   Útil si el formulario muestra errores de autenticación.
-   Puedes usar estas clases desde el HTML si las necesitas.
+   7. ERRORES Y MENSAJES
    ========================================================= */
 
-.login-error,
-.alert-error {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border-left: 4px solid var(--rojo-principal);
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 18px;
+.login-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+
+  margin-bottom: 1rem;
+  padding: 0.9rem;
+
+  border-radius: 16px;
+  border: 1px solid var(--red-border);
+  border-left: 4px solid var(--primary-color);
+
+  background: var(--red-soft);
+  color: var(--red-text);
+
+  font-size: 0.86rem;
 }
 
-.login-help {
+.login-error i {
+  margin-top: 0.1rem;
+}
+
+.login-error.show-error {
+  animation: shakeLoginError 0.28s ease;
+}
+
+@keyframes shakeLoginError {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.field-error {
+  display: block;
+
+  margin-top: 0.4rem;
+
+  color: var(--red-text);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.login-footer-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  margin-top: 1rem;
+
+  color: var(--text-muted);
+  font-size: 0.8rem;
   text-align: center;
-  margin-top: 18px;
-  font-size: 0.9rem;
-  color: var(--texto-secundario);
 }
-
-.login-help a {
-  color: var(--rojo-principal);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.login-help a:hover {
-  color: var(--rojo-oscuro);
-  text-decoration: underline;
-}
-
 
 /* =========================================================
-   10. RESPONSIVE - TABLETS
-   Ajustes para pantallas medianas.
+   8. RESPONSIVE
    ========================================================= */
 
-@media (max-width: 768px) {
-  body {
-    padding: 24px;
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
   }
 
-  .login-card {
-    max-width: 400px;
-    padding: 34px 30px;
+  .login-info-panel {
+    display: none;
   }
 
-  .brand-icon {
-    font-size: 3.2rem;
-  }
-
-  .login-title {
-    font-size: 1.35rem;
-    margin-bottom: 26px;
+  .login-container {
+    min-height: 100vh;
   }
 }
-
-
-/* =========================================================
-   11. RESPONSIVE - CELULARES
-   Ajustes para móviles normales.
-   ========================================================= */
 
 @media (max-width: 480px) {
-  body {
-    align-items: flex-start;
-    padding: 32px 16px;
+  .login-container {
+    padding: 1rem;
   }
 
   .login-card {
-    max-width: 100%;
-    padding: 30px 22px;
-    border-radius: 10px;
+    padding: 1.5rem;
+    border-radius: 20px;
   }
 
   .brand-icon {
-    font-size: 3rem;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
   }
 
   .login-title {
-    font-size: 1.25rem;
-    margin-bottom: 24px;
-  }
-
-  .form-group label {
-    font-size: 0.85rem;
-  }
-
-  .input-wrapper input[type="text"],
-  .input-wrapper input[type="password"] {
-    padding: 11px 42px 11px 42px;
-    font-size: 0.95rem;
-  }
-
-  .btn-login {
-    padding: 12px;
-    font-size: 1rem;
+    font-size: 1.18rem;
   }
 }
 
-
-/* =========================================================
-   12. RESPONSIVE - CELULARES MUY PEQUEÑOS
-   Ajustes para pantallas angostas.
-   ========================================================= */
-
-@media (max-width: 360px) {
-  body {
-    padding: 24px 12px;
-  }
-
-  .login-card {
-    padding: 26px 18px;
-  }
-
-  .brand-icon {
-    font-size: 2.6rem;
-  }
-
-  .login-title {
-    font-size: 1.15rem;
-  }
-
-  .input-wrapper i {
-    left: 12px;
-    font-size: 1rem;
-  }
-
-  .input-wrapper input[type="text"],
-  .input-wrapper input[type="password"] {
-    padding-left: 38px;
-    padding-right: 38px;
+@media (prefers-reduced-motion: reduce) {
+  .login-error,
+  .btn-login,
+  .password-toggle,
+  .input-wrapper input,
+  .login-spinner {
+    animation: none;
+    transition: none;
   }
 }
