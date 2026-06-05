@@ -1,13 +1,595 @@
-.doc-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
-.doc-completa { background: #dcfce7; color: #166534; }
-.doc-pendiente { background: #fef9c3; color: #854d0e; }
-.doc-vencida { background: #fee2e2; color: #991b1b; }
+/* =========================================================
+   REPORTES_INSCRIPCIONES.CSS - REPORTE DE INSCRIPCIONES
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+#reporte-inscripciones {
+  width: 100%;
+}
+
+/* HEADER */
+
+#reporte-inscripciones .inscriptions-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+
+  margin-bottom: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    #ffffff;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+#reporte-inscripciones .inscriptions-report-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: #fef2f2;
+  color: #c62828;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-report-header h2 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#reporte-inscripciones .inscriptions-report-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* RESUMEN */
+
+#reporte-inscripciones .inscriptions-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
+}
+
+#reporte-inscripciones .inscriptions-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-inscripciones .inscriptions-summary-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-inscripciones .inscriptions-summary-card h4 {
+  margin: 0 0 0.25rem;
+
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#reporte-inscripciones .inscriptions-summary-card .number {
+  color: #0f172a;
+  font-size: 1.65rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reporte-inscripciones .inscriptions-summary-card.total .number {
+  color: #2563eb;
+}
+
+#reporte-inscripciones .inscriptions-summary-card.complete .number {
+  color: #16a34a;
+}
+
+#reporte-inscripciones .inscriptions-summary-card.pending .number {
+  color: #f59e0b;
+}
+
+#reporte-inscripciones .inscriptions-summary-card.complete .inscriptions-summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-inscripciones .inscriptions-summary-card.pending .inscriptions-summary-icon {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+/* FILTROS */
+
+#reporte-inscripciones .inscriptions-filter-form {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) 170px 200px 150px 150px auto;
+  gap: 1rem;
+  align-items: end;
+
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-inscripciones .inscriptions-filter-group {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+#reporte-inscripciones .inscriptions-filter-group label {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-inscripciones .inscriptions-input-icon {
+  position: relative;
+}
+
+#reporte-inscripciones .inscriptions-input-icon i {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+
+  color: #94a3b8;
+
+  transform: translateY(-50%);
+}
+
+#reporte-inscripciones .inscriptions-input-icon input {
+  padding-left: 2.55rem;
+}
+
+#reporte-inscripciones .inscriptions-filter-group input,
+#reporte-inscripciones .inscriptions-filter-group select {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #334155;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+
+  outline: none;
+}
+
+#reporte-inscripciones .inscriptions-filter-group input:focus,
+#reporte-inscripciones .inscriptions-filter-group select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+}
+
+#reporte-inscripciones .inscriptions-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-inscripciones .inscriptions-filter-btn,
+#reporte-inscripciones .inscriptions-clear-btn {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+#reporte-inscripciones .inscriptions-filter-btn {
+  border: 1px solid #1e293b;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+#reporte-inscripciones .inscriptions-clear-btn {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #c62828;
+}
+
+/* TABLA */
+
+#reporte-inscripciones .inscriptions-table-card {
+  overflow: hidden;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-inscripciones .inscriptions-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#reporte-inscripciones .inscriptions-table {
+  width: 100%;
+  min-width: 1180px;
+  border-collapse: collapse;
+}
+
+#reporte-inscripciones .inscriptions-table thead {
+  background: #f8fafc;
+}
+
+#reporte-inscripciones .inscriptions-table th {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+#reporte-inscripciones .inscriptions-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #334155;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+
+#reporte-inscripciones .inscriptions-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+#reporte-inscripciones .inscriptions-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* DATOS */
+
+#reporte-inscripciones .inscriptions-row-number {
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-student {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-inscripciones .inscriptions-student-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #fef2f2;
+  color: #c62828;
+
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-inscripciones .inscriptions-student strong {
+  color: #0f172a;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+#reporte-inscripciones .inscriptions-ci,
+#reporte-inscripciones .inscriptions-level-badge,
+#reporte-inscripciones .inscriptions-parallel-badge,
+#reporte-inscripciones .inscriptions-gestion-badge,
+#reporte-inscripciones .inscriptions-rude {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-ci {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-inscripciones .inscriptions-level-badge {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+#reporte-inscripciones .inscriptions-parallel-badge {
+  background: #fef2f2;
+  color: #c62828;
+}
+
+#reporte-inscripciones .inscriptions-gestion-badge {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-inscripciones .inscriptions-rude {
+  background: #f8fafc;
+  color: #475569;
+}
+
+#reporte-inscripciones .inscriptions-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-status-badge.complete {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-inscripciones .inscriptions-status-badge.pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+#reporte-inscripciones .inscriptions-status-badge.expired {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* VACÍO */
+
+#reporte-inscripciones .inscriptions-empty-cell {
+  padding: 0 !important;
+}
+
+#reporte-inscripciones .inscriptions-empty {
+  padding: 3rem 1rem;
+
+  text-align: center;
+  color: #94a3b8;
+}
+
+#reporte-inscripciones .inscriptions-empty i {
+  display: block;
+
+  margin-bottom: 0.75rem;
+
+  color: #cbd5e1;
+  font-size: 2rem;
+}
+
+#reporte-inscripciones .inscriptions-empty h4 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-empty p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+/* PAGINACIÓN */
+
+#reporte-inscripciones .inscriptions-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+
+  margin-top: 1rem;
+}
+
+#reporte-inscripciones .inscriptions-pagination a,
+#reporte-inscripciones .inscriptions-pagination span {
+  min-width: 36px;
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #334155;
+
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+#reporte-inscripciones .inscriptions-pagination .current {
+  background: #c62828;
+  color: #ffffff;
+  border-color: #c62828;
+}
+
+#reporte-inscripciones .inscriptions-pagination .disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+#reporte-inscripciones .inscriptions-page-info,
+#reporte-inscripciones .inscriptions-generated-date {
+  margin-top: 0.85rem;
+
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+#reporte-inscripciones .inscriptions-generated-date {
+  text-align: right;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1300px) {
+  #reporte-inscripciones .inscriptions-filter-form {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  #reporte-inscripciones .inscriptions-filter-group.search,
+  #reporte-inscripciones .inscriptions-filter-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  #reporte-inscripciones .inscriptions-report-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #reporte-inscripciones .inscriptions-report-header .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #reporte-inscripciones .inscriptions-summary-grid,
+  #reporte-inscripciones .inscriptions-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-inscripciones .inscriptions-filter-group.search,
+  #reporte-inscripciones .inscriptions-filter-actions {
+    grid-column: auto;
+  }
+
+  #reporte-inscripciones .inscriptions-filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reporte-inscripciones .inscriptions-filter-btn,
+  #reporte-inscripciones .inscriptions-clear-btn {
+    width: 100%;
+  }
+
+  #reporte-inscripciones .inscriptions-table {
+    min-width: 1120px;
+  }
+}
+
+/* IMPRESIÓN */
 
 @media print {
-  .sidebar, .topbar, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
-  .accordion-content { display: block !important; }
-  .main-wrapper, .content-area, .reports-container { margin: 0 !important; padding: 0 !important; }
-  body { background: white; }
-  .student-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  tr:nth-child(even) td { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #reporte-inscripciones .inscriptions-filter-form,
+  #reporte-inscripciones .inscriptions-pagination,
+  #reporte-inscripciones .inscriptions-page-info,
+  #reporte-inscripciones .inscriptions-report-header .print-btn {
+    display: none !important;
+  }
+
+  #reporte-inscripciones .inscriptions-table-card {
+    border: none;
+    box-shadow: none;
+  }
+
+  #reporte-inscripciones .inscriptions-table {
+    min-width: 100%;
+  }
+
+  #reporte-inscripciones .inscriptions-table th {
+    background: #f1f5f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #reporte-inscripciones .inscriptions-table tr:nth-child(even) td {
+    background: #f8fafc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

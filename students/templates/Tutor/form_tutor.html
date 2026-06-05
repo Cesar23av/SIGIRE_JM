@@ -1,238 +1,186 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
-
 {% block page_title %}
   {% if edit_mode %}
     Editar Tutor
   {% else %}
     Registro de Tutor
   {% endif %}
-{% endblock %}
-
+{% endblock page_title %}
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'students/css/form_tutor.css' %}?v=5" />
-
-<section class="tutor-form-page">
-
-  <div class="tutor-form-layout">
-
-    <aside class="tutor-info-panel">
-      <div class="tutor-info-icon">
-        <i class="fa-solid fa-address-book"></i>
-      </div>
-
-      <h3>
-        {% if edit_mode %}
-          Edición de Tutor
-        {% else %}
-          Registro de Tutor
-        {% endif %}
-      </h3>
-
-      <p>
-        {% if edit_mode %}
-          Actualiza la información del tutor o apoderado registrado en el sistema.
-        {% else %}
-          Registra los datos del tutor o apoderado responsable del estudiante.
-        {% endif %}
-      </p>
-
-      <ul class="tutor-tips">
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Verifica que la cédula de identidad sea correcta.
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Registra un número celular actualizado.
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          La información será usada en el proceso de inscripción.
-        </li>
-      </ul>
-    </aside>
-
-    <section class="tutor-form-card">
-      <div class="tutor-form-header">
-        <div>
-          <h3>
-            <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-user-plus{% endif %}"></i>
-
-            {% if edit_mode %}
-              Editar Tutor / Apoderado
-            {% else %}
-              Registro de Tutor / Apoderado
-            {% endif %}
-          </h3>
-
-          <p>
-            {% if edit_mode %}
-              Modifica los datos permitidos del tutor seleccionado.
-            {% else %}
-              Completa la información requerida para registrar un nuevo tutor.
-            {% endif %}
-          </p>
-        </div>
-
-        <span class="module-badge">
-          {% if edit_mode %}
-            Modo Edición
-          {% else %}
-            Módulo Registro
-          {% endif %}
+  {% static "students/css/form_tutor.css" as form_tutor_css %}
+  <link rel="stylesheet" href="{{ form_tutor_css }}?v=6" />
+  <section class="tutor-form-page">
+    <div class="tutor-form-header-page">
+      <div>
+        <span class="tutor-page-label">
+          <i class="fa-solid fa-user-shield"></i>
+          Gestión de tutores
         </span>
+        <h2>
+          {% if edit_mode %}
+            Editar Tutor / Apoderado
+          {% else %}
+            Registro de Tutor / Apoderado
+          {% endif %}
+        </h2>
+        <p>
+          {% if edit_mode %}
+            Actualiza los datos permitidos del tutor registrado.
+          {% else %}
+            Registra al tutor o apoderado responsable antes de vincularlo con un estudiante.
+          {% endif %}
+        </p>
       </div>
-
-      <div class="tutor-form-body">
-        {% if form.non_field_errors %}
-          <div class="error-message">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <div>
-              {{ form.non_field_errors }}
-            </div>
+      <div class="tutor-page-badge">
+        <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-address-book{% endif %}"></i>
+        <div>
+          <span>Modo actual</span>
+          <strong>
+            {% if edit_mode %}
+              Edición
+            {% else %}
+              Registro
+            {% endif %}
+          </strong>
+        </div>
+      </div>
+    </div>
+    <div class="tutor-form-layout">
+      <aside class="tutor-info-panel">
+        <div class="tutor-info-icon">
+          <i class="fa-solid fa-address-book"></i>
+        </div>
+        <span class="info-panel-label">Guía rápida</span>
+        <h3>
+          {% if edit_mode %}
+            Edición de Tutor
+          {% else %}
+            Registro de Tutor
+          {% endif %}
+        </h3>
+        <p>
+          {% if edit_mode %}
+            Actualiza la información editable del tutor o apoderado seleccionado.
+          {% else %}
+            Registra los datos del tutor o apoderado responsable del estudiante.
+          {% endif %}
+        </p>
+        <ul class="tutor-tips">
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>Verifica que la cédula de identidad sea correcta.</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>El complemento debe tener formato letra + número. Ej: A1.</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>Registra un celular boliviano válido: 8 dígitos, inicia con 6 o 7.</span>
+          </li>
+        </ul>
+        <div class="tutor-mini-note">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>La información del tutor será usada durante la inscripción y comunicación institucional.</span>
+        </div>
+      </aside>
+      <section class="tutor-form-card">
+        <div class="tutor-form-header">
+          <div>
+            <span class="tutor-card-label">
+              <i class="fa-solid {% if edit_mode %}fa-user-pen{% else %}fa-user-plus{% endif %}"></i>
+              Datos del tutor
+            </span>
+            <h3>
+              {% if edit_mode %}
+                Editar Tutor / Apoderado
+              {% else %}
+                Registrar Tutor / Apoderado
+              {% endif %}
+            </h3>
+            <p>
+              {% if edit_mode %}
+                Modifica los datos permitidos del tutor seleccionado.
+              {% else %}
+                Completa la información requerida para registrar un nuevo tutor.
+              {% endif %}
+            </p>
           </div>
-        {% endif %}
-
-        <form
-          action=""
-          method="POST"
-          id="formTutor"
-          class="tutor-form"
-          data-edit-mode="{{ edit_mode|yesno:'true,false'|default:'false' }}"
-          novalidate
-        >
-          {% csrf_token %}
-
-          <div class="tutor-grid">
-
-            <div class="form-group">
-              <label for="id_nombres">
+          <span class="module-badge">
+            {% if edit_mode %}
+              Modo edición
+            {% else %}
+              Nuevo registro
+            {% endif %}
+          </span>
+        </div>
+        <div class="tutor-form-body">
+          {% if form.non_field_errors %}
+            <div class="error-message">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <div>{{ form.non_field_errors }}</div>
+            </div>
+          {% endif %}
+          <form action=""
+                method="post"
+                id="formTutor"
+                class="tutor-form"
+                data-edit-mode="{{ edit_mode|yesno:'true,false'|default:'false' }}"
+                novalidate>
+            {% csrf_token %}
+            <div class="form-status-card" id="tutorFormStatus">
+              <i class="fa-solid fa-circle-info"></i>
+              <div>
+                <strong>Formulario pendiente</strong>
+                <span>Completa correctamente los campos requeridos.</span>
+              </div>
+            </div>
+            <div class="tutor-section">
+              <div class="section-title-row">
+                <div>
+                  <span>Sección 1</span>
+                  <h4>Datos personales</h4>
+                </div>
                 <i class="fa-solid fa-user"></i>
-                Nombres
-              </label>
-
-              <input
-                type="text"
-                id="id_nombres"
-                name="nombres"
-                value="{{ form.nombres.value|default:'' }}"
-                class="tutor-input"
-                placeholder="Ej: Juan Carlos"
-              >
-
-              {% for error in form.nombres.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
-            </div>
-
-            <div class="form-group">
-              <label for="id_apellidos">
-                <i class="fa-solid fa-user-tag"></i>
-                Apellidos
-              </label>
-
-              <input
-                type="text"
-                id="id_apellidos"
-                name="apellidos"
-                value="{{ form.apellidos.value|default:'' }}"
-                class="tutor-input"
-                placeholder="Ej: Pérez Mamani"
-              >
-
-              {% for error in form.apellidos.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
-            </div>
-
-            <div class="form-group full-width">
-              <label>
-                <i class="fa-solid fa-address-card"></i>
-                Cédula de Identidad
-
-                {% if edit_mode %}
-                  <span class="locked-badge">
-                    <i class="fa-solid fa-lock"></i>
-                    No editable
-                  </span>
-                {% endif %}
-              </label>
-
-              <div class="ci-grid">
-                <div class="ci-field">
-                  <input
-                    type="text"
-                    id="id_ci_nro"
-                    name="ci_nro"
-                    value="{{ form.ci_nro.value|default:'' }}"
-                    class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
-                    placeholder="Número. Ej: 7455337"
-                    {% if edit_mode %}readonly{% endif %}
-                  >
-
-                  <small class="input-hint">Número de CI</small>
-
-                  {% for error in form.ci_nro.errors %}
+              </div>
+              <div class="tutor-grid">
+                <div class="form-group">
+                  <label for="id_nombres">
+                    <i class="fa-solid fa-user"></i>
+                    Nombres
+                  </label>
+                  <input type="text"
+                         id="id_nombres"
+                         name="nombres"
+                         value="{{ form.nombres.value|default:'' }}"
+                         class="tutor-input"
+                         placeholder="Ej: Juan Carlos"
+                         autocomplete="off"
+                         required />
+                  <span class="field-feedback"></span>
+                  {% for error in form.nombres.errors %}
                     <span class="error-text">
                       <i class="fa-solid fa-circle-exclamation"></i>
                       {{ error }}
                     </span>
                   {% endfor %}
                 </div>
-
-                <div class="ci-field">
-                  <input
-                    type="text"
-                    id="id_ci_comp"
-                    name="ci_comp"
-                    value="{{ form.ci_comp.value|default:'' }}"
-                    class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
-                    placeholder="Comp. opcional"
-                    {% if edit_mode %}readonly{% endif %}
-                  >
-
-                  <small class="input-hint">Ej: 1, 2</small>
-
-                  {% for error in form.ci_comp.errors %}
-                    <span class="error-text">
-                      <i class="fa-solid fa-circle-exclamation"></i>
-                      {{ error }}
-                    </span>
-                  {% endfor %}
-                </div>
-
-                <div class="ci-field">
-                  <select
-                    id="id_ci_exp"
-                    name="ci_exp"
-                    class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
-                    {% if edit_mode %}disabled{% endif %}
-                  >
-                    {% for value, label in form.ci_exp.field.choices %}
-                      <option
-                        value="{{ value }}"
-                        {% if form.ci_exp.value == value %}selected{% endif %}
-                      >
-                        {{ label }}
-                      </option>
-                    {% endfor %}
-                  </select>
-
-                  <small class="input-hint">Expedido</small>
-
-                  {% if edit_mode %}
-                    <input type="hidden" name="ci_exp" value="{{ form.ci_exp.value }}">
-                  {% endif %}
-
-                  {% for error in form.ci_exp.errors %}
+                <div class="form-group">
+                  <label for="id_apellidos">
+                    <i class="fa-solid fa-user-tag"></i>
+                    Apellidos
+                  </label>
+                  <input type="text"
+                         id="id_apellidos"
+                         name="apellidos"
+                         value="{{ form.apellidos.value|default:'' }}"
+                         class="tutor-input"
+                         placeholder="Ej: Pérez Mamani"
+                         autocomplete="off"
+                         required />
+                  <span class="field-feedback"></span>
+                  {% for error in form.apellidos.errors %}
                     <span class="error-text">
                       <i class="fa-solid fa-circle-exclamation"></i>
                       {{ error }}
@@ -241,79 +189,166 @@
                 </div>
               </div>
             </div>
-
-            <div class="form-group">
-              <label for="id_celular">
-                <i class="fa-solid fa-phone-flip"></i>
-                Teléfono Celular
-              </label>
-
-              <input
-                type="text"
-                id="id_celular"
-                name="celular"
-                value="{{ form.celular.value|default:'' }}"
-                class="tutor-input"
-                placeholder="Ej: 77123456"
-              >
-
-              {% for error in form.celular.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+            <div class="tutor-section">
+              <div class="section-title-row">
+                <div>
+                  <span>Sección 2</span>
+                  <h4>Identificación</h4>
+                </div>
+                <i class="fa-solid fa-address-card"></i>
+              </div>
+              <div class="form-group full-width">
+                <label>
+                  <i class="fa-solid fa-address-card"></i>
+                  Cédula de Identidad
+                  {% if edit_mode %}
+                    <span class="locked-badge">
+                      <i class="fa-solid fa-lock"></i>
+                      No editable
+                    </span>
+                  {% endif %}
+                </label>
+                <div class="ci-grid">
+                  <div class="ci-field">
+                    <input type="text"
+                           id="id_ci_nro"
+                           name="ci_nro"
+                           value="{{ form.ci_nro.value|default:'' }}"
+                           class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
+                           placeholder="Ej: 7455337"
+                           autocomplete="off"
+                           {% if not edit_mode %}required{% endif %}
+                           {% if edit_mode %}readonly{% endif %} />
+                    <small class="input-hint">Número de CI</small>
+                    <span class="field-feedback"></span>
+                    {% for error in form.ci_nro.errors %}
+                      <span class="error-text">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ error }}
+                      </span>
+                    {% endfor %}
+                  </div>
+                  <div class="ci-field">
+                    <input type="text"
+                           id="id_ci_comp"
+                           name="ci_comp"
+                           value="{{ form.ci_comp.value|default:'' }}"
+                           class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
+                           placeholder="Ej: A1"
+                           autocomplete="off"
+                           {% if edit_mode %}readonly{% endif %} />
+                    <small class="input-hint">Complemento opcional</small>
+                    <span class="field-feedback"></span>
+                    {% for error in form.ci_comp.errors %}
+                      <span class="error-text">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ error }}
+                      </span>
+                    {% endfor %}
+                  </div>
+                  <div class="ci-field select-wrapper">
+                    <select id="id_ci_exp"
+                            name="ci_exp"
+                            class="tutor-input {% if edit_mode %}input-disabled{% endif %}"
+                            {% if not edit_mode %}required{% endif %}
+                            {% if edit_mode %}disabled{% endif %}>
+                      {% for value, label in form.ci_exp.field.choices %}
+                        <option value="{{ value }}"
+                                {% if form.ci_exp.value == value %}selected{% endif %}>{{ label }}</option>
+                      {% endfor %}
+                    </select>
+                    <small class="input-hint">Expedido</small>
+                    <span class="field-feedback"></span>
+                    {% if edit_mode %}<input type="hidden" name="ci_exp" value="{{ form.ci_exp.value }}" />{% endif %}
+                    {% for error in form.ci_exp.errors %}
+                      <span class="error-text">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ error }}
+                      </span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div class="form-group">
-              <label for="id_ocupacion">
-                <i class="fa-solid fa-briefcase"></i>
-                Ocupación o Profesión
-              </label>
-
-              <input
-                type="text"
-                id="id_ocupacion"
-                name="ocupacion"
-                value="{{ form.ocupacion.value|default:'' }}"
-                class="tutor-input"
-                placeholder="Ej: Ingeniero, Comerciante..."
-              >
-
-              {% for error in form.ocupacion.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+            <div class="tutor-section">
+              <div class="section-title-row">
+                <div>
+                  <span>Sección 3</span>
+                  <h4>Contacto y ocupación</h4>
+                </div>
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div class="tutor-grid">
+                <div class="form-group">
+                  <label for="id_celular">
+                    <i class="fa-solid fa-phone-flip"></i>
+                    Teléfono Celular
+                  </label>
+                  <input type="text"
+                         id="id_celular"
+                         name="celular"
+                         value="{{ form.celular.value|default:'' }}"
+                         class="tutor-input"
+                         placeholder="Ej: 77123456"
+                         autocomplete="off"
+                         required />
+                  <span class="field-feedback"></span>
+                  {% for error in form.celular.errors %}
+                    <span class="error-text">
+                      <i class="fa-solid fa-circle-exclamation"></i>
+                      {{ error }}
+                    </span>
+                  {% endfor %}
+                </div>
+                <div class="form-group">
+                  <label for="id_ocupacion">
+                    <i class="fa-solid fa-briefcase"></i>
+                    Ocupación o Profesión
+                  </label>
+                  <input type="text"
+                         id="id_ocupacion"
+                         name="ocupacion"
+                         value="{{ form.ocupacion.value|default:'' }}"
+                         class="tutor-input"
+                         placeholder="Ej: Ingeniero, Comerciante"
+                         autocomplete="off"
+                         required />
+                  <span class="field-feedback"></span>
+                  {% for error in form.ocupacion.errors %}
+                    <span class="error-text">
+                      <i class="fa-solid fa-circle-exclamation"></i>
+                      {{ error }}
+                    </span>
+                  {% endfor %}
+                </div>
+              </div>
             </div>
-
-          </div>
-
-          <div class="form-footer-actions">
-            <a href="{% url 'list_tutores' %}" class="btn-cancel-tutor">
-              <i class="fa-solid fa-arrow-left"></i>
-              Cancelar
-            </a>
-
-            <button type="submit" class="btn-save-tutor" id="btnGuardar">
-              <i class="fa-solid fa-floppy-disk"></i>
-
-              {% if edit_mode %}
-                Guardar Cambios
-              {% else %}
-                Guardar Información
-              {% endif %}
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-  </div>
-
-</section>
-
-<script src="{% static 'students/js/form_tutor.js' %}?v=5"></script>
-
-{% endblock %}
+            <div class="form-footer-actions">
+              <a href="{% url 'list_tutores' %}" class="btn-cancel-tutor">
+                <i class="fa-solid fa-arrow-left"></i>
+                Cancelar
+              </a>
+              <button type="submit" class="btn-save-tutor" id="btnGuardar">
+                <span class="btn-text">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  {% if edit_mode %}
+                    Guardar cambios
+                  {% else %}
+                    Guardar información
+                  {% endif %}
+                </span>
+                <span class="btn-loading">
+                  <i class="fa-solid fa-circle-notch fa-spin"></i>
+                  Procesando...
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% static "students/js/form_tutor.js" as form_tutor_js %}
+  <script src="{{ form_tutor_js }}?v=6"></script>
+{% endblock content %}

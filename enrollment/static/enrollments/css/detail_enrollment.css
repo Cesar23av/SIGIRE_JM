@@ -3,12 +3,6 @@
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
-
-/* =========================================================
-   1. VARIABLES LOCALES
-   Mantienen coherencia visual con el panel administrativo.
-   ========================================================= */
-
 :root {
   --primary-color: #c62828;
   --primary-hover: #b71c1c;
@@ -41,50 +35,60 @@
   --gray-main: #475569;
 
   --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
-  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 14px 34px rgba(15, 23, 42, 0.08);
 
-  --radius-md: 14px;
-  --radius-lg: 18px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 
   --transition: all 0.25s ease;
 }
 
-
-/* =========================================================
-   2. CONTENEDOR GENERAL
-   Agrupa toda la pantalla de detalle.
-   ========================================================= */
+/* GENERAL */
 
 .detail-page {
   width: 100%;
 }
 
-.detail-container {
-  width: 100%;
-}
-
 .detail-card {
-  background: var(--white);
+  overflow: hidden;
+
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
+
+  background: var(--white);
+  box-shadow: var(--shadow-medium);
 }
 
-
-/* =========================================================
-   3. CABECERA DEL DETALLE
-   Título, gestión y estado documental.
-   ========================================================= */
+/* HEADER */
 
 .detail-header {
-  padding: 26px 30px;
-  border-bottom: 1px solid var(--border-color);
-
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 20px;
+
+  padding: 2rem;
+  border-bottom: 1px solid var(--border-color);
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    var(--white);
+}
+
+.detail-page-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .detail-header-info h3 {
@@ -92,10 +96,12 @@
   align-items: center;
   gap: 10px;
 
+  margin: 0 0 6px;
+
   color: var(--secondary-color);
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
 .detail-header-info h3 i {
@@ -103,6 +109,8 @@
 }
 
 .detail-header-info p {
+  margin: 0;
+
   color: var(--text-muted);
   font-size: 0.92rem;
 }
@@ -115,11 +123,7 @@
   flex-shrink: 0;
 }
 
-
-/* =========================================================
-   4. BADGES DE ESTADO DOCUMENTAL
-   Completa, pendiente, vencida o neutral.
-   ========================================================= */
+/* STATUS */
 
 .status-pill {
   display: inline-flex;
@@ -127,7 +131,8 @@
   justify-content: center;
   gap: 7px;
 
-  padding: 8px 12px;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
   border-radius: 999px;
 
   font-size: 0.78rem;
@@ -155,16 +160,73 @@
   color: var(--gray-main);
 }
 
+/* SUMMARY */
 
-/* =========================================================
-   5. CUERPO DEL DETALLE
-   Layout principal con información y documentos.
-   ========================================================= */
+.detail-summary-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin: 1.5rem 2rem 0;
+  padding: 1rem;
+
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+
+  background: var(--bg-soft);
+}
+
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+
+  padding: 0.9rem;
+  border-radius: 16px;
+
+  background: var(--white);
+}
+
+.summary-item > i {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+}
+
+.summary-item span {
+  display: block;
+
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.summary-item strong {
+  display: block;
+  margin-top: 0.15rem;
+
+  color: var(--secondary-color);
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+/* BODY */
 
 .detail-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 370px;
   gap: 26px;
+
   padding: 30px;
 }
 
@@ -175,75 +237,102 @@
 
 .detail-section,
 .documents-card {
-  background: var(--white);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 22px;
+
+  background: var(--white);
   box-shadow: var(--shadow-soft);
 }
 
 .detail-section {
   margin-bottom: 22px;
+  padding: 1.4rem;
 }
 
 .detail-section:last-child {
   margin-bottom: 0;
 }
 
-.detail-section h4,
-.documents-card h4 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  color: var(--secondary-color);
-  font-size: 1rem;
-  font-weight: 900;
-  margin-bottom: 16px;
-}
-
-.detail-section h4 i,
-.documents-card h4 i {
-  color: var(--primary-color);
-}
-
 .documents-card {
   position: sticky;
   top: 96px;
+
+  padding: 1.4rem;
 }
 
+/* SECTION TITLE */
 
-/* =========================================================
-   6. RESUMEN DEL ESTUDIANTE
-   Avatar y datos principales.
-   ========================================================= */
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+.section-title-row span {
+  display: block;
+
+  color: var(--primary-color);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.section-title-row h4 {
+  margin: 0.15rem 0 0;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.section-title-row > i {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+}
+
+/* STUDENT */
 
 .student-resume {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 18px;
-
   display: flex;
   align-items: center;
   gap: 16px;
+
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
 }
 
 .student-avatar {
   width: 54px;
   height: 54px;
+  min-width: 54px;
+
+  display: grid;
+  place-items: center;
+
   border-radius: 16px;
 
   background: rgba(198, 40, 40, 0.1);
   color: var(--primary-color);
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   font-size: 1.4rem;
-  flex-shrink: 0;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .student-data {
@@ -258,16 +347,16 @@
 }
 
 .student-data span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
   color: var(--text-muted);
   font-size: 0.88rem;
   font-weight: 700;
 }
 
-
-/* =========================================================
-   7. GRID DE INFORMACIÓN
-   Datos personales, académicos y tutor.
-   ========================================================= */
+/* INFO */
 
 .info-grid {
   display: grid;
@@ -276,12 +365,14 @@
 }
 
 .info-item {
-  background: var(--bg-soft);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 14px;
   display: grid;
   gap: 6px;
+
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+
+  background: var(--bg-soft);
 }
 
 .info-item.full {
@@ -306,54 +397,111 @@
   color: var(--blue-main) !important;
 }
 
+.phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
 
-/* =========================================================
-   8. OBSERVACIONES Y ESTADOS VACÍOS
-   Bloques informativos secundarios.
-   ========================================================= */
+  width: fit-content;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+
+  background: var(--green-soft);
+  color: var(--green-main);
+
+  text-decoration: none;
+  font-size: 0.86rem;
+}
+
+/* OBSERVATION */
 
 .observation-box {
-  background: var(--yellow-soft);
-  border-left: 4px solid var(--yellow-main);
-  border-radius: 12px;
   padding: 15px;
+  border-left: 4px solid var(--yellow-main);
+  border-radius: 14px;
 
+  background: var(--yellow-soft);
   color: #92400e;
+
   font-size: 0.9rem;
   line-height: 1.6;
 }
 
 .empty-mini {
-  background: var(--bg-soft);
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 14px;
-
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  font-weight: 700;
-
   display: flex;
   align-items: flex-start;
   gap: 10px;
+
+  padding: 14px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+
+  background: var(--bg-soft);
+  color: var(--text-muted);
+
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .empty-mini i {
-  color: var(--blue-main);
   margin-top: 2px;
+  color: var(--blue-main);
 }
 
-
-/* =========================================================
-   9. DOCUMENTACIÓN
-   Lista de documentos entregados y pendientes.
-   ========================================================= */
+/* DOCUMENTS */
 
 .documents-hint {
+  margin-bottom: 16px;
+
   color: var(--text-muted);
   font-size: 0.88rem;
   line-height: 1.5;
-  margin-bottom: 16px;
+}
+
+.documents-progress {
+  margin-bottom: 1rem;
+  padding: 0.9rem;
+
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+
+  background: var(--bg-soft);
+}
+
+.documents-progress strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.documents-progress span {
+  display: block;
+
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.progress-track {
+  overflow: hidden;
+
+  height: 8px;
+  margin-top: 0.7rem;
+  border-radius: 999px;
+
+  background: #e2e8f0;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+  background: var(--primary-color);
+
+  transition: width 0.25s ease;
 }
 
 .documents-list {
@@ -362,26 +510,27 @@
 }
 
 .document-item {
-  background: var(--bg-soft);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 14px;
-
   display: flex;
-  gap: 12px;
   align-items: flex-start;
+  gap: 12px;
+
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+
+  background: var(--bg-soft);
 }
 
 .document-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 
-  flex-shrink: 0;
+  border-radius: 12px;
+
   font-size: 0.9rem;
 }
 
@@ -396,9 +545,10 @@
 }
 
 .document-info {
-  min-width: 0;
   display: grid;
   gap: 8px;
+
+  min-width: 0;
 }
 
 .document-info strong {
@@ -421,8 +571,10 @@
 .doc-type,
 .doc-state {
   width: max-content;
+
   padding: 4px 8px;
   border-radius: 999px;
+
   font-size: 0.68rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -449,56 +601,55 @@
 }
 
 .deadline-box {
-  margin-top: 18px;
-  background: var(--orange-soft);
-  border-left: 4px solid var(--orange-main);
-  border-radius: 12px;
-  padding: 13px;
-
   display: flex;
   align-items: flex-start;
   gap: 10px;
 
+  margin-top: 18px;
+  padding: 13px;
+  border-left: 4px solid var(--orange-main);
+  border-radius: 14px;
+
+  background: var(--orange-soft);
   color: #9a3412;
+
   font-size: 0.86rem;
   line-height: 1.5;
 }
 
 .deadline-box i {
-  color: var(--orange-main);
   margin-top: 2px;
+  color: var(--orange-main);
 }
 
-
-/* =========================================================
-   10. PIE DE ACCIONES
-   Volver, imprimir y completar documentos.
-   ========================================================= */
+/* FOOTER */
 
 .detail-footer {
-  padding: 24px 30px;
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-soft);
-
   display: flex;
   justify-content: flex-end;
   gap: 14px;
   flex-wrap: wrap;
+
+  padding: 24px 30px;
+  border-top: 1px solid var(--border-color);
+
+  background: var(--bg-soft);
 }
 
 .btn-primary-detail,
 .btn-print-detail,
 .btn-back-detail {
-  min-height: 44px;
-  border-radius: 10px;
-  padding: 11px 18px;
+  min-height: 48px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
 
-  font-family: 'Inter', sans-serif;
+  padding: 11px 18px;
+  border-radius: 14px;
+
+  font-family: "Inter", sans-serif;
   font-size: 0.92rem;
   font-weight: 800;
   text-decoration: none;
@@ -527,10 +678,15 @@
   background: #dcfce7;
 }
 
+.btn-print-detail.clicked {
+  transform: scale(0.96);
+}
+
 .btn-primary-detail {
   background: var(--primary-color);
   color: var(--white);
   border: 1px solid var(--primary-color);
+  box-shadow: 0 10px 22px rgba(198, 40, 40, 0.18);
 }
 
 .btn-primary-detail:hover {
@@ -539,15 +695,29 @@
   transform: translateY(-1px);
 }
 
+/* ANIMATION */
 
-/* =========================================================
-   11. RESPONSIVE - LAPTOPS PEQUEÑAS
-   Reduce la columna lateral.
-   ========================================================= */
+.detail-fade-in {
+  animation: detailFadeIn 0.34s ease both;
+}
+
+@keyframes detailFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 1200px) {
   .detail-body {
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: minmax(0, 1fr) 330px;
     gap: 22px;
     padding: 26px;
   }
@@ -559,13 +729,23 @@
   }
 }
 
-
-/* =========================================================
-   12. RESPONSIVE - TABLETS
-   La documentación pasa debajo del contenido principal.
-   ========================================================= */
-
 @media (max-width: 992px) {
+  .detail-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .detail-header-status,
+  .status-pill {
+    width: 100%;
+  }
+
+  .detail-summary-panel {
+    grid-template-columns: 1fr;
+    margin-left: 1.6rem;
+    margin-right: 1.6rem;
+  }
+
   .detail-body {
     grid-template-columns: 1fr;
   }
@@ -575,15 +755,9 @@
   }
 }
 
-
-/* =========================================================
-   13. RESPONSIVE - CELULARES
-   Todo el contenido se apila.
-   ========================================================= */
-
 @media (max-width: 768px) {
-  .detail-header {
-    flex-direction: column;
+  .detail-header,
+  .detail-footer {
     padding: 24px 22px;
   }
 
@@ -591,13 +765,13 @@
     font-size: 1.18rem;
   }
 
-  .detail-header-status,
-  .status-pill {
-    width: 100%;
-  }
-
   .detail-body {
     padding: 22px;
+  }
+
+  .detail-summary-panel {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
   }
 
   .detail-section,
@@ -606,8 +780,8 @@
   }
 
   .student-resume {
-    flex-direction: column;
     align-items: flex-start;
+    flex-direction: column;
   }
 
   .info-grid {
@@ -616,7 +790,6 @@
 
   .detail-footer {
     flex-direction: column-reverse;
-    padding: 22px;
   }
 
   .btn-primary-detail,
@@ -626,18 +799,13 @@
   }
 }
 
-
-/* =========================================================
-   14. RESPONSIVE - CELULARES PEQUEÑOS
-   Reduce espacios y tamaños.
-   ========================================================= */
-
 @media (max-width: 480px) {
   .detail-card {
-    border-radius: 14px;
+    border-radius: 18px;
   }
 
-  .detail-header {
+  .detail-header,
+  .detail-footer {
     padding: 22px 18px;
   }
 
@@ -647,6 +815,11 @@
 
   .detail-header-info p {
     font-size: 0.86rem;
+  }
+
+  .detail-summary-panel {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   .detail-body {
@@ -659,8 +832,7 @@
     padding: 18px;
   }
 
-  .detail-section h4,
-  .documents-card h4 {
+  .section-title-row h4 {
     font-size: 0.95rem;
   }
 
@@ -681,9 +853,5 @@
   .empty-mini,
   .deadline-box {
     font-size: 0.8rem;
-  }
-
-  .detail-footer {
-    padding: 20px 18px;
   }
 }

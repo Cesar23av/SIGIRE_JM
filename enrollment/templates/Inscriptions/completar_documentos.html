@@ -1,21 +1,29 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
 
-{% block page_title %}Completar Documentos{% endblock %}
+{% block page_title %}
+  Completar Documentos
+{% endblock page_title %}
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'enrollments/css/form_enrollment.css' %}?v=12" />
+{% static "enrollments/css/completar_documentos.css" as completar_documentos_css %}
+<link rel="stylesheet" href="{{ completar_documentos_css }}?v=1" />
 
-<section class="enroll-page documents-page">
+<section class="documents-page">
 
-  <div class="enroll-card">
+  <div class="documents-card">
 
-    <div class="enroll-card-header">
+    <div class="documents-header">
       <div class="header-text">
-        <h3>
+        <span class="documents-page-label">
           <i class="fa-solid fa-folder-open"></i>
-          Regularización de Documentos
+          Regularización documental
+        </span>
+
+        <h3>
+          <i class="fa-solid fa-file-circle-check"></i>
+          Completar Documentos
         </h3>
 
         <p>
@@ -24,29 +32,52 @@
         </p>
       </div>
 
-      <div class="header-badge">
-        <span class="badge-process badge-document-status {{ inscripcion.estado_documental }}">
+      <div class="header-status">
+        <span class="document-status {{ inscripcion.estado_documental }}">
+          {% if inscripcion.estado_documental == "completa" %}
+            <i class="fa-solid fa-circle-check"></i>
+          {% elif inscripcion.estado_documental == "pendiente" %}
+            <i class="fa-solid fa-clock"></i>
+          {% elif inscripcion.estado_documental == "vencida" %}
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          {% else %}
+            <i class="fa-solid fa-circle-info"></i>
+          {% endif %}
+
           {{ inscripcion.estado_documental|title }}
         </span>
       </div>
     </div>
 
-    <form method="POST" class="enroll-form-body" novalidate>
+    <form method="post" class="documents-form" id="documentsForm" novalidate>
       {% csrf_token %}
 
-      <div class="enroll-layout-grid">
+      <div class="documents-status-card" id="documentsStatusCard">
+        <i class="fa-solid fa-circle-info"></i>
 
-        <div class="enroll-column-main">
+        <div>
+          <strong>Revisión documental pendiente</strong>
+          <span>Marca los documentos entregados físicamente antes de guardar.</span>
+        </div>
+      </div>
 
-          <section class="form-section">
-            <h4 class="section-subtitle">
+      <div class="documents-layout">
+
+        <div class="documents-main">
+
+          <section class="documents-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 1</span>
+                <h4>Datos de la inscripción</h4>
+              </div>
+
               <i class="fa-solid fa-user-graduate"></i>
-              Datos de la Inscripción
-            </h4>
+            </div>
 
-            <div class="student-info-banner">
+            <div class="student-summary">
               <div class="student-avatar">
-                <i class="fa-solid fa-user-graduate"></i>
+                {{ inscripcion.estudiante.nombres|slice:":1" }}
               </div>
 
               <div class="student-data">
@@ -56,50 +87,53 @@
                   {{ inscripcion.estudiante.nombres }}
                 </strong>
 
-                <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
+                <span>
+                  <i class="fa-solid fa-id-card"></i>
+                  CI: {{ inscripcion.estudiante.cedula_identidad }}
+                </span>
               </div>
             </div>
 
-            <div class="documents-summary">
-              <div class="requirements-info">
-                <i class="fa-solid fa-school"></i>
-                <span>
-                  Curso:
-                  <strong>
-                    {{ inscripcion.paralelo.grado.nombre }}
-                    de {{ inscripcion.paralelo.grado.nivel.nombre }}
-                    - {{ inscripcion.paralelo.letra }}
-                  </strong>
-                </span>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span>Curso</span>
+                <strong>
+                  {{ inscripcion.paralelo.grado.nombre }}
+                  de {{ inscripcion.paralelo.grado.nivel.nombre }}
+                  - {{ inscripcion.paralelo.letra }}
+                </strong>
               </div>
 
-              <div class="requirements-info">
-                <i class="fa-solid fa-barcode"></i>
-                <span>
-                  RUDE:
-                  <strong>{{ inscripcion.rude }}</strong>
-                </span>
+              <div class="summary-item">
+                <span>RUDE</span>
+                <strong>{{ inscripcion.rude }}</strong>
+              </div>
+
+              <div class="summary-item">
+                <span>Estado actual</span>
+                <strong>{{ inscripcion.estado_documental|title }}</strong>
               </div>
 
               {% if inscripcion.fecha_limite_documentos %}
-                <div class="requirements-info deadline-info">
-                  <i class="fa-solid fa-calendar-days"></i>
-                  <span>
-                    Fecha límite para regularizar:
-                    <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
-                  </span>
+                <div class="summary-item deadline">
+                  <span>Fecha límite</span>
+                  <strong>{{ inscripcion.fecha_limite_documentos|date:"d/m/Y" }}</strong>
                 </div>
               {% endif %}
             </div>
           </section>
 
-          <section class="form-section">
-            <h4 class="section-subtitle">
-              <i class="fa-solid fa-circle-info"></i>
-              Criterio de Regularización
-            </h4>
+          <section class="documents-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 2</span>
+                <h4>Criterio de regularización</h4>
+              </div>
 
-            <div class="documents-policy-box">
+              <i class="fa-solid fa-circle-info"></i>
+            </div>
+
+            <div class="policy-box">
               <p>
                 Marca únicamente los documentos que fueron entregados físicamente.
                 Cuando todos los documentos obligatorios estén entregados, el estado documental
@@ -110,26 +144,42 @@
 
         </div>
 
-        <aside class="enroll-column-side">
-          <div class="requirements-box">
-            <h4 class="section-subtitle">
-              <i class="fa-solid fa-file-circle-check"></i>
-              Documentos Pendientes
-            </h4>
+        <aside class="documents-side">
+          <div class="requirements-card">
+            <div class="section-title-row">
+              <div>
+                <span>Checklist</span>
+                <h4>Documentos</h4>
+              </div>
+
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
 
             <p class="requirements-hint">
               Marque los documentos que el tutor ya entregó físicamente.
             </p>
 
-            <div class="requirements-checklist">
+            <div class="documents-progress">
+              <div>
+                <strong id="documentsCounter">0</strong>
+                <span>documentos marcados</span>
+              </div>
+
+              <div class="progress-track">
+                <div class="progress-fill" id="documentsProgress"></div>
+              </div>
+            </div>
+
+            <div class="requirements-checklist" id="documentsChecklist">
               {% for entrega in entregas %}
-                <label class="check-item">
+                <label class="check-item {% if entrega.requisito.obligatorio %}required-doc{% else %}optional-doc{% endif %}">
                   <input
                     type="checkbox"
                     name="documentos"
                     value="{{ entrega.id }}"
+                    data-required="{% if entrega.requisito.obligatorio %}true{% else %}false{% endif %}"
                     {% if entrega.estado %}checked{% endif %}
-                  >
+                  />
 
                   <span class="check-custom"></span>
 
@@ -144,7 +194,7 @@
                   </span>
                 </label>
               {% empty %}
-                <div class="requirements-info">
+                <div class="empty-documents">
                   <i class="fa-solid fa-circle-info"></i>
                   <span>No hay documentos registrados para esta inscripción.</span>
                 </div>
@@ -162,15 +212,22 @@
 
       </div>
 
-      <div class="enroll-form-footer">
-        <a href="{% url 'list_inscripciones' %}" class="btn-cancel-enroll">
+      <div class="documents-footer">
+        <a href="{% url 'list_inscripciones' %}" class="btn-cancel-documents">
           <i class="fa-solid fa-arrow-left"></i>
           Cancelar
         </a>
 
-        <button type="submit" class="btn-confirm-enroll">
-          <i class="fa-solid fa-floppy-disk"></i>
-          Guardar Documentos
+        <button type="submit" class="btn-save-documents" id="btnSaveDocuments">
+          <span class="btn-text">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Guardar documentos
+          </span>
+
+          <span class="btn-loading">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            Guardando...
+          </span>
         </button>
       </div>
     </form>
@@ -179,4 +236,8 @@
 
 </section>
 
-{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% static "enrollments/js/completar_documentos.js" as completar_documentos_js %}
+<script src="{{ completar_documentos_js }}?v=2"></script>
+
+{% endblock content %}

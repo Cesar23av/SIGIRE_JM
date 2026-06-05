@@ -1,56 +1,154 @@
 <div id="reporte-academico" class="accordion-content">
-  <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+  <div class="academic-report-header">
     <div>
+      <span class="academic-report-label">
+        <i class="fa-solid fa-chart-pie"></i>
+        Análisis académico
+      </span>
+
       <h2>Reporte Académico</h2>
-      <p>Distribución de estudiantes por nivel, grado, paralelo y gestión.</p>
+
+      <p>
+        Distribución de estudiantes por nivel, grado, paralelo y gestión.
+      </p>
     </div>
-    <button class="print-btn" onclick="window.print()">
-      <i class="fa-solid fa-print"></i> Imprimir / PDF
+
+    <button type="button" class="print-btn js-print-report">
+      <i class="fa-solid fa-print"></i>
+      Imprimir / PDF
     </button>
   </div>
 
-  <div class="report-summary">
-    <div class="summary-card total">
-      <h4>Estudiantes Activos</h4>
-      <div class="number">{{ total_estudiantes_activos }}</div>
+  <div class="academic-summary-grid">
+    <div class="academic-summary-card total">
+      <div class="academic-summary-icon">
+        <i class="fa-solid fa-users"></i>
+      </div>
+
+      <div>
+        <h4>Estudiantes activos</h4>
+        <div class="number">{{ total_estudiantes_activos }}</div>
+      </div>
     </div>
-    <div class="summary-card inscritos">
-      <h4>Hombres</h4>
-      <div class="number">{{ total_hombres }}</div>
+
+    <div class="academic-summary-card male">
+      <div class="academic-summary-icon">
+        <i class="fa-solid fa-person"></i>
+      </div>
+
+      <div>
+        <h4>Hombres</h4>
+        <div class="number">{{ total_hombres }}</div>
+      </div>
     </div>
-    <div class="summary-card sin-inscripcion">
-      <h4>Mujeres</h4>
-      <div class="number">{{ total_mujeres }}</div>
+
+    <div class="academic-summary-card female">
+      <div class="academic-summary-icon">
+        <i class="fa-solid fa-person-dress"></i>
+      </div>
+
+      <div>
+        <h4>Mujeres</h4>
+        <div class="number">{{ total_mujeres }}</div>
+      </div>
     </div>
   </div>
 
-  <div class="stats-row">
-    <span class="stat-chip"><strong>{{ data_niveles.labels|length }}</strong> Nivel{{ data_niveles.labels|length|pluralize:"es" }}</span>
-    <span class="stat-chip"><strong>{{ data_grados.labels|length }}</strong> Grado{{ data_grados.labels|length|pluralize:"s" }}</span>
-    <span class="stat-chip"><strong>{{ data_paralelos.labels|length }}</strong> Paralelo{{ data_paralelos.labels|length|pluralize:"s" }}</span>
-    <span class="stat-chip"><strong>{{ data_gestion.labels|length }}</strong> Gestión{{ data_gestion.labels|length|pluralize:"es" }}</span>
+  <div class="academic-stats-row">
+    <span class="academic-stat-chip">
+      <i class="fa-solid fa-layer-group"></i>
+      <strong>{{ data_niveles.labels|length }}</strong>
+      Nivel{{ data_niveles.labels|length|pluralize:"es" }}
+    </span>
+
+    <span class="academic-stat-chip">
+      <i class="fa-solid fa-stairs"></i>
+      <strong>{{ data_grados.labels|length }}</strong>
+      Grado{{ data_grados.labels|length|pluralize:"s" }}
+    </span>
+
+    <span class="academic-stat-chip">
+      <i class="fa-solid fa-people-group"></i>
+      <strong>{{ data_paralelos.labels|length }}</strong>
+      Paralelo{{ data_paralelos.labels|length|pluralize:"s" }}
+    </span>
+
+    <span class="academic-stat-chip">
+      <i class="fa-solid fa-calendar-days"></i>
+      <strong>{{ data_gestion.labels|length }}</strong>
+      Gestión{{ data_gestion.labels|length|pluralize:"es" }}
+    </span>
   </div>
 
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h4><i class="fa-solid fa-layer-group"></i> Por Nivel</h4>
-      <div class="chart-container"><canvas id="chartNiveles"></canvas></div>
+  <div class="academic-charts-grid">
+    <div class="academic-chart-card">
+      <div class="academic-chart-header">
+        <h4>
+          <i class="fa-solid fa-layer-group"></i>
+          Por Nivel
+        </h4>
+        <p>Cantidad de estudiantes distribuidos por nivel académico.</p>
+      </div>
+
+      <div class="academic-chart-container">
+        <canvas id="chartNiveles"></canvas>
+      </div>
     </div>
-    <div class="chart-card">
-      <h4><i class="fa-solid fa-venus-mars"></i> Por Género</h4>
-      <div class="chart-container"><canvas id="chartGenero"></canvas></div>
+
+    <div class="academic-chart-card">
+      <div class="academic-chart-header">
+        <h4>
+          <i class="fa-solid fa-venus-mars"></i>
+          Por Género
+        </h4>
+        <p>Distribución general por género registrado.</p>
+      </div>
+
+      <div class="academic-chart-container">
+        <canvas id="chartGenero"></canvas>
+      </div>
     </div>
-    <div class="chart-card full">
-      <h4><i class="fa-solid fa-stairs"></i> Por Grado</h4>
-      <div class="chart-container" style="height:300px;"><canvas id="chartGrados"></canvas></div>
+
+    <div class="academic-chart-card full">
+      <div class="academic-chart-header">
+        <h4>
+          <i class="fa-solid fa-stairs"></i>
+          Por Grado
+        </h4>
+        <p>Cantidad de estudiantes inscritos por grado.</p>
+      </div>
+
+      <div class="academic-chart-container large">
+        <canvas id="chartGrados"></canvas>
+      </div>
     </div>
-    <div class="chart-card">
-      <h4><i class="fa-solid fa-people-group"></i> Por Paralelo</h4>
-      <div class="chart-container" style="height:300px;"><canvas id="chartParalelos"></canvas></div>
+
+    <div class="academic-chart-card">
+      <div class="academic-chart-header">
+        <h4>
+          <i class="fa-solid fa-people-group"></i>
+          Por Paralelo
+        </h4>
+        <p>Distribución por paralelo dentro de los cursos.</p>
+      </div>
+
+      <div class="academic-chart-container large">
+        <canvas id="chartParalelos"></canvas>
+      </div>
     </div>
-    <div class="chart-card">
-      <h4><i class="fa-solid fa-calendar"></i> Por Gestión</h4>
-      <div class="chart-container"><canvas id="chartGestion"></canvas></div>
+
+    <div class="academic-chart-card">
+      <div class="academic-chart-header">
+        <h4>
+          <i class="fa-solid fa-calendar"></i>
+          Por Gestión
+        </h4>
+        <p>Evolución de inscripciones por gestión escolar.</p>
+      </div>
+
+      <div class="academic-chart-container">
+        <canvas id="chartGestion"></canvas>
+      </div>
     </div>
   </div>
 </div>

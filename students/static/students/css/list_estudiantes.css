@@ -3,12 +3,6 @@
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
-
-/* =========================================================
-   1. VARIABLES LOCALES
-   Mantienen coherencia visual con el panel administrativo.
-   ========================================================= */
-
 :root {
   --primary-color: #c62828;
   --primary-hover: #b71c1c;
@@ -41,46 +35,58 @@
   --gray-main: #475569;
 
   --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
-  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 14px 34px rgba(15, 23, 42, 0.08);
 
-  --radius-md: 14px;
-  --radius-lg: 18px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 
   --transition: all 0.25s ease;
 }
-
-
-/* =========================================================
-   2. CONTENEDOR GENERAL
-   Agrupa la vista completa del listado.
-   ========================================================= */
 
 .student-list-page {
   width: 100%;
 }
 
 .student-list-card {
-  background: var(--white);
+  overflow: hidden;
+
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
+
+  background: var(--white);
+  box-shadow: var(--shadow-medium);
 }
 
-
-/* =========================================================
-   3. CABECERA DEL LISTADO
-   Título, descripción, botón de registro y switch.
-   ========================================================= */
+/* HEADER */
 
 .student-list-header {
-  padding: 26px 30px;
-  border-bottom: 1px solid var(--border-color);
-
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 22px;
+
+  padding: 2rem;
+  border-bottom: 1px solid var(--border-color);
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    var(--white);
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .header-info h3 {
@@ -88,10 +94,12 @@
   align-items: center;
   gap: 10px;
 
+  margin: 0 0 6px;
+
   color: var(--secondary-color);
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
 .header-info h3 i {
@@ -99,6 +107,8 @@
 }
 
 .header-info p {
+  margin: 0;
+
   color: var(--text-muted);
   font-size: 0.92rem;
 }
@@ -111,78 +121,98 @@
   flex-wrap: wrap;
 }
 
+.module-badge,
+.btn-add-student,
+.toggle-container {
+  min-height: 46px;
+}
+
 .module-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+
   background: var(--blue-soft);
   color: var(--blue-main);
-  padding: 7px 11px;
-  border-radius: 999px;
+
   font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-
-/* =========================================================
-   4. BOTÓN NUEVO ESTUDIANTE
-   Acción principal de registro.
-   ========================================================= */
-
 .btn-add-student {
-  min-height: 42px;
-  padding: 10px 16px;
-  border-radius: 10px;
-
-  background: var(--primary-color);
-  color: var(--white);
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
+  padding: 0.8rem 1.1rem;
+  border-radius: 14px;
+
+  background: var(--primary-color);
+  color: var(--white);
+
   text-decoration: none;
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 900;
 
+  box-shadow: 0 10px 22px rgba(198, 40, 40, 0.18);
   transition: var(--transition);
 }
 
 .btn-add-student:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
-
-/* =========================================================
-   5. SWITCH VER INACTIVOS
-   Control para alternar estudiantes activos/inactivos.
-   ========================================================= */
+/* TOGGLE */
 
 .toggle-container {
-  min-height: 42px;
-  padding: 8px 12px;
-  border-radius: 999px;
-
-  background: var(--gray-soft);
-  border: 1px solid var(--border-color);
-
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
+
+  padding: 0.65rem 0.9rem 0.65rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+
+  background: var(--bg-soft);
 }
 
-.toggle-label {
+.toggle-container.showing-inactive {
+  background: var(--red-soft);
+  border-color: #fecaca;
+}
+
+.toggle-text strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 0.78rem;
+  line-height: 1.1;
+}
+
+.toggle-text span {
+  display: block;
+  margin-top: 0.18rem;
+
   color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 800;
+  font-size: 0.74rem;
+  font-weight: 700;
 }
 
 .switch {
   position: relative;
+
   display: inline-block;
-  width: 46px;
-  height: 24px;
   flex-shrink: 0;
+
+  width: 48px;
+  height: 26px;
 }
 
 .switch input {
@@ -191,11 +221,12 @@
 
 .slider {
   position: absolute;
-  cursor: pointer;
   inset: 0;
 
-  background-color: #cbd5e1;
   border-radius: 999px;
+
+  background-color: #cbd5e1;
+  cursor: pointer;
 
   transition: var(--transition);
 }
@@ -203,13 +234,14 @@
 .slider::before {
   content: "";
   position: absolute;
-  width: 18px;
-  height: 18px;
   left: 3px;
   top: 3px;
 
-  background-color: var(--white);
+  width: 20px;
+  height: 20px;
+
   border-radius: 50%;
+  background-color: var(--white);
   box-shadow: 0 2px 5px rgba(15, 23, 42, 0.25);
 
   transition: var(--transition);
@@ -223,87 +255,169 @@
   transform: translateX(22px);
 }
 
+/* PANELS */
 
-/* =========================================================
-   6. BANNER MODO SELECCIÓN
-   Se muestra cuando se elige estudiante para inscripción.
-   ========================================================= */
-
-.selection-banner {
-  margin: 20px 30px 0;
-  padding: 16px 18px;
-
-  background: var(--orange-soft);
-  color: #92400e;
-  border-left: 4px solid var(--orange-main);
-  border-radius: 12px;
-
+.selection-banner,
+.list-status-panel {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 0.9rem;
 
-  font-size: 0.92rem;
-  line-height: 1.5;
+  margin: 1.25rem 2rem;
+  padding: 1rem 1.15rem;
+  border-radius: 18px;
 }
 
-.selection-banner i {
+.selection-banner {
+  background: var(--orange-soft);
+  color: #92400e;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid var(--orange-main);
+}
+
+.selection-icon,
+.status-panel-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+}
+
+.selection-icon {
+  background: #ffedd5;
   color: var(--orange-main);
-  font-size: 1.5rem;
-  margin-top: 2px;
 }
 
+.list-status-panel {
+  border: 1px solid #dbeafe;
+  background: var(--blue-soft);
+}
 
-/* =========================================================
-   7. FILTROS Y BUSCADOR
-   Barra de búsqueda por texto y género.
-   ========================================================= */
+.list-status-panel.inactive-panel {
+  border-color: #fecaca;
+  background: var(--red-soft);
+}
+
+.status-panel-icon {
+  background: #dbeafe;
+  color: var(--blue-main);
+}
+
+.inactive-panel .status-panel-icon {
+  background: #fee2e2;
+  color: var(--primary-color);
+}
+
+.selection-banner strong,
+.list-status-panel strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+}
+
+.selection-banner span,
+.list-status-panel span {
+  display: block;
+  margin-top: 0.15rem;
+
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* FILTERS */
 
 .filter-bar {
-  padding: 24px 30px;
+  padding: 1.5rem 2rem;
+
   background: var(--bg-soft);
+  border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
 
 .student-filter-form {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 220px auto auto;
-  gap: 14px;
-  align-items: center;
+  grid-template-columns: minmax(280px, 1fr) 230px auto;
+  gap: 1rem;
+  align-items: end;
 }
 
-.search-box {
+.filter-field label {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.input-with-icon,
+.select-box {
   position: relative;
-  min-width: 0;
 }
 
 .search-icon {
   position: absolute;
   left: 14px;
   top: 50%;
-  transform: translateY(-50%);
+
   color: var(--text-light);
   font-size: 0.95rem;
+
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .search-box input,
 .select-box select {
   width: 100%;
-  min-height: 44px;
-  padding: 11px 14px;
+  min-height: 48px;
 
+  padding: 0.8rem 0.95rem;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--white);
+  border-radius: 14px;
 
+  background: var(--white);
   color: var(--text-main);
-  font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+
+  font-size: 0.92rem;
+  font-family: "Inter", sans-serif;
 
   transition: var(--transition);
 }
 
 .search-box input {
-  padding-left: 40px;
+  padding-left: 2.7rem;
+  padding-right: 2.6rem;
+}
+
+.select-box select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding-right: 3rem;
+}
+
+.select-box::after {
+  content: "";
+  position: absolute;
+  right: 1.1rem;
+  bottom: 1.15rem;
+
+  width: 0.55rem;
+  height: 0.55rem;
+
+  border-right: 2px solid #475569;
+  border-bottom: 2px solid #475569;
+
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
 .search-box input:focus,
@@ -313,26 +427,54 @@
   outline: none;
 }
 
+.btn-clear-input {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #e2e8f0;
+  color: var(--gray-main);
+
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.filter-actions {
+  display: flex;
+  align-items: end;
+  gap: 0.8rem;
+}
+
 .btn-filter-student,
 .btn-clear-student {
-  min-height: 44px;
-  border-radius: 10px;
+  min-height: 48px;
+  border-radius: 14px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 900;
 
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-filter-student {
-  padding: 10px 16px;
+  padding: 0.8rem 1rem;
+
   background: var(--secondary-color);
   color: var(--white);
   border: 1px solid var(--secondary-color);
@@ -343,7 +485,8 @@
 }
 
 .btn-clear-student {
-  width: 44px;
+  padding: 0.8rem 1rem;
+
   background: var(--white);
   color: var(--primary-color);
   border: 1px solid var(--border-color);
@@ -354,14 +497,67 @@
   background: var(--red-soft);
 }
 
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
 
-/* =========================================================
-   8. CUERPO Y TABLA
-   Tabla tradicional en escritorio.
-   ========================================================= */
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+
+  background: var(--white);
+}
+
+.active-filters span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.active-filters strong {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+
+  background: var(--blue-soft);
+  color: var(--blue-main);
+
+  font-size: 0.78rem;
+}
+
+/* BODY */
 
 .list-body {
-  padding: 24px 30px 30px;
+  padding: 1.4rem 2rem 2rem;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 0.9rem;
+}
+
+.table-toolbar strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 0.98rem;
+}
+
+.table-toolbar span {
+  display: block;
+  margin-top: 0.2rem;
+
+  color: var(--text-muted);
+  font-size: 0.84rem;
 }
 
 .table-responsive {
@@ -371,39 +567,52 @@
 
 .student-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 0.55rem;
 }
 
 .student-table thead {
-  background: var(--bg-soft);
+  background: transparent;
 }
 
 .student-table th {
-  padding: 15px 16px;
+  padding: 0.9rem 1rem;
+
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 900;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
 .student-table td {
-  padding: 16px;
+  padding: 1rem;
+
+  background: var(--white);
   color: var(--text-main);
+
   font-size: 0.9rem;
-  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
 }
 
 .student-table tbody tr {
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
   transition: var(--transition);
 }
 
 .student-table tbody tr:hover {
-  background: var(--bg-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.student-table tbody td:first-child {
+  border-radius: 16px 0 0 16px;
+}
+
+.student-table tbody td:last-child {
+  border-radius: 0 16px 16px 0;
 }
 
 .number-column {
@@ -415,61 +624,85 @@
   text-align: center;
 }
 
-
-/* =========================================================
-   9. DATOS DEL ESTUDIANTE
-   Nombre, CI, género, fecha, contacto.
-   ========================================================= */
+/* STUDENT DATA */
 
 .row-number {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-
-  background: var(--gray-soft);
-  color: var(--gray-main);
+  width: 34px;
+  height: 34px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 999px;
+
+  background: var(--gray-soft);
+  color: var(--gray-main);
 
   font-size: 0.8rem;
   font-weight: 900;
 }
 
 .student-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.student-avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
   display: grid;
-  gap: 3px;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: var(--blue-soft);
+  color: var(--blue-main);
+
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .student-name {
+  display: block;
+
   color: var(--secondary-color);
   font-weight: 900;
 }
 
 .ci-badge {
-  background: var(--blue-soft);
-  color: var(--blue-main);
-  padding: 6px 10px;
-  border-radius: 999px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
+
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+
+  background: var(--blue-soft);
+  color: var(--blue-main);
 
   font-size: 0.82rem;
   font-weight: 900;
+  white-space: nowrap;
 }
 
 .demographics-info {
   display: grid;
-  gap: 4px;
+  gap: 0.25rem;
+}
+
+.demographics-info span,
+.sub-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .demographics-info span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   font-weight: 800;
 }
 
@@ -486,24 +719,27 @@
   font-size: 0.78rem;
 }
 
-.contact-actions {
+.contact-actions,
+.action-buttons {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
 .contact-badge {
-  min-height: 34px;
-  border-radius: 999px;
-  padding: 7px 10px;
+  min-height: 36px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
 
+  padding: 0.45rem 0.7rem;
   border: none;
+  border-radius: 999px;
+
   text-decoration: none;
   font-size: 0.82rem;
   font-weight: 900;
@@ -535,11 +771,7 @@
   color: var(--text-light);
 }
 
-
-/* =========================================================
-   10. ESTADOS
-   Activo e inactivo.
-   ========================================================= */
+/* STATUS */
 
 .badge {
   display: inline-flex;
@@ -547,14 +779,15 @@
   justify-content: center;
   gap: 6px;
 
-  padding: 7px 11px;
+  padding: 0.45rem 0.75rem;
   border-radius: 999px;
 
   font-size: 0.78rem;
   font-weight: 900;
 }
 
-.status-cell {
+.status-cell,
+.actions-cell {
   text-align: center;
 }
 
@@ -568,25 +801,18 @@
   color: var(--red-main);
 }
 
-
-/* =========================================================
-   11. BOTONES DE ACCIÓN
-   Editar, desactivar, reactivar, eliminar y seleccionar.
-   ========================================================= */
-
-.actions-cell {
-  text-align: center;
-}
+/* ACTION BUTTONS */
 
 .btn-action {
-  min-height: 36px;
-  min-width: 36px;
-  border-radius: 9px;
+  min-height: 38px;
+  min-width: 38px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
+
+  border-radius: 12px;
 
   text-decoration: none;
   font-size: 0.82rem;
@@ -595,13 +821,13 @@
   transition: var(--transition);
 }
 
+.btn-action:hover {
+  transform: translateY(-1px);
+}
+
 .btn-action.edit {
   background: var(--blue-soft);
   color: var(--blue-main);
-}
-
-.btn-action.edit:hover {
-  background: #dbeafe;
 }
 
 .btn-action.delete,
@@ -610,25 +836,18 @@
   color: var(--red-main);
 }
 
-.btn-action.delete:hover,
-.btn-action.delete-db:hover {
-  background: #fee2e2;
-}
-
 .btn-action.reactivate {
   background: var(--green-soft);
   color: var(--green-main);
 }
 
-.btn-action.reactivate:hover {
-  background: #dcfce7;
-}
-
 .btn-action.select {
   width: auto;
-  padding: 7px 12px;
+  padding: 0.55rem 0.85rem;
+
   background: var(--orange-main);
   color: var(--white);
+
   text-transform: uppercase;
   font-size: 0.75rem;
 }
@@ -637,59 +856,66 @@
   background: #c2410c;
 }
 
-
-/* =========================================================
-   12. ESTADO VACÍO
-   Mensaje cuando no existen resultados.
-   ========================================================= */
+/* EMPTY */
 
 .empty-state {
-  padding: 50px 20px !important;
+  padding: 2rem !important;
   text-align: center;
-  color: var(--text-light);
 }
 
-.empty-state i {
-  display: block;
-  font-size: 2.6rem;
-  margin-bottom: 15px;
-  opacity: 0.55;
+.empty-box {
+  display: grid;
+  place-items: center;
+  gap: 0.45rem;
+
+  padding: 1.6rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 20px;
+
+  background: var(--bg-soft);
 }
 
-.empty-state p {
-  font-size: 0.95rem;
-  font-weight: 800;
+.empty-box i {
+  color: var(--primary-color);
+  font-size: 2rem;
 }
 
+.empty-box strong {
+  color: var(--secondary-color);
+  font-size: 1rem;
+}
 
-/* =========================================================
-   13. PAGINACIÓN
-   Navegación entre páginas.
-   ========================================================= */
+.empty-box span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* PAGINATION */
 
 .pagination {
-  margin-top: 24px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 0.9rem;
   flex-wrap: wrap;
+
+  margin-top: 1.5rem;
 }
 
 .pagination-link,
 .pagination-current {
-  min-height: 40px;
-  border-radius: 999px;
-  padding: 9px 14px;
+  min-height: 42px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .pagination-link {
@@ -709,60 +935,130 @@
   color: var(--gray-main);
 }
 
+/* SWEETALERT CUSTOM */
 
-/* =========================================================
-   14. RESPONSIVE - LAPTOPS PEQUEÑAS
-   Ajuste de espacios.
-   ========================================================= */
+.address-modal-content {
+  display: grid;
+  place-items: center;
+  gap: 0.9rem;
+
+  text-align: center;
+}
+
+.address-modal-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 18px;
+
+  background: var(--green-soft);
+  color: var(--green-main);
+
+  font-size: 1.6rem;
+}
+
+.address-box,
+.swal-warning-box {
+  width: 100%;
+
+  padding: 0.9rem;
+  border-radius: 14px;
+
+  background: var(--bg-soft);
+  color: var(--secondary-color);
+
+  font-weight: 800;
+}
+
+.maps-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.75rem 1rem;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+
+  background: var(--green-soft);
+  color: var(--green-main);
+
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.swal-warning-box {
+  margin-top: 0.9rem;
+
+  border: 1px solid #fecaca;
+  background: var(--red-soft);
+  color: var(--red-main);
+
+  font-size: 0.86rem;
+}
+
+/* ANIMATION */
+
+.row-animate {
+  animation: rowFadeIn 0.32s ease both;
+}
+
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 1200px) {
   .student-list-header,
   .filter-bar,
   .list-body {
-    padding-left: 26px;
-    padding-right: 26px;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
   }
 
   .student-table th,
   .student-table td {
-    padding: 15px 14px;
+    padding: 0.9rem;
   }
 }
 
-
-/* =========================================================
-   15. RESPONSIVE - TABLETS
-   Cabecera y filtros se apilan.
-   ========================================================= */
-
 @media (max-width: 992px) {
   .student-list-header {
+    align-items: flex-start;
     flex-direction: column;
-    align-items: stretch;
   }
 
   .header-actions {
+    width: 100%;
     justify-content: flex-start;
   }
 
   .student-filter-form {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 220px;
   }
 
-  .search-box {
+  .filter-actions {
     grid-column: 1 / -1;
   }
 }
 
-
-/* =========================================================
-   16. RESPONSIVE - CELULARES
-   La tabla se convierte en tarjetas.
-   ========================================================= */
-
 @media (max-width: 768px) {
-  .student-list-header {
-    padding: 24px 22px;
+  .student-list-header,
+  .filter-bar,
+  .list-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   .header-info h3 {
@@ -781,29 +1077,24 @@
     justify-content: center;
   }
 
-  .selection-banner {
-    margin: 18px 22px 0;
-  }
-
-  .filter-bar {
-    padding: 22px;
+  .selection-banner,
+  .list-status-panel {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
   }
 
   .student-filter-form {
     grid-template-columns: 1fr;
   }
 
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .btn-filter-student,
   .btn-clear-student {
     width: 100%;
-  }
-
-  .btn-clear-student {
-    width: 100%;
-  }
-
-  .list-body {
-    padding: 22px;
   }
 
   .table-responsive {
@@ -825,134 +1116,125 @@
   }
 
   .student-table tbody {
+    padding: 0.85rem;
+    border-radius: 18px;
     background: var(--bg-soft);
-    padding: 14px;
   }
 
   .student-table tr {
-    background: var(--white);
+    margin-bottom: 0.9rem;
+    padding: 0.9rem;
     border: 1px solid var(--border-color);
-    border-radius: 14px;
+    border-radius: 18px;
+
+    background: var(--white);
     box-shadow: var(--shadow-soft);
-    padding: 14px;
-    margin-bottom: 14px;
+  }
+
+  .student-table tbody td:first-child,
+  .student-table tbody td:last-child {
+    border-radius: 0;
   }
 
   .student-table td {
-    border-bottom: none;
-    padding: 10px 0;
-
     display: flex;
     justify-content: space-between;
-    gap: 14px;
+    gap: 1rem;
+
+    padding: 0.65rem 0;
 
     text-align: right;
+    background: transparent;
   }
 
   .student-table td::before {
     content: attr(data-label);
+
     color: var(--text-muted);
     font-weight: 900;
     text-align: left;
     flex-shrink: 0;
   }
 
-  .student-table td[data-label="Nombre Completo"] {
+  .student-table td[data-label="Nombre completo"] {
     display: block;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 14px;
-    margin-bottom: 4px;
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.25rem;
   }
 
-  .student-table td[data-label="Nombre Completo"]::before {
+  .student-table td[data-label="Nombre completo"]::before {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 0.45rem;
   }
 
   .student-table td[data-label="Acciones"] {
     display: block;
     text-align: left;
     border-top: 1px solid var(--border-color);
-    padding-top: 14px;
-    margin-top: 6px;
+    padding-top: 0.9rem;
+    margin-top: 0.35rem;
   }
 
   .student-table td[data-label="Acciones"]::before {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 0.65rem;
   }
 
-  .actions-cell {
-    text-align: left;
+  .action-buttons {
+    justify-content: flex-start;
   }
 
   .btn-action.select {
     width: 100%;
   }
-
-  .empty-state::before {
-    display: none;
-  }
 }
-
-
-/* =========================================================
-   17. RESPONSIVE - CELULARES PEQUEÑOS
-   Reduce tamaños y espacios.
-   ========================================================= */
 
 @media (max-width: 480px) {
   .student-list-card {
-    border-radius: 14px;
+    border-radius: 18px;
   }
 
-  .student-list-header {
-    padding: 22px 18px;
+  .student-list-header,
+  .filter-bar,
+  .list-body {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .header-info h3 {
     font-size: 1.08rem;
   }
 
-  .header-info p {
-    font-size: 0.86rem;
-  }
-
-  .selection-banner {
-    margin: 16px 18px 0;
+  .header-info p,
+  .selection-banner,
+  .list-status-panel {
     font-size: 0.84rem;
   }
 
-  .filter-bar {
-    padding: 20px 18px;
-  }
-
-  .list-body {
-    padding: 20px 18px;
+  .selection-banner,
+  .list-status-panel {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   .student-table tbody {
-    padding: 12px;
+    padding: 0.7rem;
   }
 
   .student-table tr {
-    padding: 13px;
+    padding: 0.8rem;
   }
 
   .student-table td {
     font-size: 0.86rem;
-    gap: 12px;
   }
 
   .badge,
   .ci-badge,
   .contact-badge {
     font-size: 0.74rem;
-  }
-
-  .pagination {
-    gap: 10px;
   }
 
   .pagination-link,

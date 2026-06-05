@@ -3,12 +3,6 @@
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
-
-/* =========================================================
-   1. VARIABLES LOCALES
-   Mantienen coherencia visual con el panel administrativo.
-   ========================================================= */
-
 :root {
   --primary-color: #c62828;
   --primary-hover: #b71c1c;
@@ -41,46 +35,60 @@
   --gray-main: #475569;
 
   --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
-  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 14px 34px rgba(15, 23, 42, 0.08);
 
-  --radius-md: 14px;
-  --radius-lg: 18px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 
   --transition: all 0.25s ease;
 }
 
-
-/* =========================================================
-   2. CONTENEDOR GENERAL
-   Agrupa toda la vista del listado de tutores.
-   ========================================================= */
+/* GENERAL */
 
 .tutor-list-page {
   width: 100%;
 }
 
 .tutor-list-card {
-  background: var(--white);
+  overflow: hidden;
+
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
+
+  background: var(--white);
+  box-shadow: var(--shadow-medium);
 }
 
-
-/* =========================================================
-   3. CABECERA DEL LISTADO
-   Título, descripción, buscador y botón de registro.
-   ========================================================= */
+/* HEADER */
 
 .tutor-list-header {
-  padding: 26px 30px;
-  border-bottom: 1px solid var(--border-color);
-
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 22px;
+
+  padding: 2rem;
+  border-bottom: 1px solid var(--border-color);
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    var(--white);
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .header-info h3 {
@@ -88,10 +96,12 @@
   align-items: center;
   gap: 10px;
 
+  margin: 0 0 6px;
+
   color: var(--secondary-color);
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
 .header-info h3 i {
@@ -99,57 +109,73 @@
 }
 
 .header-info p {
+  margin: 0;
+
   color: var(--text-muted);
   font-size: 0.92rem;
 }
 
 .header-actions {
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: flex-end;
   gap: 14px;
   flex-wrap: wrap;
 }
 
-
-/* =========================================================
-   4. BUSCADOR Y FILTRO
-   Formulario de búsqueda por nombre, CI u ocupación.
-   ========================================================= */
+/* SEARCH */
 
 .search-form {
   display: flex;
-  align-items: center;
+  align-items: end;
   gap: 10px;
   flex-wrap: wrap;
 }
 
 .search-box {
   position: relative;
-  min-width: 260px;
+  min-width: 280px;
+}
+
+.search-box label {
+  display: block;
+
+  margin-bottom: 0.45rem;
+
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.input-with-icon {
+  position: relative;
 }
 
 .search-icon {
   position: absolute;
   left: 14px;
   top: 50%;
-  transform: translateY(-50%);
+
   color: var(--text-light);
   font-size: 0.95rem;
+
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .search-box input {
   width: 100%;
-  min-height: 42px;
-  padding: 10px 14px 10px 40px;
+  min-height: 48px;
 
+  padding: 0.8rem 2.6rem 0.8rem 2.7rem;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--white);
+  border-radius: 14px;
 
+  background: var(--white);
   color: var(--text-main);
+
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 
   transition: var(--transition);
 }
@@ -160,20 +186,41 @@
   outline: none;
 }
 
+.btn-clear-input {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #e2e8f0;
+  color: var(--gray-main);
+
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
 .btn-filter-tutor,
 .btn-clear-tutor,
 .btn-add-tutor {
-  min-height: 42px;
-  border-radius: 10px;
+  min-height: 48px;
+  border-radius: 14px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 900;
   text-decoration: none;
 
   cursor: pointer;
@@ -181,7 +228,8 @@
 }
 
 .btn-filter-tutor {
-  padding: 10px 15px;
+  padding: 0.8rem 1rem;
+
   background: var(--secondary-color);
   color: var(--white);
   border: 1px solid var(--secondary-color);
@@ -192,7 +240,8 @@
 }
 
 .btn-clear-tutor {
-  width: 42px;
+  padding: 0.8rem 1rem;
+
   background: var(--white);
   color: var(--primary-color);
   border: 1px solid var(--border-color);
@@ -203,71 +252,124 @@
 }
 
 .btn-add-tutor {
-  padding: 10px 16px;
+  padding: 0.8rem 1.1rem;
+
   background: var(--primary-color);
   color: var(--white);
   border: 1px solid var(--primary-color);
+  box-shadow: 0 10px 22px rgba(198, 40, 40, 0.18);
 }
 
 .btn-add-tutor:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
+/* PANELS */
 
-/* =========================================================
-   5. MENSAJES INFORMATIVOS
-   Resultados de búsqueda y modo selección.
-   ========================================================= */
-
-.search-results-info {
-  margin: 20px 30px 0;
-  padding: 13px 15px;
-
-  background: var(--blue-soft);
-  color: var(--blue-main);
-  border-left: 4px solid var(--blue-main);
-  border-radius: 10px;
-
+.search-results-info,
+.selection-banner,
+.list-status-panel {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.9rem;
+
+  margin: 1.25rem 2rem 0;
+  padding: 1rem 1.15rem;
+  border-radius: 18px;
+}
+
+.search-results-info {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid var(--blue-main);
 
   font-size: 0.9rem;
   font-weight: 700;
 }
 
 .selection-banner {
-  margin: 20px 30px 0;
-  padding: 16px 18px;
-
   background: var(--yellow-soft);
   color: #92400e;
+  border: 1px solid #fde68a;
   border-left: 4px solid var(--yellow-main);
-  border-radius: 12px;
-
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
 
   font-size: 0.92rem;
   line-height: 1.5;
 }
 
-.selection-banner i {
-  color: var(--yellow-main);
-  font-size: 1.5rem;
-  margin-top: 2px;
+.list-status-panel {
+  border: 1px solid #dbeafe;
+  background: var(--blue-soft);
 }
 
+.selection-icon,
+.status-panel-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
 
-/* =========================================================
-   6. CUERPO Y TABLA
-   En escritorio funciona como tabla tradicional.
-   ========================================================= */
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+}
+
+.selection-icon {
+  background: #fef3c7;
+  color: var(--yellow-main);
+}
+
+.status-panel-icon {
+  background: #dbeafe;
+  color: var(--blue-main);
+}
+
+.selection-banner strong,
+.list-status-panel strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+}
+
+.selection-banner span,
+.list-status-panel span {
+  display: block;
+  margin-top: 0.15rem;
+
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* BODY */
 
 .list-body {
-  padding: 24px 30px 30px;
+  padding: 1.4rem 2rem 2rem;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 0.9rem;
+}
+
+.table-toolbar strong {
+  display: block;
+
+  color: var(--secondary-color);
+  font-size: 0.98rem;
+}
+
+.table-toolbar span {
+  display: block;
+  margin-top: 0.2rem;
+
+  color: var(--text-muted);
+  font-size: 0.84rem;
 }
 
 .table-responsive {
@@ -277,39 +379,52 @@
 
 .tutor-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 0.55rem;
 }
 
 .tutor-table thead {
-  background: var(--bg-soft);
+  background: transparent;
 }
 
 .tutor-table th {
-  padding: 15px 16px;
+  padding: 0.9rem 1rem;
+
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 900;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
 .tutor-table td {
-  padding: 16px;
+  padding: 1rem;
+
+  background: var(--white);
   color: var(--text-main);
+
   font-size: 0.9rem;
-  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
 }
 
 .tutor-table tbody tr {
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
   transition: var(--transition);
 }
 
 .tutor-table tbody tr:hover {
-  background: var(--bg-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.tutor-table tbody td:first-child {
+  border-radius: 16px 0 0 16px;
+}
+
+.tutor-table tbody td:last-child {
+  border-radius: 0 16px 16px 0;
 }
 
 .number-column {
@@ -321,43 +436,51 @@
   text-align: center;
 }
 
-.selection-column {
-  background: #fef3c7;
-}
-
-.selection-cell {
-  background: #fffbeb;
-  text-align: center;
-}
-
-
-/* =========================================================
-   7. DATOS DEL TUTOR
-   Nombre, CI, WhatsApp y ocupación.
-   ========================================================= */
+/* DATA */
 
 .row-number {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-
-  background: var(--gray-soft);
-  color: var(--gray-main);
+  width: 34px;
+  height: 34px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 999px;
+
+  background: var(--gray-soft);
+  color: var(--gray-main);
 
   font-size: 0.8rem;
   font-weight: 900;
 }
 
 .tutor-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.tutor-avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
   display: grid;
-  gap: 3px;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: var(--blue-soft);
+  color: var(--blue-main);
+
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .tutor-name {
+  display: block;
+
   color: var(--secondary-color);
   font-weight: 900;
 }
@@ -367,34 +490,31 @@
   font-size: 0.78rem;
 }
 
-.ci-badge {
-  background: var(--blue-soft);
-  color: var(--blue-main);
-  padding: 6px 10px;
-  border-radius: 999px;
-
+.ci-badge,
+.whatsapp-link,
+.occupation-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
+
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
 
   font-size: 0.82rem;
   font-weight: 900;
+  white-space: nowrap;
+}
+
+.ci-badge {
+  background: var(--blue-soft);
+  color: var(--blue-main);
 }
 
 .whatsapp-link {
-  color: var(--green-main);
   background: var(--green-soft);
-  border-radius: 999px;
-  padding: 7px 10px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-
+  color: var(--green-main);
   text-decoration: none;
-  font-size: 0.84rem;
-  font-weight: 900;
-
   transition: var(--transition);
 }
 
@@ -402,25 +522,36 @@
   background: #dcfce7;
 }
 
+.occupation-badge {
+  background: var(--gray-soft);
+  color: var(--gray-main);
+}
 
-/* =========================================================
-   8. BOTONES DE ACCIÓN
-   Editar, eliminar, bloquear y seleccionar.
-   ========================================================= */
+/* ACTIONS */
 
-.actions-cell {
+.actions-cell,
+.selection-cell {
   text-align: center;
 }
 
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
 .btn-action {
-  min-height: 36px;
-  min-width: 36px;
-  border-radius: 9px;
+  min-height: 38px;
+  min-width: 38px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
+
+  border-radius: 12px;
 
   text-decoration: none;
   font-size: 0.82rem;
@@ -429,22 +560,18 @@
   transition: var(--transition);
 }
 
+.btn-action:hover {
+  transform: translateY(-1px);
+}
+
 .btn-action.edit {
   background: var(--blue-soft);
   color: var(--blue-main);
 }
 
-.btn-action.edit:hover {
-  background: #dbeafe;
-}
-
 .btn-action.delete {
   background: var(--red-soft);
   color: var(--red-main);
-}
-
-.btn-action.delete:hover {
-  background: #fee2e2;
 }
 
 .btn-action.locked {
@@ -455,74 +582,79 @@
 
 .btn-action.select {
   width: auto;
-  min-height: 36px;
-  padding: 7px 12px;
+  padding: 0.55rem 0.85rem;
 
   background: var(--yellow-main);
   color: var(--white);
 
-  border-radius: 8px;
-  font-size: 0.75rem;
   text-transform: uppercase;
+  font-size: 0.75rem;
 }
 
 .btn-action.select:hover {
   background: #d97706;
 }
 
-
-/* =========================================================
-   9. ESTADO VACÍO
-   Mensaje cuando no existen registros.
-   ========================================================= */
+/* EMPTY */
 
 .empty-state {
-  padding: 46px 20px !important;
+  padding: 2rem !important;
   text-align: center;
-  color: var(--text-muted);
 }
 
-.empty-state i {
-  display: block;
-  color: #cbd5e1;
+.empty-box {
+  display: grid;
+  place-items: center;
+  gap: 0.45rem;
+
+  padding: 1.6rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 20px;
+
+  background: var(--bg-soft);
+}
+
+.empty-box i {
+  color: var(--primary-color);
   font-size: 2rem;
-  margin-bottom: 10px;
 }
 
-.empty-state span {
-  font-size: 0.95rem;
-  font-weight: 800;
+.empty-box strong {
+  color: var(--secondary-color);
+  font-size: 1rem;
 }
 
+.empty-box span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
 
-/* =========================================================
-   10. PAGINACIÓN
-   Navegación entre páginas de tutores.
-   ========================================================= */
+/* PAGINATION */
 
 .pagination {
-  margin-top: 24px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 0.9rem;
   flex-wrap: wrap;
+
+  margin-top: 1.5rem;
 }
 
 .pagination-link,
 .pagination-current {
-  min-height: 40px;
-  border-radius: 999px;
-  padding: 9px 14px;
+  min-height: 42px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .pagination-link {
@@ -542,38 +674,64 @@
   color: var(--gray-main);
 }
 
+/* SWEETALERT */
 
-/* =========================================================
-   11. RESPONSIVE - LAPTOPS PEQUEÑAS
-   Ajusta separación de cabecera y tabla.
-   ========================================================= */
+.swal-warning-box {
+  width: 100%;
+
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+
+  background: var(--red-soft);
+  color: var(--red-main);
+
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+/* ANIMATION */
+
+.row-animate {
+  animation: rowFadeIn 0.32s ease both;
+}
+
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 1200px) {
   .tutor-list-header,
   .list-body {
-    padding-left: 26px;
-    padding-right: 26px;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
   }
 
   .tutor-table th,
   .tutor-table td {
-    padding: 15px 14px;
+    padding: 0.9rem;
   }
 }
 
-
-/* =========================================================
-   12. RESPONSIVE - TABLETS
-   La cabecera y los filtros se apilan.
-   ========================================================= */
-
 @media (max-width: 992px) {
   .tutor-list-header {
+    align-items: flex-start;
     flex-direction: column;
-    align-items: stretch;
   }
 
   .header-actions {
+    width: 100%;
     justify-content: flex-start;
   }
 
@@ -587,15 +745,11 @@
   }
 }
 
-
-/* =========================================================
-   13. RESPONSIVE - CELULARES
-   La tabla se convierte en tarjetas.
-   ========================================================= */
-
 @media (max-width: 768px) {
-  .tutor-list-header {
-    padding: 24px 22px;
+  .tutor-list-header,
+  .list-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   .header-info h3 {
@@ -619,17 +773,11 @@
     width: 100%;
   }
 
-  .btn-clear-tutor {
-    width: 100%;
-  }
-
   .search-results-info,
-  .selection-banner {
-    margin: 18px 22px 0;
-  }
-
-  .list-body {
-    padding: 22px;
+  .selection-banner,
+  .list-status-panel {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
   }
 
   .table-responsive {
@@ -651,49 +799,59 @@
   }
 
   .tutor-table tbody {
+    padding: 0.85rem;
+    border-radius: 18px;
     background: var(--bg-soft);
-    padding: 14px;
   }
 
   .tutor-table tr {
-    background: var(--white);
+    margin-bottom: 0.9rem;
+    padding: 0.9rem;
     border: 1px solid var(--border-color);
-    border-radius: 14px;
+    border-radius: 18px;
+
+    background: var(--white);
     box-shadow: var(--shadow-soft);
-    padding: 14px;
-    margin-bottom: 14px;
+  }
+
+  .tutor-table tbody td:first-child,
+  .tutor-table tbody td:last-child {
+    border-radius: 0;
   }
 
   .tutor-table td {
-    border-bottom: none;
-    padding: 10px 0;
-
     display: flex;
     justify-content: space-between;
-    gap: 14px;
+    gap: 1rem;
+
+    padding: 0.65rem 0;
 
     text-align: right;
+    background: transparent;
   }
 
   .tutor-table td::before {
     content: attr(data-label);
+
     color: var(--text-muted);
     font-weight: 900;
     text-align: left;
     flex-shrink: 0;
   }
 
+  .tutor-table td[data-label="Nombre completo"],
   .tutor-table td[data-label="Nombre Completo"] {
     display: block;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 14px;
-    margin-bottom: 4px;
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.25rem;
   }
 
+  .tutor-table td[data-label="Nombre completo"]::before,
   .tutor-table td[data-label="Nombre Completo"]::before {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 0.45rem;
   }
 
   .tutor-table td[data-label="Acciones"],
@@ -701,79 +859,69 @@
     display: block;
     text-align: left;
     border-top: 1px solid var(--border-color);
-    padding-top: 14px;
-    margin-top: 6px;
+    padding-top: 0.9rem;
+    margin-top: 0.35rem;
   }
 
   .tutor-table td[data-label="Acciones"]::before,
   .tutor-table td[data-label="Seleccionar"]::before {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 0.65rem;
   }
 
-  .actions-cell,
-  .selection-cell {
-    background: transparent;
-    text-align: left;
+  .action-buttons {
+    justify-content: flex-start;
   }
 
   .btn-action.select {
     width: 100%;
   }
-
-  .empty-state::before {
-    display: none;
-  }
 }
-
-
-/* =========================================================
-   14. RESPONSIVE - CELULARES PEQUEÑOS
-   Reduce espacios para evitar desbordes.
-   ========================================================= */
 
 @media (max-width: 480px) {
   .tutor-list-card {
-    border-radius: 14px;
+    border-radius: 18px;
   }
 
-  .tutor-list-header {
-    padding: 22px 18px;
+  .tutor-list-header,
+  .list-body {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .header-info h3 {
     font-size: 1.08rem;
   }
 
-  .header-info p {
-    font-size: 0.86rem;
-  }
-
-  .search-results-info,
-  .selection-banner {
-    margin: 16px 18px 0;
+  .header-info p,
+  .selection-banner,
+  .list-status-panel {
     font-size: 0.84rem;
   }
 
-  .list-body {
-    padding: 20px 18px;
+  .search-results-info,
+  .selection-banner,
+  .list-status-panel {
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   .tutor-table tbody {
-    padding: 12px;
+    padding: 0.7rem;
   }
 
   .tutor-table tr {
-    padding: 13px;
+    padding: 0.8rem;
   }
 
   .tutor-table td {
     font-size: 0.86rem;
-    gap: 12px;
   }
 
-  .pagination {
-    gap: 10px;
+  .ci-badge,
+  .whatsapp-link,
+  .occupation-badge {
+    font-size: 0.74rem;
   }
 
   .pagination-link,

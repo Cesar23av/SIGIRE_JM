@@ -1,137 +1,296 @@
 {% load static %}
+
 <div id="reporte-inscripciones" class="accordion-content">
-  <link rel="stylesheet" href="{% static 'accounts/css/reportes_inscripciones.css' %}">
-  <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+  <div class="inscriptions-report-header">
     <div>
+      <span class="inscriptions-report-label">
+        <i class="fa-solid fa-file-signature"></i>
+        Control de inscripciones
+      </span>
+
       <h2>Reporte de Inscripciones</h2>
-      <p>Resumen de inscripciones por gestión, grado, paralelo y estado documental.</p>
+
+      <p>
+        Resumen de inscripciones por gestión, grado, paralelo y estado documental.
+      </p>
     </div>
-    <button class="print-btn" onclick="window.print()">
-      <i class="fa-solid fa-print"></i> Imprimir / PDF
+
+    <button type="button" class="print-btn js-print-report">
+      <i class="fa-solid fa-print"></i>
+      Imprimir / PDF
     </button>
   </div>
 
-  <div class="report-summary">
-    <div class="summary-card total">
-      <h4>Total Inscripciones</h4>
-      <div class="number">{{ total_inscripciones }}</div>
+  <div class="inscriptions-summary-grid">
+    <div class="inscriptions-summary-card total">
+      <div class="inscriptions-summary-icon">
+        <i class="fa-solid fa-file-lines"></i>
+      </div>
+
+      <div>
+        <h4>Total inscripciones</h4>
+        <div class="number">{{ total_inscripciones }}</div>
+      </div>
     </div>
-    <div class="summary-card inscritos">
-      <h4>Documentación Completa</h4>
-      <div class="number">{{ doc_completa }}</div>
+
+    <div class="inscriptions-summary-card complete">
+      <div class="inscriptions-summary-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <div>
+        <h4>Documentación completa</h4>
+        <div class="number">{{ doc_completa }}</div>
+      </div>
     </div>
-    <div class="summary-card sin-inscripcion">
-      <h4>Documentación Pendiente</h4>
-      <div class="number">{{ doc_pendiente }}</div>
+
+    <div class="inscriptions-summary-card pending">
+      <div class="inscriptions-summary-icon">
+        <i class="fa-solid fa-clock"></i>
+      </div>
+
+      <div>
+        <h4>Documentación pendiente</h4>
+        <div class="number">{{ doc_pendiente }}</div>
+      </div>
     </div>
   </div>
 
-  <form method="GET" action="{% url 'reportes' %}#reporte-inscripciones" class="filter-bar">
-    <input type="text" name="q_ins" placeholder="Buscar por CI, nombres o apellidos..." value="{{ ins_query }}">
-    <select name="gestion">
-      <option value="">Todas las gestiones</option>
-      {% for g in gestiones_opciones %}
-        <option value="{{ g.id }}" {% if gestion_filtro|slugify == g.id|slugify %}selected{% endif %}>{{ g.anio }}</option>
-      {% endfor %}
-    </select>
-    <select name="estado_doc">
-      <option value="">Todos los estados</option>
-      {% for val, label in doc_choices %}
-        <option value="{{ val }}" {% if estado_doc_filtro == val %}selected{% endif %}>{{ label }}</option>
-      {% endfor %}
-    </select>
-    <span style="color:#64748b;font-size:0.8rem;white-space:nowrap;">Inicio:</span>
-    <input type="date" name="fecha_desde" value="{{ fecha_desde }}" title="Fecha de inicio" style="width:140px;">
-    <span style="color:#64748b;font-size:0.8rem;white-space:nowrap;">Fin:</span>
-    <input type="date" name="fecha_hasta" value="{{ fecha_hasta }}" title="Fecha de fin" style="width:140px;">
-    <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
-    <a href="{% url 'reportes' %}" class="clear-btn" data-ajax-ins><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
-    <span style="color:#94a3b8;font-size:0.8rem;margin-left:auto;">
-      F. Registro
-    </span>
+  <form method="get"
+        action="{% url 'reportes' %}#reporte-inscripciones"
+        class="inscriptions-filter-form">
+
+    <div class="inscriptions-filter-group search">
+      <label for="inscriptionSearch">Buscar estudiante</label>
+
+      <div class="inscriptions-input-icon">
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input type="text"
+               id="inscriptionSearch"
+               name="q_ins"
+               placeholder="CI, nombres o apellidos"
+               value="{{ ins_query }}" />
+      </div>
+    </div>
+
+    <div class="inscriptions-filter-group">
+      <label for="inscriptionGestion">Gestión</label>
+
+      <select name="gestion" id="inscriptionGestion">
+        <option value="">Todas las gestiones</option>
+
+        {% for g in gestiones_opciones %}
+          <option value="{{ g.id }}"
+                  {% if gestion_filtro|slugify == g.id|slugify %}selected{% endif %}>
+            {{ g.anio }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="inscriptions-filter-group">
+      <label for="inscriptionEstadoDoc">Estado documental</label>
+
+      <select name="estado_doc" id="inscriptionEstadoDoc">
+        <option value="">Todos los estados</option>
+
+        {% for val, label in doc_choices %}
+          <option value="{{ val }}" {% if estado_doc_filtro == val %}selected{% endif %}>
+            {{ label }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="inscriptions-filter-group">
+      <label for="fechaDesde">Desde</label>
+
+      <input type="date"
+             id="fechaDesde"
+             name="fecha_desde"
+             value="{{ fecha_desde }}"
+             title="Fecha de inicio" />
+    </div>
+
+    <div class="inscriptions-filter-group">
+      <label for="fechaHasta">Hasta</label>
+
+      <input type="date"
+             id="fechaHasta"
+             name="fecha_hasta"
+             value="{{ fecha_hasta }}"
+             title="Fecha de fin" />
+    </div>
+
+    <div class="inscriptions-filter-actions">
+      <button type="submit" class="inscriptions-filter-btn">
+        <i class="fa-solid fa-filter"></i>
+        Filtrar
+      </button>
+
+      <a href="{% url 'reportes' %}#reporte-inscripciones"
+         class="inscriptions-clear-btn"
+         data-ajax-ins>
+        <i class="fa-solid fa-rotate-left"></i>
+        Limpiar
+      </a>
+    </div>
   </form>
 
-  <div class="table-responsive">
-    <table class="student-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Estudiante</th>
-          <th>C.I.</th>
-          <th>Nivel</th>
-          <th>Grado</th>
-          <th>Paralelo</th>
-          <th>Gestión</th>
-          <th>Estado Doc.</th>
-          <th>Rude</th>
-          <th>F. Registro</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ins in inscripciones %}
+  <div class="inscriptions-table-card">
+    <div class="inscriptions-table-responsive">
+      <table class="inscriptions-table">
+        <thead>
           <tr>
-            <td>{{ inscripciones.start_index|add:forloop.counter0 }}</td>
-            <td><strong>{{ ins.estudiante.apellido_paterno }} {{ ins.estudiante.apellido_materno }}, {{ ins.estudiante.nombres }}</strong></td>
-            <td>{{ ins.estudiante.cedula_identidad }}</td>
-            <td>{{ ins.paralelo.grado.nivel.nombre }}</td>
-            <td>{{ ins.paralelo.grado.nombre }}</td>
-            <td>{{ ins.paralelo.letra }}</td>
-            <td>{{ ins.gestion.anio }}</td>
-            <td>
-              {% if ins.estado_documental == 'completa' %}
-                <span class="doc-badge doc-completa">Completa</span>
-              {% elif ins.estado_documental == 'pendiente' %}
-                <span class="doc-badge doc-pendiente">Pendiente</span>
-              {% else %}
-                <span class="doc-badge doc-vencida">Vencida</span>
-              {% endif %}
-            </td>
-            <td>{{ ins.rude|default:"—" }}</td>
-            <td>{{ ins.fecha_registro|date:"d/m/Y" }}</td>
+            <th>#</th>
+            <th>Estudiante</th>
+            <th>C.I.</th>
+            <th>Nivel</th>
+            <th>Grado</th>
+            <th>Paralelo</th>
+            <th>Gestión</th>
+            <th>Estado doc.</th>
+            <th>RUDE</th>
+            <th>F. Registro</th>
           </tr>
-        {% empty %}
-          <tr>
-            <td colspan="10" style="text-align:center;padding:40px;color:#94a3b8;">
-              <i class="fa-solid fa-file-circle-exclamation" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-              No se encontraron inscripciones
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {% for ins in inscripciones %}
+            <tr>
+              <td data-label="#">
+                <span class="inscriptions-row-number">
+                  {{ inscripciones.start_index|add:forloop.counter0 }}
+                </span>
+              </td>
+
+              <td data-label="Estudiante">
+                <div class="inscriptions-student">
+                  <div class="inscriptions-student-avatar">
+                    {{ ins.estudiante.nombres|slice:":1" }}
+                  </div>
+
+                  <div>
+                    <strong>
+                      {{ ins.estudiante.apellido_paterno }}
+                      {{ ins.estudiante.apellido_materno }},
+                      {{ ins.estudiante.nombres }}
+                    </strong>
+                  </div>
+                </div>
+              </td>
+
+              <td data-label="C.I.">
+                <span class="inscriptions-ci">
+                  {{ ins.estudiante.cedula_identidad }}
+                </span>
+              </td>
+
+              <td data-label="Nivel">
+                <span class="inscriptions-level-badge">
+                  {{ ins.paralelo.grado.nivel.nombre }}
+                </span>
+              </td>
+
+              <td data-label="Grado">
+                <strong>{{ ins.paralelo.grado.nombre }}</strong>
+              </td>
+
+              <td data-label="Paralelo">
+                <span class="inscriptions-parallel-badge">
+                  {{ ins.paralelo.letra }}
+                </span>
+              </td>
+
+              <td data-label="Gestión">
+                <span class="inscriptions-gestion-badge">
+                  {{ ins.gestion.anio }}
+                </span>
+              </td>
+
+              <td data-label="Estado doc.">
+                {% if ins.estado_documental == "completa" %}
+                  <span class="inscriptions-status-badge complete">
+                    <i class="fa-solid fa-circle-check"></i>
+                    Completa
+                  </span>
+                {% elif ins.estado_documental == "pendiente" %}
+                  <span class="inscriptions-status-badge pending">
+                    <i class="fa-solid fa-clock"></i>
+                    Pendiente
+                  </span>
+                {% else %}
+                  <span class="inscriptions-status-badge expired">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Vencida
+                  </span>
+                {% endif %}
+              </td>
+
+              <td data-label="RUDE">
+                <span class="inscriptions-rude">
+                  {{ ins.rude|default:"—" }}
+                </span>
+              </td>
+
+              <td data-label="F. Registro">
+                {{ ins.fecha_registro|date:"d/m/Y" }}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="10" class="inscriptions-empty-cell">
+                <div class="inscriptions-empty">
+                  <i class="fa-solid fa-file-circle-exclamation"></i>
+                  <h4>No se encontraron inscripciones</h4>
+                  <p>No existen inscripciones con los filtros seleccionados.</p>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   {% if inscripciones.paginator.num_pages > 1 %}
-  <div class="pagination">
-    {% if inscripciones.has_previous %}
-      <a href="?page_ins=1{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&laquo;</a>
-      <a href="?page_ins={{ inscripciones.previous_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&lsaquo;</a>
-    {% else %}
-      <span class="disabled">&laquo;</span>
-      <span class="disabled">&lsaquo;</span>
-    {% endif %}
-    {% for num in inscripciones.paginator.page_range %}
-      {% if num == inscripciones.number %}
-        <span class="current">{{ num }}</span>
-      {% elif num > inscripciones.number|add:"-3" and num < inscripciones.number|add:"3" %}
-        <a href="?page_ins={{ num }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">{{ num }}</a>
+    <div class="inscriptions-pagination">
+      {% if inscripciones.has_previous %}
+        <a data-ajax-ins href="?page_ins=1{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&laquo;</a>
+
+        <a data-ajax-ins href="?page_ins={{ inscripciones.previous_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&lsaquo;</a>
+      {% else %}
+        <span class="disabled">&laquo;</span>
+        <span class="disabled">&lsaquo;</span>
       {% endif %}
-    {% endfor %}
-    {% if inscripciones.has_next %}
-      <a href="?page_ins={{ inscripciones.next_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&rsaquo;</a>
-      <a href="?page_ins={{ inscripciones.paginator.num_pages }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&raquo;</a>
-    {% else %}
-      <span class="disabled">&rsaquo;</span>
-      <span class="disabled">&raquo;</span>
-    {% endif %}
-  </div>
-  <div class="page-info">
-    Página {{ inscripciones.number }} de {{ inscripciones.paginator.num_pages }} ({{ total_inscripciones }} inscripción{{ total_inscripciones|pluralize:"es" }})
-  </div>
+
+      {% for num in inscripciones.paginator.page_range %}
+        {% if num == inscripciones.number %}
+          <span class="current">{{ num }}</span>
+        {% elif num > inscripciones.number|add:"-3" and num < inscripciones.number|add:"3" %}
+          <a data-ajax-ins href="?page_ins={{ num }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if inscripciones.has_next %}
+        <a data-ajax-ins href="?page_ins={{ inscripciones.next_page_number }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&rsaquo;</a>
+
+        <a data-ajax-ins href="?page_ins={{ inscripciones.paginator.num_pages }}{% if ins_query %}&q_ins={{ ins_query }}{% endif %}{% if gestion_filtro %}&gestion={{ gestion_filtro }}{% endif %}{% if estado_doc_filtro %}&estado_doc={{ estado_doc_filtro }}{% endif %}{% if fecha_desde %}&fecha_desde={{ fecha_desde }}{% endif %}{% if fecha_hasta %}&fecha_hasta={{ fecha_hasta }}{% endif %}#reporte-inscripciones">&raquo;</a>
+      {% else %}
+        <span class="disabled">&rsaquo;</span>
+        <span class="disabled">&raquo;</span>
+      {% endif %}
+    </div>
+
+    <div class="inscriptions-page-info">
+      Página {{ inscripciones.number }} de {{ inscripciones.paginator.num_pages }}
+      ({{ total_inscripciones }} inscripción{{ total_inscripciones|pluralize:"es" }})
+    </div>
   {% endif %}
 
   {% if total_inscripciones > 0 %}
-    <p style="text-align:right;color:#94a3b8;font-size:0.85rem;margin-top:12px;">
+    <p class="inscriptions-generated-date">
       Reporte generado el {% now "d/m/Y H:i" %}
     </p>
   {% endif %}

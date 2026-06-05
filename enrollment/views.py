@@ -494,39 +494,48 @@ def completar_documentos(request, pk):
     if request.method == "POST":
         documentos_entregados = request.POST.getlist("documentos")
 
+        obligatorios = entregas.filter(requisito__obligatorio=True)
+        obligatorios_ids = set(obligatorios.values_list("id", flat=True))
+        documentos_entregados_ids = set()
+
+        for doc_id in documentos_entregados:
+            try:
+                documentos_entregados_ids.add(int(doc_id))
+            except ValueError:
+                continue
+
+        if not obligatorios_ids.issubset(documentos_entregados_ids):
+            messages.warning(
+                request,
+                "Debe marcar todos los documentos obligatorios antes de guardar."
+            )
+            return redirect("completar_documentos", pk=inscripcion.pk)
+
         for entrega in entregas:
-            fue_entregado = str(entrega.id) in documentos_entregados
+            fue_entregado = entrega.id in documentos_entregados_ids
+
+            entrega.estado = fue_entregado
 
             if fue_entregado:
-                entrega.estado = True
-
                 if not entrega.fecha_entrega:
                     entrega.fecha_entrega = timezone.now().date()
+            else:
+                entrega.fecha_entrega = None
 
-                entrega.save()
+            entrega.save()
 
-        faltan_obligatorios = EntregaDocumento.objects.filter(
-            inscripcion=inscripcion,
-            requisito__obligatorio=True,
-            estado=False
-        ).exists()
-
-        if faltan_obligatorios:
-            inscripcion.estado_documental = "pendiente"
-        else:
-            inscripcion.estado_documental = "completa"
-            inscripcion.fecha_limite_documentos = None
-
+        inscripcion.estado_documental = "completa"
+        inscripcion.fecha_limite_documentos = None
         inscripcion.save()
 
-        messages.success(request, "Documentos actualizados correctamente.")
+        messages.success(request, "Documentación completada correctamente.")
         return redirect("list_inscripciones")
 
     return render(request, "Inscriptions/completar_documentos.html", {
         "inscripcion": inscripcion,
         "entregas": entregas,
     })
-
+    
 @require_POST
 def crear_requisito(request):
     nombre = request.POST.get('nombre_documento')

@@ -1,11 +1,14 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
 
-{% block page_title %}Detalle de Inscripción{% endblock %}
+{% block page_title %}
+  Detalle de Inscripción
+{% endblock page_title %}
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'enrollments/css/detail_enrollment.css' %}?v=3" />
+{% static "enrollments/css/detail_enrollment.css" as detail_enrollment_css %}
+<link rel="stylesheet" href="{{ detail_enrollment_css }}?v=4" />
 
 <section class="detail-page">
 
@@ -13,6 +16,11 @@
 
     <div class="detail-header">
       <div class="detail-header-info">
+        <span class="detail-page-label">
+          <i class="fa-solid fa-clipboard-check"></i>
+          Ficha de inscripción
+        </span>
+
         <h3>
           <i class="fa-solid fa-eye"></i>
           Detalle de Inscripción
@@ -28,24 +36,58 @@
         {% if inscripcion.estado_documental == "completa" %}
           <span class="status-pill complete">
             <i class="fa-solid fa-circle-check"></i>
-            Completa
+            Documentación completa
           </span>
         {% elif inscripcion.estado_documental == "pendiente" %}
           <span class="status-pill pending">
             <i class="fa-solid fa-clock"></i>
-            Pendiente
+            Documentación pendiente
           </span>
         {% elif inscripcion.estado_documental == "vencida" %}
           <span class="status-pill expired">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            Vencida
+            Documentación vencida
           </span>
         {% else %}
           <span class="status-pill neutral">
             <i class="fa-solid fa-circle-info"></i>
-            Sin estado
+            Sin estado documental
           </span>
         {% endif %}
+      </div>
+    </div>
+
+    <div class="detail-summary-panel">
+      <div class="summary-item">
+        <i class="fa-solid fa-user-graduate"></i>
+        <div>
+          <span>Estudiante</span>
+          <strong>
+            {{ inscripcion.estudiante.apellido_paterno }}
+            {{ inscripcion.estudiante.apellido_materno }},
+            {{ inscripcion.estudiante.nombres }}
+          </strong>
+        </div>
+      </div>
+
+      <div class="summary-item">
+        <i class="fa-solid fa-school"></i>
+        <div>
+          <span>Curso</span>
+          <strong>
+            {{ inscripcion.paralelo.grado.nombre }}
+            de {{ inscripcion.paralelo.grado.nivel.nombre }}
+            - {{ inscripcion.paralelo.letra }}
+          </strong>
+        </div>
+      </div>
+
+      <div class="summary-item">
+        <i class="fa-solid fa-barcode"></i>
+        <div>
+          <span>RUDE</span>
+          <strong>{{ inscripcion.rude }}</strong>
+        </div>
       </div>
     </div>
 
@@ -53,15 +95,18 @@
 
       <div class="detail-main">
 
-        <section class="detail-section">
-          <h4>
+        <section class="detail-section detail-animate">
+          <div class="section-title-row">
+            <div>
+              <span>Sección 1</span>
+              <h4>Datos del estudiante</h4>
+            </div>
             <i class="fa-solid fa-user-graduate"></i>
-            Datos del Estudiante
-          </h4>
+          </div>
 
           <div class="student-resume">
             <div class="student-avatar">
-              <i class="fa-solid fa-user-graduate"></i>
+              {{ inscripcion.estudiante.nombres|slice:":1" }}
             </div>
 
             <div class="student-data">
@@ -71,7 +116,10 @@
                 {{ inscripcion.estudiante.nombres }}
               </strong>
 
-              <span>CI: {{ inscripcion.estudiante.cedula_identidad }}</span>
+              <span>
+                <i class="fa-solid fa-id-card"></i>
+                CI: {{ inscripcion.estudiante.cedula_identidad }}
+              </span>
             </div>
           </div>
 
@@ -93,11 +141,14 @@
           </div>
         </section>
 
-        <section class="detail-section">
-          <h4>
+        <section class="detail-section detail-animate">
+          <div class="section-title-row">
+            <div>
+              <span>Sección 2</span>
+              <h4>Datos académicos</h4>
+            </div>
             <i class="fa-solid fa-school"></i>
-            Datos Académicos
-          </h4>
+          </div>
 
           <div class="info-grid">
             <div class="info-item">
@@ -126,11 +177,14 @@
           </div>
         </section>
 
-        <section class="detail-section">
-          <h4>
+        <section class="detail-section detail-animate">
+          <div class="section-title-row">
+            <div>
+              <span>Sección 3</span>
+              <h4>Tutor / Apoderado</h4>
+            </div>
             <i class="fa-solid fa-user-shield"></i>
-            Tutor / Apoderado
-          </h4>
+          </div>
 
           {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
             {% if parentesco %}
@@ -155,7 +209,15 @@
 
                 <div class="info-item">
                   <span class="info-label">Celular</span>
-                  <strong>{{ parentesco.tutor.celular }}</strong>
+                  <strong>
+                    <a href="https://wa.me/591{{ parentesco.tutor.celular }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="phone-link">
+                      <i class="fa-brands fa-whatsapp"></i>
+                      {{ parentesco.tutor.celular }}
+                    </a>
+                  </strong>
                 </div>
               </div>
             {% else %}
@@ -168,11 +230,14 @@
         </section>
 
         {% if inscripcion.observacion %}
-          <section class="detail-section">
-            <h4>
+          <section class="detail-section detail-animate">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 4</span>
+                <h4>Observaciones</h4>
+              </div>
               <i class="fa-solid fa-comment-dots"></i>
-              Observaciones
-            </h4>
+            </div>
 
             <div class="observation-box">
               {{ inscripcion.observacion }}
@@ -183,19 +248,33 @@
       </div>
 
       <aside class="detail-side">
-        <section class="documents-card">
-          <h4>
+        <section class="documents-card detail-animate">
+          <div class="section-title-row">
+            <div>
+              <span>Sección documental</span>
+              <h4>Documentación</h4>
+            </div>
             <i class="fa-solid fa-folder-open"></i>
-            Documentación
-          </h4>
+          </div>
 
           <p class="documents-hint">
             Estado de los documentos asociados a esta inscripción.
           </p>
 
-          <div class="documents-list">
+          <div class="documents-progress">
+            <div>
+              <strong id="documentsDeliveredCounter">0</strong>
+              <span>documentos entregados</span>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill" id="documentsProgressFill"></div>
+            </div>
+          </div>
+
+          <div class="documents-list" id="documentsList">
             {% for entrega in entregas %}
-              <div class="document-item">
+              <div class="document-item" data-delivered="{% if entrega.estado %}true{% else %}false{% endif %}">
                 <div class="document-icon {% if entrega.estado %}ok{% else %}pending{% endif %}">
                   {% if entrega.estado %}
                     <i class="fa-solid fa-check"></i>
@@ -222,7 +301,9 @@
                   </div>
 
                   {% if entrega.fecha_entrega %}
-                    <small>Entregado el {{ entrega.fecha_entrega|date:"d/m/Y" }}</small>
+                    <small>
+                      Entregado el {{ entrega.fecha_entrega|date:"d/m/Y" }}
+                    </small>
                   {% endif %}
                 </div>
               </div>
@@ -254,7 +335,9 @@
         Volver
       </a>
 
-      <a href="{% url 'imprimir_inscripcion' inscripcion.id %}" class="btn-print-detail">
+      <a href="{% url 'imprimir_inscripcion' inscripcion.id %}"
+         class="btn-print-detail"
+         id="btnPrintEnrollment">
         <i class="fa-solid fa-print"></i>
         Imprimir
       </a>
@@ -262,7 +345,7 @@
       {% if inscripcion.estado_documental == "pendiente" %}
         <a href="{% url 'completar_documentos' inscripcion.id %}" class="btn-primary-detail">
           <i class="fa-solid fa-folder-open"></i>
-          Completar Documentos
+          Completar documentos
         </a>
       {% endif %}
     </div>
@@ -271,4 +354,7 @@
 
 </section>
 
-{% endblock %}
+{% static "enrollments/js/detail_enrollment.js" as detail_enrollment_js %}
+<script src="{{ detail_enrollment_js }}?v=1"></script>
+
+{% endblock content %}

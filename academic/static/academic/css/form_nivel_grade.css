@@ -3,10 +3,8 @@
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
-
 /* =========================================================
-   1. VARIABLES LOCALES
-   Mantienen coherencia con el panel administrativo.
+   1. VARIABLES
    ========================================================= */
 
 :root {
@@ -29,80 +27,162 @@
 
   --green-soft: #ecfdf5;
   --green-main: #16a34a;
+  --green-dark: #166534;
 
   --red-soft: #fef2f2;
   --red-main: #dc2626;
+  --red-dark: #991b1b;
 
-  --orange-soft: #fff7ed;
-  --orange-main: #ea580c;
+  --orange-soft: #fffbeb;
+  --orange-main: #d97706;
 
   --shadow-soft: 0 4px 15px rgba(15, 23, 42, 0.05);
-  --shadow-medium: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 14px 34px rgba(15, 23, 42, 0.08);
 
   --radius-md: 14px;
-  --radius-lg: 18px;
+  --radius-lg: 24px;
 
   --transition: all 0.25s ease;
 }
 
-
 /* =========================================================
-   2. CONTENEDOR PRINCIPAL
-   Agrupa toda la pantalla de configuración académica.
+   2. CONTENEDOR GENERAL
    ========================================================= */
 
 .academic-form-page {
   width: 100%;
 }
 
-
 /* =========================================================
-   3. CABECERA DE LA PÁGINA
-   Título superior y descripción general.
+   3. HEADER PRINCIPAL
    ========================================================= */
 
 .academic-form-header {
-  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem;
+
+  padding: 2rem;
+  margin-bottom: 24px;
+
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 26px 30px;
-  margin-bottom: 24px;
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    var(--white);
+
   box-shadow: var(--shadow-soft);
 }
 
+.academic-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.academic-label {
+  width: fit-content;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
 .academic-form-header h2 {
-  color: var(--secondary-color);
-  font-size: 1.55rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  margin: 0;
+
+  color: #0f172a;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
 }
 
 .academic-form-header p {
+  margin: 0;
+  max-width: 680px;
+
   color: var(--text-muted);
   font-size: 0.95rem;
 }
 
+.academic-header-badge {
+  min-width: 200px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+}
+
+.academic-header-badge i {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: var(--red-soft);
+  color: var(--primary-color);
+}
+
+.academic-header-badge span {
+  display: block;
+
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.academic-header-badge strong {
+  display: block;
+
+  color: #0f172a;
+  font-size: 0.94rem;
+  font-weight: 900;
+}
 
 /* =========================================================
-   4. MENSAJES DEL SISTEMA
-   Alertas de éxito o error.
+   4. MENSAJES
    ========================================================= */
 
 .messages-wrapper {
   max-width: 760px;
   margin: 0 auto 24px;
+
   display: grid;
   gap: 12px;
 }
 
 .alert-msg {
-  border-radius: 12px;
-  padding: 14px 16px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
+
+  padding: 14px 16px;
+  border-radius: 16px;
+
   font-size: 0.92rem;
   font-weight: 700;
+
   box-shadow: var(--shadow-soft);
 }
 
@@ -122,10 +202,8 @@
   margin-top: 2px;
 }
 
-
 /* =========================================================
-   5. LAYOUT GENERAL
-   Panel informativo lateral + formulario.
+   5. LAYOUT PRINCIPAL
    ========================================================= */
 
 .academic-form-layout {
@@ -140,20 +218,24 @@
   max-width: 760px;
 }
 
-
 /* =========================================================
    6. PANEL INFORMATIVO
-   Recomendaciones y contexto del módulo.
    ========================================================= */
 
 .academic-info-panel {
-  background: linear-gradient(145deg, #1e293b, #334155);
-  color: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px;
-  box-shadow: var(--shadow-medium);
   position: relative;
   overflow: hidden;
+
+  padding: 32px 28px;
+  border-radius: var(--radius-lg);
+
+  color: var(--white);
+
+  background:
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.11), transparent 30%),
+    linear-gradient(145deg, #0f172a, #334155);
+
+  box-shadow: var(--shadow-medium);
 }
 
 .academic-info-panel::after {
@@ -161,172 +243,360 @@
   position: absolute;
   right: -55px;
   bottom: -55px;
+
   width: 170px;
   height: 170px;
-  background: rgba(255, 255, 255, 0.08);
+
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .academic-info-icon {
   width: 62px;
   height: 62px;
-  background: rgba(198, 40, 40, 0.95);
-  border-radius: 18px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 1.7rem;
   margin-bottom: 24px;
+  border-radius: 18px;
+
+  background: rgba(198, 40, 40, 0.95);
+  color: var(--white);
+
+  font-size: 1.7rem;
+}
+
+.info-panel-label {
+  display: inline-flex;
+  margin-bottom: 0.6rem;
+
+  color: #fecaca;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .academic-info-panel h3 {
+  margin: 0 0 12px;
+
   font-size: 1.45rem;
-  font-weight: 800;
-  margin-bottom: 12px;
+  font-weight: 900;
 }
 
 .academic-info-panel p {
+  margin: 0 0 28px;
+
   color: #cbd5e1;
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 28px;
 }
 
 .academic-tips {
-  list-style: none;
-  display: grid;
-  gap: 14px;
   position: relative;
   z-index: 1;
+
+  display: grid;
+  gap: 14px;
+
+  padding: 0;
+  margin: 0;
+
+  list-style: none;
 }
 
 .academic-tips li {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+
   color: #f8fafc;
   font-size: 0.92rem;
 }
 
 .academic-tips i {
-  color: #86efac;
   margin-top: 3px;
+  color: #86efac;
 }
 
+.academic-tips li span {
+  line-height: 1.45;
+}
+
+.academic-mini-note {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+
+  margin-top: 1.5rem;
+  padding: 0.9rem;
+
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.09);
+
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.academic-mini-note i {
+  margin-top: 0.15rem;
+  color: #fecaca;
+}
 
 /* =========================================================
-   7. TARJETA DEL FORMULARIO
-   Contenedor para creación o edición de nivel/grado.
+   7. TARJETA FORMULARIO
    ========================================================= */
 
-.academic-form-card,
-.card-large {
-  background: var(--white);
+.academic-form-card {
+  overflow: hidden;
+
+  margin-bottom: 24px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  margin-bottom: 24px;
+
+  background: var(--white);
+  box-shadow: var(--shadow-medium);
 }
 
-.academic-form-card:last-child,
-.card-large:last-child {
+.academic-form-card:last-child {
   margin-bottom: 0;
 }
 
-.academic-card-header,
-.card-header-large {
+.academic-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
   padding: 26px 30px;
   border-bottom: 1px solid var(--border-color);
 }
 
-.academic-card-header.nivel,
-.card-header-large.nivel {
+.academic-card-header.nivel {
   background: linear-gradient(135deg, #ffffff, #eff6ff);
 }
 
-.academic-card-header.grado,
-.card-header-large.grado {
+.academic-card-header.grado {
   background: linear-gradient(135deg, #ffffff, #fef2f2);
 }
 
-.academic-card-header h3,
-.card-header-large h3 {
-  display: flex;
+.form-mode-label {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.45rem;
 
-  color: var(--secondary-color);
-  font-size: 1.25rem;
-  font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 0.6rem;
+  padding: 0.32rem 0.7rem;
+
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 900;
 }
 
-.academic-card-header h3 i,
-.card-header-large h3 i {
+.nivel-label {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+.grado-label {
+  background: var(--red-soft);
   color: var(--primary-color);
 }
 
+.academic-card-header h3 {
+  margin: 0 0 0.35rem;
+
+  color: var(--secondary-color);
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
 .academic-card-header p {
+  margin: 0;
+
   color: var(--text-muted);
   font-size: 0.92rem;
   line-height: 1.5;
 }
 
-.academic-card-body,
-.card-body-large {
-  padding: 30px;
+.academic-card-body {
+  padding: 2rem 30px;
 }
 
+/* =========================================================
+   8. ESTADO DEL FORMULARIO
+   ========================================================= */
+
+.form-status-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  margin-bottom: 1.65rem;
+  padding: 0.95rem 1rem;
+
+  border-radius: 18px;
+  border: 1px solid #dbeafe;
+  background: var(--blue-soft);
+}
+
+.form-status-card > i {
+  margin-top: 0.12rem;
+
+  color: var(--blue-main);
+  font-size: 1.05rem;
+}
+
+.form-status-card strong {
+  display: block;
+
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.form-status-card span {
+  display: block;
+  margin-top: 0.15rem;
+
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.form-status-card.status-ready {
+  background: var(--green-soft);
+  border-color: #bbf7d0;
+}
+
+.form-status-card.status-ready > i {
+  color: var(--green-main);
+}
+
+.form-status-card.status-warning {
+  background: var(--orange-soft);
+  border-color: #fde68a;
+}
+
+.form-status-card.status-warning > i {
+  color: var(--orange-main);
+}
+
+.form-status-card.status-error {
+  background: var(--red-soft);
+  border-color: #fecaca;
+}
+
+.form-status-card.status-error > i {
+  color: var(--red-main);
+}
 
 /* =========================================================
-   8. FORMULARIO
-   Campos generados por Django.
+   9. FORMULARIO E INPUTS
    ========================================================= */
 
 .academic-form {
   width: 100%;
 }
 
-.form-group {
-  margin-bottom: 22px;
+.academic-form .form-group {
+  margin-bottom: 1.8rem;
 }
 
-.form-group label {
+.academic-form .form-group label {
   display: block;
+
+  margin-bottom: 0.65rem;
+
   color: var(--text-main);
   font-size: 0.9rem;
   font-weight: 800;
-  margin-bottom: 8px;
 }
 
-.input-wrapper {
+.academic-form .input-wrapper {
+  position: relative;
+  display: block;
   width: 100%;
 }
 
-.input-wrapper input,
-.input-wrapper select,
+.academic-form .input-icon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  z-index: 3;
+
+  color: var(--text-light);
+  font-size: 1rem;
+
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 .academic-form input,
 .academic-form select {
   width: 100%;
-  min-height: 46px;
-  padding: 12px 14px;
+  min-height: 54px;
 
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--white);
+  border-radius: 18px;
 
+  background-color: var(--white);
   color: var(--text-main);
+
   font-size: 0.95rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 
   transition: var(--transition);
 }
 
-.input-wrapper input:focus,
-.input-wrapper select:focus,
+.academic-form input {
+  padding: 0.85rem 1rem;
+}
+
+.academic-form .input-icon + input {
+  padding-left: 3.25rem;
+}
+
+.academic-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 0.85rem 4rem 0.85rem 1rem;
+
+  background-image: none !important;
+  line-height: 1.3;
+}
+
+.academic-form .input-icon + select {
+  padding-left: 3.25rem;
+}
+
+.academic-form select::-ms-expand {
+  display: none;
+}
+
+/* Flecha personalizada para SELECT */
+.academic-form .input-wrapper:has(select)::after {
+  content: "";
+  position: absolute;
+  right: 1.35rem;
+  top: 50%;
+  z-index: 3;
+
+  width: 0.65rem;
+  height: 0.65rem;
+
+  border-right: 2px solid #475569;
+  border-bottom: 2px solid #475569;
+
+  transform: translateY(-65%) rotate(45deg);
+  pointer-events: none;
+}
+
 .academic-form input:focus,
 .academic-form select:focus {
   border-color: var(--primary-color);
@@ -334,10 +604,56 @@
   outline: none;
 }
 
+/* =========================================================
+   10. VALIDACIÓN VISUAL
+   ========================================================= */
+
+.input-valid {
+  border-color: var(--green-main) !important;
+  background-color: #f0fdf4 !important;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
+}
+
+.input-invalid {
+  border-color: var(--red-main) !important;
+  background-color: var(--red-soft) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.academic-form .input-wrapper:has(select.input-valid)::after {
+  border-color: var(--green-dark);
+}
+
+.academic-form .input-wrapper:has(select.input-invalid)::after {
+  border-color: var(--red-dark);
+}
+
+.field-feedback {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+
+  min-height: 1rem;
+  margin-top: 0.65rem;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.field-feedback.show {
+  display: flex;
+}
+
+.feedback-valid {
+  color: #15803d;
+}
+
+.feedback-invalid {
+  color: #b91c1c;
+}
 
 /* =========================================================
-   9. ACCIONES DEL FORMULARIO
-   Botones de cancelar, confirmar y guardar cambios.
+   11. ACCIONES
    ========================================================= */
 
 .form-actions {
@@ -345,23 +661,24 @@
   justify-content: flex-end;
   gap: 14px;
 
-  margin-top: 28px;
-  padding-top: 22px;
+  margin-top: 2rem;
+  padding-top: 1.6rem;
   border-top: 1px solid var(--border-color);
 }
 
 .btn-back,
 .btn-save-academic {
-  min-height: 44px;
-  border-radius: 10px;
-  padding: 11px 18px;
+  min-height: 48px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
 
-  font-family: 'Inter', sans-serif;
+  padding: 11px 18px;
+  border-radius: 14px;
+
+  font-family: "Inter", sans-serif;
   font-size: 0.92rem;
   font-weight: 800;
   text-decoration: none;
@@ -384,6 +701,7 @@
   background: var(--primary-color);
   color: var(--white);
   border: 1px solid var(--primary-color);
+  box-shadow: 0 10px 22px rgba(198, 40, 40, 0.18);
 }
 
 .btn-save-academic:hover {
@@ -396,14 +714,31 @@
   background: #cbd5e1;
   color: #64748b;
   border-color: #cbd5e1;
+  box-shadow: none;
   cursor: not-allowed;
   transform: none;
 }
 
+.btn-text,
+.btn-loading {
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-loading {
+  display: none;
+}
+
+.btn-save-academic.loading .btn-text {
+  display: none;
+}
+
+.btn-save-academic.loading .btn-loading {
+  display: inline-flex;
+}
 
 /* =========================================================
-   10. RESPONSIVE - LAPTOPS PEQUEÑAS
-   Reduce ancho del panel lateral.
+   12. RESPONSIVE
    ========================================================= */
 
 @media (max-width: 1200px) {
@@ -416,19 +751,21 @@
     padding: 28px 24px;
   }
 
-  .academic-card-body,
-  .card-body-large {
+  .academic-card-body {
     padding: 26px;
   }
 }
 
-
-/* =========================================================
-   11. RESPONSIVE - TABLETS
-   El panel informativo pasa arriba del formulario.
-   ========================================================= */
-
 @media (max-width: 992px) {
+  .academic-form-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .academic-header-badge {
+    width: 100%;
+  }
+
   .academic-form-layout {
     grid-template-columns: 1fr;
   }
@@ -449,24 +786,15 @@
   }
 
   .academic-info-panel p,
-  .academic-tips {
+  .academic-tips,
+  .academic-mini-note {
     grid-column: 2;
   }
 }
 
-
-/* =========================================================
-   12. RESPONSIVE - CELULARES
-   Botones e inputs a una sola columna.
-   ========================================================= */
-
 @media (max-width: 768px) {
   .academic-form-header {
-    padding: 24px 22px;
-  }
-
-  .academic-form-header h2 {
-    font-size: 1.35rem;
+    padding: 1.4rem;
   }
 
   .academic-info-panel {
@@ -477,8 +805,10 @@
   .academic-info-icon {
     width: 56px;
     height: 56px;
-    font-size: 1.5rem;
+
     margin-bottom: 20px;
+
+    font-size: 1.5rem;
   }
 
   .academic-info-panel h3 {
@@ -486,13 +816,16 @@
   }
 
   .academic-card-header,
-  .card-header-large {
-    padding: 24px 22px;
+  .academic-card-body {
+    padding: 1.4rem;
   }
 
-  .academic-card-body,
-  .card-body-large {
-    padding: 24px 22px;
+  .academic-form .form-group {
+    margin-bottom: 1.35rem;
+  }
+
+  .form-status-card {
+    margin-bottom: 1.35rem;
   }
 
   .form-actions {
@@ -503,18 +836,26 @@
   .btn-save-academic {
     width: 100%;
   }
+
+  .academic-form select {
+    min-height: 52px;
+    padding-right: 3.5rem;
+  }
+
+  .academic-form .input-wrapper:has(select)::after {
+    right: 1.2rem;
+  }
 }
 
-
-/* =========================================================
-   13. RESPONSIVE - CELULARES PEQUEÑOS
-   Ajustes finos para evitar desbordes.
-   ========================================================= */
-
 @media (max-width: 480px) {
+  .academic-form-header,
+  .academic-info-panel,
+  .academic-form-card {
+    border-radius: 18px;
+  }
+
   .academic-form-header {
     padding: 22px 18px;
-    border-radius: 14px;
   }
 
   .academic-form-header h2 {
@@ -525,23 +866,20 @@
     font-size: 0.86rem;
   }
 
-  .academic-info-panel {
-    padding: 24px 18px;
-    border-radius: 14px;
+  .academic-header-badge {
+    min-width: 0;
   }
 
-  .academic-form-card,
-  .card-large {
-    border-radius: 14px;
+  .academic-info-panel {
+    padding: 24px 18px;
   }
 
   .academic-card-header,
-  .card-header-large {
+  .academic-card-body {
     padding: 22px 18px;
   }
 
-  .academic-card-header h3,
-  .card-header-large h3 {
+  .academic-card-header h3 {
     font-size: 1.1rem;
   }
 
@@ -549,21 +887,13 @@
     font-size: 0.86rem;
   }
 
-  .academic-card-body,
-  .card-body-large {
-    padding: 22px 18px;
-  }
-
-  .form-group label {
+  .academic-form .form-group label {
     font-size: 0.86rem;
   }
 
-  .input-wrapper input,
-  .input-wrapper select,
   .academic-form input,
   .academic-form select {
     font-size: 0.9rem;
-    padding: 11px 12px;
   }
 
   .alert-msg {

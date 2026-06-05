@@ -1,11 +1,14 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
 
-{% block page_title %}Lista de Inscritos{% endblock %}
+{% block page_title %}
+  Lista de Inscritos
+{% endblock page_title %}
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'enrollments/css/list_of_subscribers.css' %}?v=5" />
+{% static "enrollments/css/list_of_subscribers.css" as list_subscribers_css %}
+<link rel="stylesheet" href="{{ list_subscribers_css }}?v=7" />
 
 <section class="subscribers-list-page">
 
@@ -13,6 +16,11 @@
 
     <div class="subscribers-list-header">
       <div class="header-info">
+        <span class="section-label">
+          <i class="fa-solid fa-clipboard-list"></i>
+          Control de inscripciones
+        </span>
+
         <h3>
           <i class="fa-solid fa-list-check"></i>
           Registro de Inscritos
@@ -21,11 +29,16 @@
           {% endif %}
         </h3>
 
-        <p>Consulta y administra las inscripciones registradas en la gestión académica.</p>
+        <p>
+          Consulta, filtra y administra las inscripciones registradas en la gestión académica.
+        </p>
       </div>
 
       <div class="header-actions">
-        <span class="module-badge">Control Académico</span>
+        <span class="module-badge">
+          <i class="fa-solid fa-school"></i>
+          Control Académico
+        </span>
 
         <a href="{% url 'registrar_inscripcion_view' %}" class="btn-new-enroll">
           <i class="fa-solid fa-user-plus"></i>
@@ -34,21 +47,54 @@
       </div>
     </div>
 
-    <div class="filter-bar">
-      <form method="GET" class="combined-search-form">
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <div class="list-status-panel">
+      <div class="status-panel-icon">
+        <i class="fa-solid fa-users-viewfinder"></i>
+      </div>
 
-          <input
-            type="text"
-            name="search"
-            value="{{ search_query }}"
-            placeholder="Buscar por RUDE, CI, nombres o apellidos..."
-          >
+      <div>
+        <strong>Listado general de inscritos</strong>
+        <span>
+          Usa los filtros para ubicar inscripciones por estudiante, RUDE, curso o estado documental.
+        </span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <form method="get" class="combined-search-form" id="subscribersFilterForm">
+
+        <div class="filter-field search-box">
+          <label for="subscriberSearchInput">Buscar inscripción</label>
+
+          <div class="input-with-icon">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+            <input
+              type="text"
+              id="subscriberSearchInput"
+              name="search"
+              value="{{ search_query }}"
+              placeholder="RUDE, CI, nombres o apellidos"
+              autocomplete="off"
+            />
+
+            {% if search_query %}
+              <button
+                type="button"
+                class="btn-clear-input"
+                id="btnClearSubscriberInput"
+                title="Limpiar búsqueda"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            {% endif %}
+          </div>
         </div>
 
-        <div class="select-box">
-          <select name="paralelo">
+        <div class="filter-field select-box">
+          <label for="paraleloFilter">Curso</label>
+
+          <select name="paralelo" id="paraleloFilter">
             <option value="">Todos los cursos</option>
 
             {% for paralelo in paralelos %}
@@ -62,8 +108,10 @@
           </select>
         </div>
 
-        <div class="select-box">
-          <select name="estado_documental">
+        <div class="filter-field select-box">
+          <label for="estadoDocumentalFilter">Estado documental</label>
+
+          <select name="estado_documental" id="estadoDocumentalFilter">
             <option value="">Todos los estados</option>
 
             <option value="completa" {% if estado_documental_filter == "completa" %}selected{% endif %}>
@@ -80,18 +128,58 @@
           </select>
         </div>
 
-        <button type="submit" class="btn-filter">
-          <i class="fa-solid fa-filter"></i>
-          Filtrar
-        </button>
+        <div class="filter-actions">
+          <button type="submit" class="btn-filter">
+            <i class="fa-solid fa-filter"></i>
+            Filtrar
+          </button>
 
-        <a href="{% url 'list_inscripciones' %}" class="btn-clear-filter" title="Limpiar filtros">
-          <i class="fa-solid fa-rotate-left"></i>
-        </a>
+          <a href="{% url 'list_inscripciones' %}" class="btn-clear-filter" title="Limpiar filtros">
+            <i class="fa-solid fa-rotate-left"></i>
+            Limpiar
+          </a>
+        </div>
       </form>
+
+      {% if search_query or paralelo_filter or estado_documental_filter %}
+        <div class="active-filters">
+          <span>
+            <i class="fa-solid fa-sliders"></i>
+            Filtros activos:
+          </span>
+
+          {% if search_query %}
+            <strong>Búsqueda: {{ search_query }}</strong>
+          {% endif %}
+
+          {% if paralelo_filter %}
+            <strong>Curso seleccionado</strong>
+          {% endif %}
+
+          {% if estado_documental_filter %}
+            <strong>
+              Estado:
+              {% if estado_documental_filter == "completa" %}
+                Completa
+              {% elif estado_documental_filter == "pendiente" %}
+                Pendiente
+              {% elif estado_documental_filter == "vencida" %}
+                Vencida
+              {% endif %}
+            </strong>
+          {% endif %}
+        </div>
+      {% endif %}
     </div>
 
     <div class="list-body">
+      <div class="table-toolbar">
+        <div>
+          <strong>Resultado del listado</strong>
+          <span>Inscripciones registradas en la gestión académica actual.</span>
+        </div>
+      </div>
+
       <div class="table-responsive">
         <table class="enroll-table">
           <thead>
@@ -108,43 +196,56 @@
 
           <tbody>
             {% for inscripcion in inscripciones %}
-              <tr>
+              <tr class="subscriber-row">
                 <td data-label="#">
                   <span class="row-number">{{ forloop.counter }}</span>
                 </td>
 
                 <td data-label="Fecha" class="date-cell">
-                  {{ inscripcion.fecha_registro|date:"d/m/Y" }}
+                  <span class="date-badge">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    {{ inscripcion.fecha_registro|date:"d/m/Y" }}
+                  </span>
                 </td>
 
                 <td data-label="Estudiante / Tutor">
                   <div class="subscriber-info">
-                    <span class="subscriber-name">
-                      {{ inscripcion.estudiante.apellido_paterno }}
-                      {{ inscripcion.estudiante.apellido_materno }},
-                      {{ inscripcion.estudiante.nombres }}
-                    </span>
+                    <div class="subscriber-avatar">
+                      {{ inscripcion.estudiante.nombres|slice:":1" }}
+                    </div>
 
-                    <small class="student-ci">
-                      CI: {{ inscripcion.estudiante.cedula_identidad }}
-                    </small>
+                    <div>
+                      <span class="subscriber-name">
+                        {{ inscripcion.estudiante.apellido_paterno }}
+                        {{ inscripcion.estudiante.apellido_materno }},
+                        {{ inscripcion.estudiante.nombres }}
+                      </span>
 
-                    {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
-                      {% if parentesco %}
-                        <small class="tutor-sub">
-                          Tutor: {{ parentesco.tutor.nombres }} {{ parentesco.tutor.apellidos }}
-                        </small>
-                      {% else %}
-                        <small class="tutor-sub muted">
-                          Tutor no registrado
-                        </small>
-                      {% endif %}
-                    {% endwith %}
+                      <small class="student-ci">
+                        <i class="fa-solid fa-id-card"></i>
+                        CI: {{ inscripcion.estudiante.cedula_identidad }}
+                      </small>
+
+                      {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
+                        {% if parentesco %}
+                          <small class="tutor-sub">
+                            <i class="fa-solid fa-user-shield"></i>
+                            Tutor: {{ parentesco.tutor.nombres }} {{ parentesco.tutor.apellidos }}
+                          </small>
+                        {% else %}
+                          <small class="tutor-sub muted">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Tutor no registrado
+                          </small>
+                        {% endif %}
+                      {% endwith %}
+                    </div>
                   </div>
                 </td>
 
                 <td data-label="Grado y Paralelo">
                   <span class="grade-badge">
+                    <i class="fa-solid fa-school"></i>
                     {{ inscripcion.paralelo.grado.nombre }}
                     de {{ inscripcion.paralelo.grado.nivel.nombre }}
                     - {{ inscripcion.paralelo.letra }}
@@ -153,6 +254,7 @@
 
                 <td data-label="Código RUDE">
                   <span class="rude-badge">
+                    <i class="fa-solid fa-barcode"></i>
                     {{ inscripcion.rude }}
                   </span>
                 </td>
@@ -203,7 +305,7 @@
 
                     <a
                       href="{% url 'imprimir_inscripcion' inscripcion.id %}"
-                      class="btn-circle print"
+                      class="btn-circle print js-print-enrollment"
                       title="Imprimir formulario"
                     >
                       <i class="fa-solid fa-print"></i>
@@ -231,4 +333,7 @@
 
 </section>
 
-{% endblock %}
+{% static "enrollments/js/list_of_subscribers.js" as list_subscribers_js %}
+<script src="{{ list_subscribers_js }}?v=1"></script>
+
+{% endblock content %}

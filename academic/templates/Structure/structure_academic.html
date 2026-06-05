@@ -5,16 +5,75 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=21" />
+<link rel="stylesheet" href="{% static 'academic/css/structure_academic.css' %}?v=22" />
 
 <section class="academic-dashboard">
 
-  <div class="academic-header">
+  <div class="academic-header academic-fade-target">
+  <div class="academic-title-block">
+    <span class="academic-label">
+      <i class="fa-solid fa-school-circle-check"></i>
+      Configuración institucional
+    </span>
+
+    <h2>Panel de Control Académico</h2>
+
+    <p>
+      Gestiona periodos escolares, niveles, grados, paralelos, cupos y requisitos
+      desde un solo tablero.
+    </p>
+  </div>
+
+  <div class="academic-header-badge">
+    <i class="fa-solid fa-layer-group"></i>
     <div>
-      <h2>Panel de Control Académico</h2>
-      <p>Gestión estratégica de periodos escolares, niveles, grados, paralelos y requisitos.</p>
+      <span>Módulo</span>
+      <strong>Académico</strong>
     </div>
   </div>
+</div>
+
+<div class="academic-summary-grid">
+  <div class="summary-card">
+    <div class="summary-icon">
+      <i class="fa-solid fa-calendar-days"></i>
+    </div>
+    <div>
+      <span>Gestiones</span>
+      <strong>{{ gestiones|length }}</strong>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">
+      <i class="fa-solid fa-layer-group"></i>
+    </div>
+    <div>
+      <span>Niveles</span>
+      <strong>{{ niveles|length }}</strong>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">
+      <i class="fa-solid fa-graduation-cap"></i>
+    </div>
+    <div>
+      <span>Grados</span>
+      <strong>{{ grados|length }}</strong>
+    </div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-icon">
+      <i class="fa-solid fa-users-rectangle"></i>
+    </div>
+    <div>
+      <span>Paralelos</span>
+      <strong>{{ paralelos|length }}</strong>
+    </div>
+  </div>
+</div>
 
   <div class="academic-grid">
 
@@ -266,9 +325,21 @@
     </div>
 
     <div class="card-body">
-      <p class="section-description">
-        Define la documentación obligatoria para los nuevos registros.
-      </p>
+      <div class="requirement-intro">
+  <div>
+    <h4 id="requirementFormTitle">Nuevo requisito</h4>
+    <p id="requirementFormHint">
+      Define la documentación que será solicitada durante la inscripción.
+    </p>
+  </div>
+
+  <span class="requirement-count">
+    <i class="fa-solid fa-list-check"></i>
+    Requisitos activos
+  </span>
+</div>
+
+<div class="requirement-error" id="requirementError"></div>
 
       <form
         id="formRequisito"
@@ -307,13 +378,14 @@
           </button>
 
           <button
-            type="button"
-            id="btnCancelReq"
-            class="btn-cancel-req hidden"
-            onclick="cancelarEdicion()"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+  type="button"
+  id="btnCancelReq"
+  class="btn-cancel-req hidden"
+  onclick="cancelarEdicion()"
+>
+  <i class="fa-solid fa-xmark"></i>
+  Cancelar
+</button>
         </div>
       </form>
 
@@ -468,6 +540,6 @@
 </script>
 
 <script src="{% static 'academic/js/form_nivel_grade.js' %}?v=9"></script>
-<script src="{% static 'academic/js/structure_academic.js' %}?v=11"></script>
+<script src="{% static 'academic/js/structure_academic.js' %}?v=12"></script>
 
 {% endblock %}

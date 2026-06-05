@@ -1,12 +1,337 @@
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-top: 20px; }
-.chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
-.chart-card h4 { margin: 0 0 16px; color: #0f172a; font-size: 1rem; font-weight: 800; }
-.chart-card .chart-container { position: relative; height: 260px; }
-.chart-card.full { grid-column: 1 / -1; }
-.stats-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.stat-chip { background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: #334155; display: inline-flex; align-items: center; gap: 6px; }
-.stat-chip strong { color: #0f172a; }
+/* =========================================================
+   REPORTES_ACADEMICOS.CSS - REPORTE ACADÉMICO
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+#reporte-academico {
+  width: 100%;
+}
+
+/* HEADER */
+
+#reporte-academico .academic-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+
+  margin-bottom: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 28%),
+    #ffffff;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+#reporte-academico .academic-report-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-academico .academic-report-header h2 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#reporte-academico .academic-report-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* RESUMEN */
+
+#reporte-academico .academic-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+#reporte-academico .academic-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-academico .academic-summary-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-academico .academic-summary-card h4 {
+  margin: 0 0 0.25rem;
+
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#reporte-academico .academic-summary-card .number {
+  color: #0f172a;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reporte-academico .academic-summary-card.total .number {
+  color: #2563eb;
+}
+
+#reporte-academico .academic-summary-card.male .number {
+  color: #16a34a;
+}
+
+#reporte-academico .academic-summary-card.female .number {
+  color: #dc2626;
+}
+
+#reporte-academico .academic-summary-card.male .academic-summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-academico .academic-summary-card.female .academic-summary-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* CHIPS */
+
+#reporte-academico .academic-stats-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  margin-bottom: 1.25rem;
+}
+
+#reporte-academico .academic-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+
+  background: #f8fafc;
+  color: #334155;
+
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+#reporte-academico .academic-stat-chip i {
+  color: #2563eb;
+}
+
+#reporte-academico .academic-stat-chip strong {
+  color: #0f172a;
+  font-weight: 900;
+}
+
+/* GRÁFICOS */
+
+#reporte-academico .academic-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+
+  margin-top: 1.25rem;
+}
+
+#reporte-academico .academic-chart-card {
+  min-width: 0;
+
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-academico .academic-chart-card.full {
+  grid-column: 1 / -1;
+}
+
+#reporte-academico .academic-chart-header {
+  margin-bottom: 1rem;
+}
+
+#reporte-academico .academic-chart-header h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin: 0 0 0.25rem;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#reporte-academico .academic-chart-header h4 i {
+  color: #2563eb;
+}
+
+#reporte-academico .academic-chart-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+#reporte-academico .academic-chart-container {
+  position: relative;
+
+  width: 100%;
+  height: 230px;
+  max-height: 230px;
+  overflow: hidden;
+}
+
+#reporte-academico .academic-chart-container.large {
+  height: 280px;
+  max-height: 280px;
+}
+
+#reporte-academico .academic-chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  #reporte-academico .academic-charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-academico .academic-chart-card.full {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  #reporte-academico .academic-report-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #reporte-academico .academic-report-header .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #reporte-academico .academic-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  #reporte-academico .academic-report-header {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  #reporte-academico .academic-report-header h2 {
+    font-size: 1.15rem;
+  }
+
+  #reporte-academico .academic-summary-card {
+    padding: 0.9rem;
+  }
+
+  #reporte-academico .academic-summary-card .number {
+    font-size: 1.45rem;
+  }
+
+  #reporte-academico .academic-chart-card {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  #reporte-academico .academic-chart-container,
+  #reporte-academico .academic-chart-container.large {
+    height: 240px;
+    max-height: 240px;
+  }
+
+  #reporte-academico .academic-stat-chip {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* IMPRESIÓN */
 
 @media print {
-  .charts-grid { break-inside: avoid; }
+  #reporte-academico .academic-report-header {
+    box-shadow: none;
+    border: none;
+    padding: 0 0 1rem;
+  }
+
+  #reporte-academico .academic-report-header .print-btn {
+    display: none !important;
+  }
+
+  #reporte-academico .academic-summary-grid,
+  #reporte-academico .academic-stats-row,
+  #reporte-academico .academic-charts-grid,
+  #reporte-academico .academic-chart-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #reporte-academico .academic-charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-academico .academic-chart-card {
+    box-shadow: none;
+  }
 }

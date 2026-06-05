@@ -1,130 +1,285 @@
 {% load static %}
+
 <div id="reporte-documental" class="accordion-content">
-  <link rel="stylesheet" href="{% static 'accounts/css/reportes_documental.css' %}">
-  <div class="reports-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+  <div class="documental-report-header">
     <div>
+      <span class="documental-report-label">
+        <i class="fa-solid fa-folder-open"></i>
+        Control documental
+      </span>
+
       <h2>Reporte Documental</h2>
-      <p>Control de documentos entregados, pendientes y observados.</p>
+
+      <p>
+        Control de documentos entregados, pendientes y vencidos por estudiante.
+      </p>
     </div>
-    <button class="print-btn" onclick="window.print()">
-      <i class="fa-solid fa-print"></i> Imprimir / PDF
+
+    <button type="button" class="print-btn js-print-report">
+      <i class="fa-solid fa-print"></i>
+      Imprimir / PDF
     </button>
   </div>
 
-  <div class="report-summary">
-    <div class="summary-card total">
-      <h4>Total Registros</h4>
-      <div class="number">{{ total_docs }}</div>
+  <div class="documental-summary-grid">
+    <div class="documental-summary-card total">
+      <div class="documental-summary-icon">
+        <i class="fa-solid fa-file-lines"></i>
+      </div>
+
+      <div>
+        <h4>Total registros</h4>
+        <div class="number">{{ total_docs }}</div>
+      </div>
     </div>
-    <div class="summary-card inscritos">
-      <h4>Documentación Completa</h4>
-      <div class="number">{{ doc_ok }}</div>
+
+    <div class="documental-summary-card complete">
+      <div class="documental-summary-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <div>
+        <h4>Documentación completa</h4>
+        <div class="number">{{ doc_ok }}</div>
+      </div>
     </div>
-    <div class="summary-card sin-inscripcion">
-      <h4>Documentación Pendiente</h4>
-      <div class="number">{{ doc_pend }}</div>
+
+    <div class="documental-summary-card pending">
+      <div class="documental-summary-icon">
+        <i class="fa-solid fa-clock"></i>
+      </div>
+
+      <div>
+        <h4>Documentación pendiente</h4>
+        <div class="number">{{ doc_pend }}</div>
+      </div>
     </div>
-    <div class="summary-card doc-vencida">
-      <h4>Documentación Vencida</h4>
-      <div class="number">{{ doc_venc }}</div>
+
+    <div class="documental-summary-card expired">
+      <div class="documental-summary-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+
+      <div>
+        <h4>Documentación vencida</h4>
+        <div class="number">{{ doc_venc }}</div>
+      </div>
     </div>
   </div>
 
-  <form method="GET" action="{% url 'reportes' %}#reporte-documental" class="filter-bar">
-    <input type="text" name="q_doc" placeholder="Buscar por CI, nombres o apellidos..." value="{{ q_doc }}">
-    <select name="gestion_doc">
-      <option value="">Todas las gestiones</option>
-      {% for g in gestiones_opciones %}
-        <option value="{{ g.id }}" {% if gestion_doc_filtro|slugify == g.id|slugify %}selected{% endif %}>{{ g.anio }}</option>
-      {% endfor %}
-    </select>
-    <select name="estado_doc_doc">
-      <option value="">Todos los estados</option>
-      {% for val, label in doc_choices %}
-        <option value="{{ val }}" {% if estado_doc_filtro_doc == val %}selected{% endif %}>{{ label }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar</button>
-    <a href="{% url 'reportes' %}" class="clear-btn" data-ajax-doc><i class="fa-solid fa-rotate-left"></i> Limpiar</a>
+  <form method="get"
+        action="{% url 'reportes' %}#reporte-documental"
+        class="documental-filter-form">
+    <div class="documental-filter-group search">
+      <label for="documentalSearch">Buscar estudiante</label>
+
+      <div class="documental-input-icon">
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input type="text"
+               id="documentalSearch"
+               name="q_doc"
+               placeholder="CI, nombres o apellidos"
+               value="{{ q_doc }}" />
+      </div>
+    </div>
+
+    <div class="documental-filter-group">
+      <label for="documentalGestion">Gestión</label>
+
+      <select name="gestion_doc" id="documentalGestion">
+        <option value="">Todas las gestiones</option>
+
+        {% for g in gestiones_opciones %}
+          <option value="{{ g.id }}"
+                  {% if gestion_doc_filtro|slugify == g.id|slugify %}selected{% endif %}>
+            {{ g.anio }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="documental-filter-group">
+      <label for="documentalEstado">Estado documental</label>
+
+      <select name="estado_doc_doc" id="documentalEstado">
+        <option value="">Todos los estados</option>
+
+        {% for val, label in doc_choices %}
+          <option value="{{ val }}" {% if estado_doc_filtro_doc == val %}selected{% endif %}>
+            {{ label }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="documental-filter-actions">
+      <button type="submit" class="documental-filter-btn">
+        <i class="fa-solid fa-filter"></i>
+        Filtrar
+      </button>
+
+      <a href="{% url 'reportes' %}#reporte-documental"
+         class="documental-clear-btn"
+         data-ajax-doc>
+        <i class="fa-solid fa-rotate-left"></i>
+        Limpiar
+      </a>
+    </div>
   </form>
 
-  <div class="table-responsive">
-    <table class="student-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Estudiante</th>
-          <th>C.I.</th>
-          <th>Nivel - Grado</th>
-          <th>Gestión</th>
-          <th>Estado Documental</th>
-          <th>Fecha Límite</th>
-          <th>Observación</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for d in docs %}
+  <div class="documental-table-card">
+    <div class="documental-table-responsive">
+      <table class="documental-table">
+        <thead>
           <tr>
-            <td>{{ docs.start_index|add:forloop.counter0 }}</td>
-            <td><strong>{{ d.estudiante.apellido_paterno }} {{ d.estudiante.apellido_materno }}, {{ d.estudiante.nombres }}</strong></td>
-            <td>{{ d.estudiante.cedula_identidad }}</td>
-            <td>{{ d.paralelo.grado.nivel.nombre|slice:":4" }} - {{ d.paralelo.grado.nombre }} "{{ d.paralelo.letra }}"</td>
-            <td>{{ d.gestion.anio }}</td>
-            <td>
-              {% if d.estado_documental == 'completa' %}
-                <span class="doc-badge doc-completa"><i class="fa-solid fa-check-circle"></i> Completa</span>
-              {% elif d.estado_documental == 'pendiente' %}
-                <span class="doc-badge doc-pendiente"><i class="fa-solid fa-clock"></i> Pendiente</span>
-              {% else %}
-                <span class="doc-badge doc-vencida"><i class="fa-solid fa-exclamation-circle"></i> Vencida</span>
-              {% endif %}
-            </td>
-            <td>{{ d.fecha_limite_documentos|date:"d/m/Y"|default:"—" }}</td>
-            <td style="max-width:200px;">{{ d.observacion|default:"—"|truncatechars:60 }}</td>
+            <th>#</th>
+            <th>Estudiante</th>
+            <th>C.I.</th>
+            <th>Nivel - Grado</th>
+            <th>Gestión</th>
+            <th>Estado documental</th>
+            <th>Fecha límite</th>
+            <th>Observación</th>
           </tr>
-        {% empty %}
-          <tr>
-            <td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;">
-              <i class="fa-solid fa-folder-open" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-              No se encontraron registros documentales
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {% for d in docs %}
+            <tr>
+              <td data-label="#">
+                <span class="documental-row-number">
+                  {{ docs.start_index|add:forloop.counter0 }}
+                </span>
+              </td>
+
+              <td data-label="Estudiante">
+                <div class="documental-student">
+                  <div class="documental-student-avatar">
+                    {{ d.estudiante.nombres|slice:":1" }}
+                  </div>
+
+                  <div>
+                    <strong>
+                      {{ d.estudiante.apellido_paterno }}
+                      {{ d.estudiante.apellido_materno }},
+                      {{ d.estudiante.nombres }}
+                    </strong>
+                  </div>
+                </div>
+              </td>
+
+              <td data-label="C.I.">
+                <span class="documental-ci">
+                  {{ d.estudiante.cedula_identidad }}
+                </span>
+              </td>
+
+              <td data-label="Nivel - Grado">
+                <span class="documental-course-badge">
+                  {{ d.paralelo.grado.nivel.nombre|slice:":4" }} -
+                  {{ d.paralelo.grado.nombre }} "{{ d.paralelo.letra }}"
+                </span>
+              </td>
+
+              <td data-label="Gestión">
+                <span class="documental-gestion-badge">
+                  {{ d.gestion.anio }}
+                </span>
+              </td>
+
+              <td data-label="Estado documental">
+                {% if d.estado_documental == "completa" %}
+                  <span class="documental-status-badge complete">
+                    <i class="fa-solid fa-check-circle"></i>
+                    Completa
+                  </span>
+                {% elif d.estado_documental == "pendiente" %}
+                  <span class="documental-status-badge pending">
+                    <i class="fa-solid fa-clock"></i>
+                    Pendiente
+                  </span>
+                {% else %}
+                  <span class="documental-status-badge expired">
+                    <i class="fa-solid fa-exclamation-circle"></i>
+                    Vencida
+                  </span>
+                {% endif %}
+              </td>
+
+              <td data-label="Fecha límite">
+                {{ d.fecha_limite_documentos|date:"d/m/Y"|default:"—" }}
+              </td>
+
+              <td data-label="Observación">
+                <span class="documental-observation">
+                  {{ d.observacion|default:"—"|truncatechars:60 }}
+                </span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="8" class="documental-empty-cell">
+                <div class="documental-empty">
+                  <i class="fa-solid fa-folder-open"></i>
+                  <h4>No se encontraron registros documentales</h4>
+                  <p>No existen registros con los filtros seleccionados.</p>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   {% if docs.paginator.num_pages > 1 %}
-  <div class="pagination">
-    {% if docs.has_previous %}
-      <a href="?page_doc=1{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&laquo;</a>
-      <a href="?page_doc={{ docs.previous_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&lsaquo;</a>
-    {% else %}
-      <span class="disabled">&laquo;</span>
-      <span class="disabled">&lsaquo;</span>
-    {% endif %}
-    {% for num in docs.paginator.page_range %}
-      {% if num == docs.number %}
-        <span class="current">{{ num }}</span>
-      {% elif num > docs.number|add:"-3" and num < docs.number|add:"3" %}
-        <a href="?page_doc={{ num }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">{{ num }}</a>
+    <div class="documental-pagination">
+      {% if docs.has_previous %}
+        <a data-ajax-doc href="?page_doc=1{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">
+          &laquo;
+        </a>
+
+        <a data-ajax-doc href="?page_doc={{ docs.previous_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">
+          &lsaquo;
+        </a>
+      {% else %}
+        <span class="disabled">&laquo;</span>
+        <span class="disabled">&lsaquo;</span>
       {% endif %}
-    {% endfor %}
-    {% if docs.has_next %}
-      <a href="?page_doc={{ docs.next_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&rsaquo;</a>
-      <a href="?page_doc={{ docs.paginator.num_pages }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">&raquo;</a>
-    {% else %}
-      <span class="disabled">&rsaquo;</span>
-      <span class="disabled">&raquo;</span>
-    {% endif %}
-  </div>
-  <div class="page-info">
-    Página {{ docs.number }} de {{ docs.paginator.num_pages }} ({{ total_docs }} registro{{ total_docs|pluralize:"s" }})
-  </div>
+
+      {% for num in docs.paginator.page_range %}
+        {% if num == docs.number %}
+          <span class="current">{{ num }}</span>
+        {% elif num > docs.number|add:"-3" and num < docs.number|add:"3" %}
+          <a data-ajax-doc href="?page_doc={{ num }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">
+            {{ num }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if docs.has_next %}
+        <a data-ajax-doc href="?page_doc={{ docs.next_page_number }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">
+          &rsaquo;
+        </a>
+
+        <a data-ajax-doc href="?page_doc={{ docs.paginator.num_pages }}{% if q_doc %}&q_doc={{ q_doc }}{% endif %}{% if gestion_doc_filtro %}&gestion_doc={{ gestion_doc_filtro }}{% endif %}{% if estado_doc_filtro_doc %}&estado_doc_doc={{ estado_doc_filtro_doc }}{% endif %}#reporte-documental">
+          &raquo;
+        </a>
+      {% else %}
+        <span class="disabled">&rsaquo;</span>
+        <span class="disabled">&raquo;</span>
+      {% endif %}
+    </div>
+
+    <div class="documental-page-info">
+      Página {{ docs.number }} de {{ docs.paginator.num_pages }}
+      ({{ total_docs }} registro{{ total_docs|pluralize:"s" }})
+    </div>
   {% endif %}
 
   {% if total_docs > 0 %}
-    <p style="text-align:right;color:#94a3b8;font-size:0.85rem;margin-top:12px;">
+    <p class="documental-generated-date">
       Reporte generado el {% now "d/m/Y H:i" %}
     </p>
   {% endif %}
