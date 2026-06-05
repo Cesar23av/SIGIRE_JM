@@ -1,15 +1,489 @@
-.progress-bar {
-  width: 100px;
-  height: 8px;
-  background: #e2e8f0;
-  border-radius: 4px;
+/* =========================================================
+   REPORTES_CURSOS.CSS - REPORTE DE CURSOS
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
+
+#reporte-cursos {
+  width: 100%;
+}
+
+/* HEADER DEL REPORTE */
+
+#reporte-cursos .report-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+
+  margin-bottom: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top right, rgba(198, 40, 40, 0.08), transparent 28%),
+    #ffffff;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+#reporte-cursos .report-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: #fef2f2;
+  color: #c62828;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-cursos .report-section-header h2 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#reporte-cursos .report-section-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* RESUMEN */
+
+#reporte-cursos .report-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
+}
+
+#reporte-cursos .summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-cursos .summary-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-cursos .summary-card h4 {
+  margin: 0 0 0.25rem;
+
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#reporte-cursos .summary-card .number {
+  color: #0f172a;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reporte-cursos .summary-card.total .number {
+  color: #2563eb;
+}
+
+#reporte-cursos .summary-card.inscritos .number {
+  color: #16a34a;
+}
+
+#reporte-cursos .summary-card.sin-inscripcion .number {
+  color: #dc2626;
+}
+
+/* FILTRO */
+
+#reporte-cursos .courses-filter-form {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-cursos .filter-group {
+  min-width: 240px;
+  display: grid;
+  gap: 0.45rem;
+}
+
+#reporte-cursos .filter-group label {
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+#reporte-cursos .filter-group select {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #334155;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+
+  outline: none;
+}
+
+#reporte-cursos .filter-group select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+}
+
+#reporte-cursos .filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-cursos .filter-btn,
+#reporte-cursos .clear-btn {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+#reporte-cursos .filter-btn {
+  border: 1px solid #1e293b;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+#reporte-cursos .clear-btn {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #c62828;
+}
+
+/* TABLA */
+
+#reporte-cursos .courses-table-card {
   overflow: hidden;
-  display: inline-block;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-cursos .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#reporte-cursos .courses-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+}
+
+#reporte-cursos .courses-table thead {
+  background: #f8fafc;
+}
+
+#reporte-cursos .courses-table th {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+#reporte-cursos .courses-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #334155;
+  font-size: 0.9rem;
   vertical-align: middle;
 }
 
-.progress-fill {
+#reporte-cursos .courses-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+#reporte-cursos .courses-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* DATOS */
+
+#reporte-cursos .row-number {
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+#reporte-cursos .level-badge,
+#reporte-cursos .parallel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+#reporte-cursos .level-badge {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-cursos .parallel-badge {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+#reporte-cursos .registered-number {
+  color: #2563eb;
+  font-weight: 900;
+}
+
+#reporte-cursos .available-number {
+  font-weight: 900;
+}
+
+#reporte-cursos .available-number.positive {
+  color: #16a34a;
+}
+
+#reporte-cursos .available-number.negative {
+  color: #dc2626;
+}
+
+/* OCUPACIÓN */
+
+#reporte-cursos .occupation-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+#reporte-cursos .progress-bar {
+  width: 110px;
+  height: 9px;
+
+  overflow: hidden;
+  display: inline-block;
+
+  border-radius: 999px;
+
+  background: #e2e8f0;
+}
+
+#reporte-cursos .progress-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: inherit;
+
   transition: width 0.3s ease;
+}
+
+#reporte-cursos .progress-fill.normal {
+  background: #2563eb;
+}
+
+#reporte-cursos .progress-fill.warning {
+  background: #f59e0b;
+}
+
+#reporte-cursos .progress-fill.danger {
+  background: #dc2626;
+}
+
+#reporte-cursos .occupation-cell small {
+  min-width: 38px;
+
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+/* VACÍO */
+
+#reporte-cursos .empty-courses-cell {
+  padding: 0 !important;
+}
+
+#reporte-cursos .empty-courses {
+  padding: 3rem 1rem;
+
+  text-align: center;
+  color: #94a3b8;
+}
+
+#reporte-cursos .empty-courses i {
+  display: block;
+
+  margin-bottom: 0.75rem;
+
+  color: #cbd5e1;
+  font-size: 2rem;
+}
+
+#reporte-cursos .empty-courses h4 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#reporte-cursos .empty-courses p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+#reporte-cursos .report-generated-date {
+  margin-top: 0.85rem;
+
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  #reporte-cursos .report-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #reporte-cursos .report-section-header .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #reporte-cursos .report-summary {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-cursos .courses-filter-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #reporte-cursos .filter-group {
+    min-width: 100%;
+  }
+
+  #reporte-cursos .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reporte-cursos .filter-btn,
+  #reporte-cursos .clear-btn {
+    width: 100%;
+  }
+
+  #reporte-cursos .courses-table {
+    min-width: 860px;
+  }
+}
+
+/* IMPRESIÓN */
+
+@media print {
+  #reporte-cursos .courses-filter-form,
+  #reporte-cursos .report-section-header .print-btn {
+    display: none !important;
+  }
+
+  #reporte-cursos .courses-table-card {
+    border: none;
+    box-shadow: none;
+  }
+
+  #reporte-cursos .courses-table {
+    min-width: 100%;
+  }
+
+  #reporte-cursos .progress-fill.normal,
+  #reporte-cursos .progress-fill.warning,
+  #reporte-cursos .progress-fill.danger {
+    background: #111827 !important;
+  }
 }

@@ -1,26 +1,675 @@
-.filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; }
-.filter-bar input, .filter-bar select { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; background: white; }
-.filter-bar input { flex: 1; min-width: 180px; }
-.filter-bar label { font-size: 0.85rem; color: #475569; display: flex; align-items: center; gap: 4px; cursor: pointer; }
-.filter-bar label input { min-width: auto; }
-.filter-btn { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
-.filter-btn:hover { background: #1d4ed8; }
-.clear-btn { background: transparent; color: #64748b; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-.clear-btn:hover { background: #f1f5f9; }
+/* =========================================================
+   REPORTES_ESTUDIANTES.CSS - REPORTE DE ESTUDIANTES
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
 
-.pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 20px; flex-wrap: wrap; }
-.pagination a, .pagination span { padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
-.pagination a { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
-.pagination a:hover { background: #e2e8f0; }
-.pagination .current { background: #2563eb; color: white; border: 1px solid #2563eb; }
-.pagination .disabled { color: #cbd5e1; background: #f8fafc; border: 1px solid #e2e8f0; cursor: default; }
-.page-info { text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 8px; }
+#reporte-estudiantes {
+  width: 100%;
+}
+
+/* HEADER */
+
+#reporte-estudiantes .students-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+
+  margin-bottom: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 28%),
+    #ffffff;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+#reporte-estudiantes .students-report-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-report-header h2 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#reporte-estudiantes .students-report-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* RESUMEN */
+
+#reporte-estudiantes .students-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+#reporte-estudiantes .students-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-estudiantes .students-summary-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-estudiantes .students-summary-card h4 {
+  margin: 0 0 0.25rem;
+
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#reporte-estudiantes .students-summary-card .number {
+  color: #0f172a;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reporte-estudiantes .students-summary-card.total .number {
+  color: #2563eb;
+}
+
+#reporte-estudiantes .students-summary-card.enrolled .number {
+  color: #16a34a;
+}
+
+#reporte-estudiantes .students-summary-card.not-enrolled .number {
+  color: #dc2626;
+}
+
+#reporte-estudiantes .students-summary-card.enrolled .students-summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-estudiantes .students-summary-card.not-enrolled .students-summary-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* GESTIÓN */
+
+#reporte-estudiantes .students-active-management {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 999px;
+
+  background: #ecfdf5;
+  color: #166534;
+
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+#reporte-estudiantes .students-active-management.warning {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* FILTROS */
+
+#reporte-estudiantes .students-filter-form {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 170px 190px auto auto;
+  gap: 1rem;
+  align-items: end;
+
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-estudiantes .students-filter-group {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+#reporte-estudiantes .students-filter-group label {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-estudiantes .students-input-icon {
+  position: relative;
+}
+
+#reporte-estudiantes .students-input-icon i {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+
+  color: #94a3b8;
+
+  transform: translateY(-50%);
+}
+
+#reporte-estudiantes .students-input-icon input {
+  padding-left: 2.55rem;
+}
+
+#reporte-estudiantes .students-filter-group input,
+#reporte-estudiantes .students-filter-group select {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #334155;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+
+  outline: none;
+}
+
+#reporte-estudiantes .students-filter-group input:focus,
+#reporte-estudiantes .students-filter-group select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+}
+
+#reporte-estudiantes .students-check-filter {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #f8fafc;
+  color: #475569;
+
+  font-size: 0.84rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+#reporte-estudiantes .students-check-filter input {
+  display: none;
+}
+
+#reporte-estudiantes .students-check-filter span {
+  width: 18px;
+  height: 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #cbd5e1;
+  border-radius: 5px;
+
+  background: #ffffff;
+}
+
+#reporte-estudiantes .students-check-filter input:checked + span {
+  background: #c62828;
+  border-color: #c62828;
+}
+
+#reporte-estudiantes .students-check-filter input:checked + span::after {
+  content: "✓";
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-estudiantes .students-filter-btn,
+#reporte-estudiantes .students-clear-btn {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+#reporte-estudiantes .students-filter-btn {
+  border: 1px solid #1e293b;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+#reporte-estudiantes .students-clear-btn {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #c62828;
+}
+
+/* TABLA */
+
+#reporte-estudiantes .students-table-card {
+  overflow: hidden;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-estudiantes .students-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#reporte-estudiantes .students-report-table {
+  width: 100%;
+  min-width: 1120px;
+  border-collapse: collapse;
+}
+
+#reporte-estudiantes .students-report-table thead {
+  background: #f8fafc;
+}
+
+#reporte-estudiantes .students-report-table th {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+#reporte-estudiantes .students-report-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #334155;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+
+#reporte-estudiantes .students-report-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+#reporte-estudiantes .students-report-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* DATOS */
+
+#reporte-estudiantes .students-row-number {
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-person {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-estudiantes .students-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-estudiantes .students-person strong {
+  color: #0f172a;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+#reporte-estudiantes .students-ci,
+#reporte-estudiantes .students-gender,
+#reporte-estudiantes .students-enrollment-badge,
+#reporte-estudiantes .students-empty-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-ci {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-estudiantes .students-gender {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+#reporte-estudiantes .students-enrollment-badge {
+  background: #ecfdf5;
+  color: #166534;
+}
+
+#reporte-estudiantes .students-empty-badge {
+  background: #f8fafc;
+  color: #94a3b8;
+}
+
+#reporte-estudiantes .students-contact {
+  display: grid;
+  gap: 0.25rem;
+
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+#reporte-estudiantes .students-contact span,
+#reporte-estudiantes .students-contact small {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+#reporte-estudiantes .students-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-status.active {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-estudiantes .students-status.inactive {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* VACÍO */
+
+#reporte-estudiantes .students-empty-cell {
+  padding: 0 !important;
+}
+
+#reporte-estudiantes .students-empty {
+  padding: 3rem 1rem;
+
+  text-align: center;
+  color: #94a3b8;
+}
+
+#reporte-estudiantes .students-empty i {
+  display: block;
+
+  margin-bottom: 0.75rem;
+
+  color: #cbd5e1;
+  font-size: 2rem;
+}
+
+#reporte-estudiantes .students-empty h4 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-empty p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+/* PAGINACIÓN */
+
+#reporte-estudiantes .students-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+
+  margin-top: 1rem;
+}
+
+#reporte-estudiantes .students-pagination a,
+#reporte-estudiantes .students-pagination span {
+  min-width: 36px;
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #334155;
+
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+#reporte-estudiantes .students-pagination .current {
+  background: #c62828;
+  color: #ffffff;
+  border-color: #c62828;
+}
+
+#reporte-estudiantes .students-pagination .disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+#reporte-estudiantes .students-page-info,
+#reporte-estudiantes .students-generated-date {
+  margin-top: 0.85rem;
+
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+#reporte-estudiantes .students-generated-date {
+  text-align: right;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  #reporte-estudiantes .students-filter-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #reporte-estudiantes .students-filter-group.search,
+  #reporte-estudiantes .students-filter-actions {
+    grid-column: 1 / -1;
+  }
+
+  #reporte-estudiantes .students-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #reporte-estudiantes .students-report-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #reporte-estudiantes .students-report-header .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #reporte-estudiantes .students-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-estudiantes .students-filter-group.search,
+  #reporte-estudiantes .students-filter-actions {
+    grid-column: auto;
+  }
+
+  #reporte-estudiantes .students-filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reporte-estudiantes .students-filter-btn,
+  #reporte-estudiantes .students-clear-btn {
+    width: 100%;
+  }
+
+  #reporte-estudiantes .students-report-table {
+    min-width: 1080px;
+  }
+}
+
+/* IMPRESIÓN */
 
 @media print {
-  .sidebar, .topbar, .reports-grid, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
-  .accordion-content { display: block !important; }
-  .main-wrapper, .content-area, .reports-container { margin: 0 !important; padding: 0 !important; }
-  body { background: white; }
-  .student-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  tr:nth-child(even) td { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #reporte-estudiantes .students-filter-form,
+  #reporte-estudiantes .students-pagination,
+  #reporte-estudiantes .students-page-info,
+  #reporte-estudiantes .students-report-header .print-btn {
+    display: none !important;
+  }
+
+  #reporte-estudiantes .students-table-card {
+    border: none;
+    box-shadow: none;
+  }
+
+  #reporte-estudiantes .students-report-table {
+    min-width: 100%;
+  }
+
+  #reporte-estudiantes .students-report-table th {
+    background: #f1f5f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #reporte-estudiantes .students-report-table tr:nth-child(even) td {
+    background: #f8fafc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

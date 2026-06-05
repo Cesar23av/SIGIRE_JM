@@ -1,13 +1,605 @@
-.summary-card.doc-vencida { background: #fef2f2; border-left: 4px solid #dc2626; }
-.summary-card.doc-vencida .number { color: #dc2626; }
+/* =========================================================
+   REPORTES_DOCUMENTAL.CSS - REPORTE DOCUMENTAL
+   Sistema de Inscripciones - UE Jesús María
+   ========================================================= */
 
-.doc-badge i { margin-right: 4px; }
+#reporte-documental {
+  width: 100%;
+}
+
+/* HEADER */
+
+#reporte-documental .documental-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+
+  margin-bottom: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(circle at top right, rgba(234, 88, 12, 0.08), transparent 28%),
+    #ffffff;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+#reporte-documental .documental-report-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+
+  background: #fff7ed;
+  color: #ea580c;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-report-header h2 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#reporte-documental .documental-report-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* RESUMEN */
+
+#reporte-documental .documental-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
+}
+
+#reporte-documental .documental-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-documental .documental-summary-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-documental .documental-summary-card h4 {
+  margin: 0 0 0.25rem;
+
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+
+#reporte-documental .documental-summary-card .number {
+  color: #0f172a;
+  font-size: 1.65rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#reporte-documental .documental-summary-card.total .number {
+  color: #2563eb;
+}
+
+#reporte-documental .documental-summary-card.complete .number {
+  color: #16a34a;
+}
+
+#reporte-documental .documental-summary-card.pending .number {
+  color: #f59e0b;
+}
+
+#reporte-documental .documental-summary-card.expired .number {
+  color: #dc2626;
+}
+
+#reporte-documental .documental-summary-card.complete .documental-summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-documental .documental-summary-card.pending .documental-summary-icon {
+  background: #fffbeb;
+  color: #f59e0b;
+}
+
+#reporte-documental .documental-summary-card.expired .documental-summary-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* FILTROS */
+
+#reporte-documental .documental-filter-form {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 180px 220px auto;
+  gap: 1rem;
+  align-items: end;
+
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-documental .documental-filter-group {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+#reporte-documental .documental-filter-group label {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-documental .documental-input-icon {
+  position: relative;
+}
+
+#reporte-documental .documental-input-icon i {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+
+  color: #94a3b8;
+
+  transform: translateY(-50%);
+}
+
+#reporte-documental .documental-input-icon input {
+  padding-left: 2.55rem;
+}
+
+#reporte-documental .documental-filter-group input,
+#reporte-documental .documental-filter-group select {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #334155;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+
+  outline: none;
+}
+
+#reporte-documental .documental-filter-group input:focus,
+#reporte-documental .documental-filter-group select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
+}
+
+#reporte-documental .documental-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-documental .documental-filter-btn,
+#reporte-documental .documental-clear-btn {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+#reporte-documental .documental-filter-btn {
+  border: 1px solid #1e293b;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+#reporte-documental .documental-clear-btn {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #c62828;
+}
+
+/* TABLA */
+
+#reporte-documental .documental-table-card {
+  overflow: hidden;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+#reporte-documental .documental-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#reporte-documental .documental-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+}
+
+#reporte-documental .documental-table thead {
+  background: #f8fafc;
+}
+
+#reporte-documental .documental-table th {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+#reporte-documental .documental-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  color: #334155;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+
+#reporte-documental .documental-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+#reporte-documental .documental-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* DATOS */
+
+#reporte-documental .documental-row-number {
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-student {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#reporte-documental .documental-student-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #fff7ed;
+  color: #ea580c;
+
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#reporte-documental .documental-student strong {
+  color: #0f172a;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+#reporte-documental .documental-ci,
+#reporte-documental .documental-course-badge,
+#reporte-documental .documental-gestion-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-ci {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+#reporte-documental .documental-course-badge {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+#reporte-documental .documental-gestion-badge {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-documental .documental-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-status-badge.complete {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+#reporte-documental .documental-status-badge.pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+#reporte-documental .documental-status-badge.expired {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+#reporte-documental .documental-observation {
+  display: inline-block;
+  max-width: 220px;
+
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* VACÍO */
+
+#reporte-documental .documental-empty-cell {
+  padding: 0 !important;
+}
+
+#reporte-documental .documental-empty {
+  padding: 3rem 1rem;
+
+  text-align: center;
+  color: #94a3b8;
+}
+
+#reporte-documental .documental-empty i {
+  display: block;
+
+  margin-bottom: 0.75rem;
+
+  color: #cbd5e1;
+  font-size: 2rem;
+}
+
+#reporte-documental .documental-empty h4 {
+  margin: 0 0 0.35rem;
+
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-empty p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+/* PAGINACIÓN */
+
+#reporte-documental .documental-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+
+  margin-top: 1rem;
+}
+
+#reporte-documental .documental-pagination a,
+#reporte-documental .documental-pagination span {
+  min-width: 36px;
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #334155;
+
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+#reporte-documental .documental-pagination .current {
+  background: #c62828;
+  color: #ffffff;
+  border-color: #c62828;
+}
+
+#reporte-documental .documental-pagination .disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+#reporte-documental .documental-page-info,
+#reporte-documental .documental-generated-date {
+  margin-top: 0.85rem;
+
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+#reporte-documental .documental-generated-date {
+  text-align: right;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+  #reporte-documental .documental-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #reporte-documental .documental-filter-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #reporte-documental .documental-filter-group.search,
+  #reporte-documental .documental-filter-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  #reporte-documental .documental-report-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #reporte-documental .documental-report-header .print-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #reporte-documental .documental-summary-grid,
+  #reporte-documental .documental-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  #reporte-documental .documental-filter-group.search,
+  #reporte-documental .documental-filter-actions {
+    grid-column: auto;
+  }
+
+  #reporte-documental .documental-filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reporte-documental .documental-filter-btn,
+  #reporte-documental .documental-clear-btn {
+    width: 100%;
+  }
+
+  #reporte-documental .documental-table {
+    min-width: 1040px;
+  }
+}
+
+/* IMPRESIÓN */
 
 @media print {
-  .sidebar, .topbar, .filter-bar, .pagination, .page-info, .print-btn { display: none !important; }
-  .accordion-content { display: block !important; }
-  .main-wrapper, .content-area, .reports-container { margin: 0 !important; padding: 0 !important; }
-  body { background: white; }
-  .student-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  tr:nth-child(even) td { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #reporte-documental .documental-filter-form,
+  #reporte-documental .documental-pagination,
+  #reporte-documental .documental-page-info,
+  #reporte-documental .documental-report-header .print-btn {
+    display: none !important;
+  }
+
+  #reporte-documental .documental-table-card {
+    border: none;
+    box-shadow: none;
+  }
+
+  #reporte-documental .documental-table {
+    min-width: 100%;
+  }
+
+  #reporte-documental .documental-table th {
+    background: #f1f5f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #reporte-documental .documental-table tr:nth-child(even) td {
+    background: #f8fafc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

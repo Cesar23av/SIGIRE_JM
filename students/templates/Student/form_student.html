@@ -1,4 +1,4 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
 
 {% block page_title %}
@@ -7,15 +7,55 @@
   {% else %}
     Registro de Estudiante
   {% endif %}
-{% endblock %}
+{% endblock page_title %}
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'students/css/form_student.css' %}?v=6" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+{% static "students/css/form_student.css" as form_student_css %}
+<link rel="stylesheet" href="{{ form_student_css }}?v=10" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css" />
 
 <section class="student-form-page">
+
+  <div class="student-form-header-page">
+    <div>
+      <span class="student-page-label">
+        <i class="fa-solid fa-user-graduate"></i>
+        Gestión de estudiantes
+      </span>
+
+      <h2>
+        {% if es_edicion %}
+          Editar Estudiante
+        {% else %}
+          Registro de Estudiante
+        {% endif %}
+      </h2>
+
+      <p>
+        {% if es_edicion %}
+          Actualiza los datos permitidos del estudiante manteniendo protegida su identidad académica.
+        {% else %}
+          Registra los datos personales del estudiante para continuar con el proceso de inscripción.
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="student-page-badge">
+      <i class="fa-solid {% if es_edicion %}fa-user-pen{% else %}fa-child-reaching{% endif %}"></i>
+      <div>
+        <span>Modo actual</span>
+        <strong>
+          {% if es_edicion %}
+            Edición
+          {% else %}
+            Registro
+          {% endif %}
+        </strong>
+      </div>
+    </div>
+  </div>
 
   <div class="student-form-layout">
 
@@ -23,6 +63,8 @@
       <div class="student-info-icon">
         <i class="fa-solid {% if es_edicion %}fa-user-pen{% else %}fa-child-reaching{% endif %}"></i>
       </div>
+
+      <span class="info-panel-label">Guía rápida</span>
 
       <h3>
         {% if es_edicion %}
@@ -36,53 +78,61 @@
         {% if es_edicion %}
           Actualiza los datos permitidos del estudiante registrado.
         {% else %}
-          Registra la información personal del estudiante para continuar con el proceso de inscripción.
+          Registra la información personal del estudiante para continuar con la inscripción.
         {% endif %}
       </p>
 
       <ul class="student-tips">
         <li>
           <i class="fa-solid fa-check"></i>
-          Verifica nombres, apellidos y fecha de nacimiento.
+          <span>Verifica nombres, apellidos y fecha de nacimiento.</span>
         </li>
         <li>
           <i class="fa-solid fa-check"></i>
-          La cédula de identidad no se modifica en edición.
+          <span>La cédula de identidad no se modifica en edición.</span>
         </li>
         <li>
           <i class="fa-solid fa-check"></i>
-          La dirección debe ser clara para el registro institucional.
+          <span>La dirección debe ser clara para el registro institucional.</span>
         </li>
       </ul>
+
+      <div class="student-mini-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>Un registro ordenado evita observaciones al momento de formalizar la inscripción.</span>
+      </div>
     </aside>
 
     <section class="student-form-card">
       <div class="student-form-header">
         <div>
-          <h3>
-            <i class="fa-solid {% if es_edicion %}fa-user-pen{% else %}fa-child-reaching{% endif %}"></i>
+          <span class="student-card-label">
+            <i class="fa-solid {% if es_edicion %}fa-user-pen{% else %}fa-id-card{% endif %}"></i>
+            Datos del estudiante
+          </span>
 
+          <h3>
             {% if es_edicion %}
-              Editar Estudiante
+              Editar información estudiantil
             {% else %}
-              Registro de Nuevo Estudiante
+              Registrar nuevo estudiante
             {% endif %}
           </h3>
 
           <p>
             {% if es_edicion %}
-              Modifica la información académicamente editable del estudiante.
+              Modifica únicamente la información académicamente editable.
             {% else %}
-              Completa los datos requeridos para registrar al estudiante.
+              Completa los campos requeridos para crear el registro del estudiante.
             {% endif %}
           </p>
         </div>
 
         <span class="module-badge">
           {% if es_edicion %}
-            Modo Edición
+            Modo edición
           {% else %}
-            Módulo Registro
+            Nuevo registro
           {% endif %}
         </span>
       </div>
@@ -96,8 +146,8 @@
             </div>
 
             <div class="banner-content">
-              <strong>Identidad Protegida:</strong> {{ estudiante.cedula_identidad }}
-              <br>
+              <strong>Identidad protegida:</strong> {{ estudiante.cedula_identidad }}
+              <br />
               <small>Por integridad académica, el CI no puede ser modificado en edición.</small>
             </div>
           </div>
@@ -108,9 +158,9 @@
             </div>
 
             <div class="banner-content">
-              <strong>Vinculando con Tutor:</strong>
+              <strong>Vinculando con tutor:</strong>
               {{ tutor_seleccionado.nombres }} {{ tutor_seleccionado.apellidos }}
-              <br>
+              <br />
               <small>CI: {{ tutor_seleccionado.cedula_identidad }}</small>
             </div>
           </div>
@@ -118,93 +168,131 @@
 
         <form
           action="{% if es_edicion %}{% url 'editar_estudiante' estudiante.pk %}{% else %}{% url 'crear_estudiante' %}{% endif %}"
-          method="POST"
+          method="post"
           class="student-form"
+          id="studentForm"
           novalidate
         >
           {% csrf_token %}
 
           {% if tutor_seleccionado and not es_edicion %}
-            <input type="hidden" name="tutor_id" value="{{ tutor_seleccionado.pk }}">
+            <input type="hidden" name="tutor_id" value="{{ tutor_seleccionado.pk }}" />
           {% endif %}
 
-          <div class="student-grid">
+          <div class="form-status-card" id="studentFormStatus">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Formulario pendiente</strong>
+              <span>Completa los campos requeridos para continuar.</span>
+            </div>
+          </div>
 
-            <div class="form-group full-width">
-              <label for="id_nombres">
-                <i class="fa-solid fa-user"></i>
-                Nombres
-              </label>
-
-              <input
-                type="text"
-                id="id_nombres"
-                name="nombres"
-                value="{{ form.nombres.value|default:'' }}"
-                class="student-input"
-                placeholder="Ej: Ana María"
-                required
-              >
-
-              {% for error in form.nombres.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+          <div class="student-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 1</span>
+                <h4>Datos personales</h4>
+              </div>
+              <i class="fa-solid fa-user"></i>
             </div>
 
-            <div class="form-group">
-              <label for="id_apellido_paterno">
-                <i class="fa-solid fa-user-tag"></i>
-                Apellido Paterno
-              </label>
+            <div class="student-grid">
+              <div class="form-group full-width">
+                <label for="id_nombres">
+                  <i class="fa-solid fa-user"></i>
+                  Nombres
+                </label>
 
-              <input
-                type="text"
-                id="id_apellido_paterno"
-                name="apellido_paterno"
-                value="{{ form.apellido_paterno.value|default:'' }}"
-                class="student-input"
-                placeholder="Ej: Pérez"
-                required
-              >
+                <input
+                  type="text"
+                  id="id_nombres"
+                  name="nombres"
+                  value="{{ form.nombres.value|default:'' }}"
+                  class="student-input"
+                  placeholder="Ej: Ana María"
+                  autocomplete="off"
+                  required
+                />
 
-              {% for error in form.apellido_paterno.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+                <span class="field-feedback"></span>
+
+                {% for error in form.nombres.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
+                {% endfor %}
+              </div>
+
+              <div class="form-group">
+                <label for="id_apellido_paterno">
+                  <i class="fa-solid fa-user-tag"></i>
+                  Apellido paterno
+                </label>
+
+                <input
+                  type="text"
+                  id="id_apellido_paterno"
+                  name="apellido_paterno"
+                  value="{{ form.apellido_paterno.value|default:'' }}"
+                  class="student-input"
+                  placeholder="Ej: Pérez"
+                  autocomplete="off"
+                  required
+                />
+
+                <span class="field-feedback"></span>
+
+                {% for error in form.apellido_paterno.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
+                {% endfor %}
+              </div>
+
+              <div class="form-group">
+                <label for="id_apellido_materno">
+                  <i class="fa-solid fa-user-tag"></i>
+                  Apellido materno
+                  <span class="optional-badge">Opcional</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="id_apellido_materno"
+                  name="apellido_materno"
+                  value="{{ form.apellido_materno.value|default:'' }}"
+                  class="student-input"
+                  placeholder="Ej: Mamani"
+                  autocomplete="off"
+                />
+
+                <span class="field-feedback"></span>
+
+                {% for error in form.apellido_materno.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
+                {% endfor %}
+              </div>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="id_apellido_materno">
-                <i class="fa-solid fa-user-tag"></i>
-                Apellido Materno
-              </label>
-
-              <input
-                type="text"
-                id="id_apellido_materno"
-                name="apellido_materno"
-                value="{{ form.apellido_materno.value|default:'' }}"
-                class="student-input"
-                placeholder="Ej: Mamani"
-              >
-
-              {% for error in form.apellido_materno.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+          <div class="student-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 2</span>
+                <h4>Identificación</h4>
+              </div>
+              <i class="fa-solid fa-address-card"></i>
             </div>
 
             <div class="form-group full-width">
               <label>
                 <i class="fa-solid fa-address-card"></i>
-                Cédula de Identidad
+                Cédula de identidad
 
                 {% if es_edicion %}
                   <span class="locked-badge">
@@ -223,9 +311,13 @@
                     value="{% if es_edicion %}{{ ci_nro_val }}{% else %}{{ form.ci_nro.value|default:'' }}{% endif %}"
                     class="student-input {% if es_edicion %}input-disabled{% endif %}"
                     placeholder="Número"
+                    autocomplete="off"
+                    {% if not es_edicion %}required{% endif %}
                     {% if es_edicion %}disabled{% endif %}
-                  >
+                  />
+
                   <small class="input-hint">Número</small>
+                  <span class="field-feedback"></span>
 
                   {% for error in form.ci_nro.errors %}
                     <span class="error-text">
@@ -243,9 +335,12 @@
                     value="{% if es_edicion %}{{ ci_comp_val }}{% else %}{{ form.ci_comp.value|default:'' }}{% endif %}"
                     class="student-input {% if es_edicion %}input-disabled{% endif %}"
                     placeholder="Comp."
+                    autocomplete="off"
                     {% if es_edicion %}disabled{% endif %}
-                  >
+                  />
+
                   <small class="input-hint">Complemento</small>
+                  <span class="field-feedback"></span>
 
                   {% for error in form.ci_comp.errors %}
                     <span class="error-text">
@@ -255,11 +350,12 @@
                   {% endfor %}
                 </div>
 
-                <div class="ci-field">
+                <div class="ci-field select-wrapper">
                   <select
                     id="id_ci_exp"
                     name="ci_exp"
                     class="student-input {% if es_edicion %}input-disabled{% endif %}"
+                    {% if not es_edicion %}required{% endif %}
                     {% if es_edicion %}disabled{% endif %}
                   >
                     <option value="">Expedido</option>
@@ -271,6 +367,7 @@
                   </select>
 
                   <small class="input-hint">Departamento</small>
+                  <span class="field-feedback"></span>
 
                   {% for error in form.ci_exp.errors %}
                     <span class="error-text">
@@ -281,50 +378,76 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="id_fecha_nacimiento">
-                <i class="fa-solid fa-calendar-days"></i>
-                Fecha de Nacimiento
-              </label>
-
-              <input
-                type="date"
-                id="id_fecha_nacimiento"
-                name="fecha_nacimiento"
-                value="{{ form.fecha_nacimiento.value|date:'Y-m-d'|default:'' }}"
-                class="student-input"
-                required
-              >
-
-              {% for error in form.fecha_nacimiento.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+          <div class="student-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 3</span>
+                <h4>Nacimiento y género</h4>
+              </div>
+              <i class="fa-solid fa-calendar-days"></i>
             </div>
 
-            <div class="form-group">
-              <label for="id_genero">
-                <i class="fa-solid fa-venus-mars"></i>
-                Género
-              </label>
+            <div class="student-grid">
+              <div class="form-group">
+                <label for="id_fecha_nacimiento">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  Fecha de nacimiento
+                </label>
 
-              <select id="id_genero" name="genero" class="student-input" required>
-                {% for value, label in form.genero.field.choices %}
-                  <option value="{{ value }}" {% if form.genero.value == value %}selected{% endif %}>
-                    {{ label }}
-                  </option>
+                <input
+                  type="date"
+                  id="id_fecha_nacimiento"
+                  name="fecha_nacimiento"
+                  value="{{ form.fecha_nacimiento.value|date:'Y-m-d'|default:'' }}"
+                  class="student-input"
+                  required
+                />
+
+                <span class="field-feedback"></span>
+
+                {% for error in form.fecha_nacimiento.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
                 {% endfor %}
-              </select>
+              </div>
 
-              {% for error in form.genero.errors %}
-                <span class="error-text">
-                  <i class="fa-solid fa-circle-exclamation"></i>
-                  {{ error }}
-                </span>
-              {% endfor %}
+              <div class="form-group select-wrapper">
+                <label for="id_genero">
+                  <i class="fa-solid fa-venus-mars"></i>
+                  Género
+                </label>
+
+                <select id="id_genero" name="genero" class="student-input" required>
+                  {% for value, label in form.genero.field.choices %}
+                    <option value="{{ value }}" {% if form.genero.value == value %}selected{% endif %}>
+                      {{ label }}
+                    </option>
+                  {% endfor %}
+                </select>
+
+                <span class="field-feedback"></span>
+
+                {% for error in form.genero.errors %}
+                  <span class="error-text">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ error }}
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="student-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección 4</span>
+                <h4>Dirección</h4>
+              </div>
+              <i class="fa-solid fa-map-location-dot"></i>
             </div>
 
             <div class="form-group full-width">
@@ -342,9 +465,12 @@
                     value="{{ dir_calle|default:'' }}"
                     placeholder="Calle o Avenida"
                     class="student-input"
+                    autocomplete="off"
                     required
-                  >
+                  />
+
                   <small class="input-hint">Calle / Av.</small>
+                  <span class="field-feedback"></span>
                 </div>
 
                 <div class="address-field">
@@ -355,8 +481,11 @@
                     value="{{ dir_nro|default:'' }}"
                     placeholder="N°"
                     class="student-input"
-                  >
+                    autocomplete="off"
+                  />
+
                   <small class="input-hint">Número</small>
+                  <span class="field-feedback"></span>
                 </div>
 
                 <div class="address-field">
@@ -367,22 +496,35 @@
                     value="{{ dir_zona|default:'' }}"
                     placeholder="Zona o Barrio"
                     class="student-input"
+                    autocomplete="off"
                     required
-                  >
+                  />
+
                   <small class="input-hint">Zona / Barrio</small>
+                  <span class="field-feedback"></span>
                 </div>
               </div>
             </div>
+          </div>
 
-            {% if tutor_seleccionado and not es_edicion %}
-              <div class="form-group full-width relation-box">
+          {% if tutor_seleccionado and not es_edicion %}
+            <div class="student-section relation-box">
+              <div class="section-title-row">
+                <div>
+                  <span>Sección 5</span>
+                  <h4>Relación con tutor</h4>
+                </div>
+                <i class="fa-solid fa-users-rays"></i>
+              </div>
+
+              <div class="form-group full-width select-wrapper">
                 <label for="id_relacion">
                   <i class="fa-solid fa-users-rays"></i>
-                  Parentesco o Relación con el Tutor
+                  Parentesco o relación con el tutor
                 </label>
 
                 <select id="id_relacion" name="relacion" class="student-input" required>
-                  <option value="">¿Qué es el tutor del estudiante? Seleccione...</option>
+                  <option value="">Seleccione una relación...</option>
                   <option value="Madre">Madre</option>
                   <option value="Padre">Padre</option>
                   <option value="Abuelo/a">Abuelo / Abuela</option>
@@ -391,13 +533,25 @@
                   <option value="Tutor Legal">Tutor Legal</option>
                   <option value="Apoderado">Apoderado</option>
                 </select>
+
+                <span class="field-feedback"></span>
               </div>
-            {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="student-section">
+            <div class="section-title-row">
+              <div>
+                <span>Sección final</span>
+                <h4>Contacto</h4>
+              </div>
+              <i class="fa-solid fa-envelope"></i>
+            </div>
 
             <div class="form-group full-width">
               <label for="id_correo_electronico">
                 <i class="fa-solid fa-envelope"></i>
-                Correo Electrónico
+                Correo electrónico
                 <span class="optional-badge">Opcional</span>
               </label>
 
@@ -408,7 +562,10 @@
                 value="{{ form.correo_electronico.value|default:'' }}"
                 class="student-input"
                 placeholder="Ej: correo@ejemplo.com"
-              >
+                autocomplete="off"
+              />
+
+              <span class="field-feedback"></span>
 
               {% for error in form.correo_electronico.errors %}
                 <span class="error-text">
@@ -417,7 +574,6 @@
                 </span>
               {% endfor %}
             </div>
-
           </div>
 
           <div class="form-footer-actions">
@@ -426,14 +582,20 @@
               Cancelar
             </a>
 
-            <button type="submit" class="btn-save-student">
-              <i class="fa-solid fa-floppy-disk"></i>
+            <button type="submit" class="btn-save-student" id="btnSaveStudent">
+              <span class="btn-text">
+                <i class="fa-solid fa-floppy-disk"></i>
+                {% if es_edicion %}
+                  Guardar cambios
+                {% else %}
+                  Registrar estudiante
+                {% endif %}
+              </span>
 
-              {% if es_edicion %}
-                Guardar Cambios
-              {% else %}
-                Registrar Estudiante
-              {% endif %}
+              <span class="btn-loading">
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                Procesando...
+              </span>
             </button>
           </div>
         </form>
@@ -457,6 +619,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
-<script src="{% static 'students/js/form_student.js' %}?v=9"></script>
+{% static "students/js/form_student.js" as form_student_js %}
+<script src="{{ form_student_js }}?v=11"></script>
 
-{% endblock %}
+{% endblock content %}

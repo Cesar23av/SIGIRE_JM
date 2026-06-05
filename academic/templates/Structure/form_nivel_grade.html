@@ -1,206 +1,230 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
-
 {% block page_title %}Configuración Académica{% endblock %}
-
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'academic/css/form_nivel_grade.css' %}?v=10" />
-
-<section class="academic-form-page">
-
-  <div class="academic-form-header">
-    <div>
-      <h2>Gestión Estratégica Académica</h2>
-      <p>Define los niveles y grados que conforman la oferta educativa de la institución.</p>
-    </div>
-  </div>
-
-  {% if messages %}
-    <div class="messages-wrapper">
-      {% for message in messages %}
-        <div class="alert-msg {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
-          <i class="fa-solid {% if message.tags == 'error' %}fa-circle-xmark{% else %}fa-circle-check{% endif %}"></i>
-          <span>{{ message }}</span>
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  <div class="academic-form-layout">
-
-    <aside class="academic-info-panel">
-      <div class="academic-info-icon">
-        <i class="fa-solid fa-sitemap"></i>
+  <link rel="stylesheet"
+        href="{% static 'academic/css/form_nivel_grade.css' %}?v=15" />
+  <section class="academic-form-page">
+    <div class="academic-form-header">
+      <div class="academic-header-content">
+        <span class="academic-label">
+          <i class="fa-solid fa-school-circle-check"></i>
+          Configuración institucional
+        </span>
+        <h2>Gestión Estratégica Académica</h2>
+        <p>Define los niveles y grados que conforman la oferta educativa de la institución.</p>
       </div>
-
-      <h3>Configuración Académica</h3>
-
-      <p>
-        Administra la estructura base del sistema: niveles educativos y grados escolares.
-        Estos datos serán utilizados para organizar paralelos, cupos e inscripciones.
-      </p>
-
-      <ul class="academic-tips">
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Primero registra los niveles educativos.
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Luego asocia cada grado a su nivel correspondiente.
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Evita duplicar nombres para mantener reportes claros.
-        </li>
-      </ul>
-    </aside>
-
-    <div class="registration-wrapper">
-
-      {% if editando or request.GET.tipo == 'nivel' %}
-        <section class="academic-form-card">
-          <div class="academic-card-header nivel">
-            <h3>
-              <i class="fa-solid fa-layer-group"></i>
-
-              {% if editando %}
-                Actualizar Nivel
-              {% else %}
-                Nuevo Nivel Educativo
-              {% endif %}
-            </h3>
-
-            <p>
-              {% if editando %}
-                Modifica el nombre del nivel educativo seleccionado.
-              {% else %}
-                Registra un nuevo nivel educativo para la estructura académica.
-              {% endif %}
-            </p>
-          </div>
-
-          <div class="academic-card-body">
-            <form method="post" id="form-nivel" class="academic-form">
-              {% csrf_token %}
-
-              <div class="form-group">
-                <label for="{{ form_nivel.nombre.id_for_label }}">
-                  {{ form_nivel.nombre.label }}
-                </label>
-
-                <div class="input-wrapper">
-                  {{ form_nivel.nombre }}
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <a href="{% url 'estructura_academica' %}" class="btn-back">
-                  <i class="fa-solid fa-xmark"></i>
-                  Cancelar
-                </a>
-
-                <button
-                  type="submit"
-                  name="btn_guardar_nivel"
-                  id="btn-nivel"
-                  class="btn-save-academic btn-nivel {% if editando %}btn-edit{% endif %}"
-                  {% if editando %}disabled{% endif %}
-                >
-                  <i class="fa-solid {% if editando %}fa-floppy-disk{% else %}fa-check-double{% endif %}"></i>
-
-                  {% if editando %}
-                    Guardar Cambios
-                  {% else %}
-                    Confirmar
-                  {% endif %}
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
-      {% endif %}
-
-      {% if editando_grado or request.GET.tipo == 'grado' %}
-        <section class="academic-form-card">
-          <div class="academic-card-header grado">
-            <h3>
-              <i class="fa-solid fa-graduation-cap"></i>
-
-              {% if editando_grado %}
-                Actualizar Grado
-              {% else %}
-                Nuevo Grado Escolar
-              {% endif %}
-            </h3>
-
-            <p>
-              {% if editando_grado %}
-                Modifica los datos del grado escolar seleccionado.
-              {% else %}
-                Registra un nuevo grado y asígnalo al nivel educativo correspondiente.
-              {% endif %}
-            </p>
-          </div>
-
-          <div class="academic-card-body">
-            <form method="post" id="form-grado" class="academic-form">
-              {% csrf_token %}
-
-              <div class="form-group">
-                <label for="{{ form_grado.nivel.id_for_label }}">
-                  {{ form_grado.nivel.label }}
-                </label>
-
-                <div class="input-wrapper">
-                  {{ form_grado.nivel }}
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="{{ form_grado.nombre.id_for_label }}">
-                  {{ form_grado.nombre.label }}
-                </label>
-
-                <div class="input-wrapper">
-                  {{ form_grado.nombre }}
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <a href="{% url 'estructura_academica' %}" class="btn-back">
-                  <i class="fa-solid fa-xmark"></i>
-                  Cancelar
-                </a>
-
-                <button
-                  type="submit"
-                  name="btn_guardar_grado"
-                  id="btn-grado"
-                  class="btn-save-academic btn-grado {% if editando_grado %}btn-edit{% endif %}"
-                  {% if editando_grado %}disabled{% endif %}
-                >
-                  <i class="fa-solid {% if editando_grado %}fa-floppy-disk{% else %}fa-check-double{% endif %}"></i>
-
-                  {% if editando_grado %}
-                    Guardar Cambios
-                  {% else %}
-                    Confirmar
-                  {% endif %}
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
-      {% endif %}
-
+      <div class="academic-header-badge">
+        <i class="fa-solid fa-sitemap"></i>
+        <div>
+          <span>Módulo</span>
+          <strong>Niveles y Grados</strong>
+        </div>
+      </div>
     </div>
-
-  </div>
-
-</section>
-
-<script src="{% static 'academic/js/form_nivel_grade.js' %}?v=8"></script>
-
+    {% if messages %}
+      <div class="messages-wrapper">
+        {% for message in messages %}
+          <div class="alert-msg {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-xmark{% else %}fa-circle-check{% endif %}"></i>
+            <span>{{ message }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="academic-form-layout">
+      <aside class="academic-info-panel">
+        <div class="academic-info-icon">
+          <i class="fa-solid fa-diagram-project"></i>
+        </div>
+        <span class="info-panel-label">Guía rápida</span>
+        <h3>Configuración Académica</h3>
+        <p>
+          Administra la estructura base del sistema: niveles educativos y grados escolares.
+          Estos datos serán utilizados para organizar paralelos, cupos e inscripciones.
+        </p>
+        <ul class="academic-tips">
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>Primero registra los niveles educativos.</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>Luego asocia cada grado a su nivel correspondiente.</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-check"></i>
+            <span>Evita duplicar nombres para mantener reportes claros.</span>
+          </li>
+        </ul>
+        <div class="academic-mini-note">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Una estructura académica ordenada evita errores posteriores en paralelos e inscripciones.</span>
+        </div>
+      </aside>
+      <div class="registration-wrapper">
+        {% if editando or request.GET.tipo == 'nivel' %}
+          <section class="academic-form-card">
+            <div class="academic-card-header nivel">
+              <div>
+                <span class="form-mode-label nivel-label">
+                  <i class="fa-solid fa-layer-group"></i>
+                  Nivel educativo
+                </span>
+                <h3>
+                  {% if editando %}
+                    Actualizar Nivel
+                  {% else %}
+                    Nuevo Nivel Educativo
+                  {% endif %}
+                </h3>
+                <p>
+                  {% if editando %}
+                    Modifica el nombre del nivel educativo seleccionado.
+                  {% else %}
+                    Registra un nuevo nivel educativo para la estructura académica.
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            <div class="academic-card-body">
+              <form method="post" id="form-nivel" class="academic-form" novalidate>
+                {% csrf_token %}
+                <div class="form-status-card" id="status-form-nivel">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div>
+                    <strong>Formulario de nivel</strong>
+                    <span>
+                      {% if editando %}
+                        Realiza un cambio para habilitar el guardado.
+                      {% else %}
+                        Ingresa el nombre del nuevo nivel educativo.
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="{{ form_nivel.nombre.id_for_label }}">{{ form_nivel.nombre.label }}</label>
+                  <div class="input-wrapper">
+                    <i class="fa-solid fa-layer-group input-icon"></i>
+                    {{ form_nivel.nombre }}
+                  </div>
+                  <span class="field-feedback"></span>
+                </div>
+                <div class="form-actions">
+                  <a href="{% url 'estructura_academica' %}" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Cancelar
+                  </a>
+                  <button type="submit"
+                          name="btn_guardar_nivel"
+                          id="btn-nivel"
+                          class="btn-save-academic btn-nivel {% if editando %}btn-edit{% endif %}"
+                          {% if editando %}disabled{% endif %}>
+                    <span class="btn-text">
+                      <i class="fa-solid {% if editando %}fa-floppy-disk{% else %}fa-check-double{% endif %}"></i>
+                      {% if editando %}
+                        Guardar Cambios
+                      {% else %}
+                        Confirmar Registro
+                      {% endif %}
+                    </span>
+                    <span class="btn-loading">
+                      <i class="fa-solid fa-circle-notch fa-spin"></i>
+                      Procesando...
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+        {% endif %}
+        {% if editando_grado or request.GET.tipo == 'grado' %}
+          <section class="academic-form-card">
+            <div class="academic-card-header grado">
+              <div>
+                <span class="form-mode-label grado-label">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                  Grado escolar
+                </span>
+                <h3>
+                  {% if editando_grado %}
+                    Actualizar Grado
+                  {% else %}
+                    Nuevo Grado Escolar
+                  {% endif %}
+                </h3>
+                <p>
+                  {% if editando_grado %}
+                    Modifica los datos del grado escolar seleccionado.
+                  {% else %}
+                    Registra un nuevo grado y asígnalo al nivel educativo correspondiente.
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            <div class="academic-card-body">
+              <form method="post" id="form-grado" class="academic-form" novalidate>
+                {% csrf_token %}
+                <div class="form-status-card" id="status-form-grado">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div>
+                    <strong>Formulario de grado</strong>
+                    <span>
+                      {% if editando_grado %}
+                        Realiza un cambio para habilitar el guardado.
+                      {% else %}
+                        Selecciona un nivel y registra el nombre del grado.
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="{{ form_grado.nivel.id_for_label }}">{{ form_grado.nivel.label }}</label>
+                  <div class="input-wrapper">
+                    <i class="fa-solid fa-school input-icon"></i>
+                    {{ form_grado.nivel }}
+                  </div>
+                  <span class="field-feedback"></span>
+                </div>
+                <div class="form-group">
+                  <label for="{{ form_grado.nombre.id_for_label }}">{{ form_grado.nombre.label }}</label>
+                  <div class="input-wrapper">
+                    <i class="fa-solid fa-graduation-cap input-icon"></i>
+                    {{ form_grado.nombre }}
+                  </div>
+                  <span class="field-feedback"></span>
+                </div>
+                <div class="form-actions">
+                  <a href="{% url 'estructura_academica' %}" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Cancelar
+                  </a>
+                  <button type="submit"
+                          name="btn_guardar_grado"
+                          id="btn-grado"
+                          class="btn-save-academic btn-grado {% if editando_grado %}btn-edit{% endif %}"
+                          {% if editando_grado %}disabled{% endif %}>
+                    <span class="btn-text">
+                      <i class="fa-solid {% if editando_grado %}fa-floppy-disk{% else %}fa-check-double{% endif %}"></i>
+                      {% if editando_grado %}
+                        Guardar Cambios
+                      {% else %}
+                        Confirmar Registro
+                      {% endif %}
+                    </span>
+                    <span class="btn-loading">
+                      <i class="fa-solid fa-circle-notch fa-spin"></i>
+                      Procesando...
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  <script src="{% static 'academic/js/form_nivel_grade.js' %}?v=10"></script>
 {% endblock %}

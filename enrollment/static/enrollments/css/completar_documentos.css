@@ -1,5 +1,5 @@
 /* =========================================================
-   FORM_ENROLLMENT.CSS - FORMULARIO DE INSCRIPCIÓN
+   COMPLETAR_DOCUMENTOS.CSS - REGULARIZACIÓN DOCUMENTAL
    Sistema de Inscripciones - UE Jesús María
    ========================================================= */
 
@@ -8,8 +8,6 @@
   --primary-hover: #b71c1c;
 
   --secondary-color: #1e293b;
-  --secondary-light: #334155;
-
   --text-main: #334155;
   --text-muted: #64748b;
   --text-light: #94a3b8;
@@ -23,11 +21,9 @@
 
   --green-soft: #ecfdf5;
   --green-main: #16a34a;
-  --green-dark: #166534;
 
   --red-soft: #fef2f2;
   --red-main: #dc2626;
-  --red-dark: #991b1b;
 
   --orange-soft: #fff7ed;
   --orange-main: #ea580c;
@@ -49,11 +45,11 @@
 
 /* GENERAL */
 
-.enroll-page {
+.documents-page {
   width: 100%;
 }
 
-.enroll-card {
+.documents-card {
   overflow: hidden;
 
   border: 1px solid var(--border-color);
@@ -65,10 +61,10 @@
 
 /* HEADER */
 
-.enroll-card-header {
+.documents-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 20px;
 
   padding: 2rem;
@@ -79,7 +75,7 @@
     var(--white);
 }
 
-.enroll-page-label {
+.documents-page-label {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -123,53 +119,44 @@
   color: var(--primary-color);
 }
 
-.header-badge {
-  min-width: 170px;
+.header-status {
+  flex-shrink: 0;
+}
 
-  display: flex;
+.document-status {
+  min-height: 44px;
+
+  display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: center;
+  gap: 7px;
 
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
 
-  background: var(--orange-soft);
-  border: 1px solid #fed7aa;
-}
-
-.header-badge > i {
-  width: 42px;
-  height: 42px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 14px;
-
-  background: #ffedd5;
-  color: var(--orange-main);
-}
-
-.header-badge span {
-  display: block;
-
-  color: #9a3412;
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: 0.78rem;
+  font-weight: 900;
   text-transform: uppercase;
 }
 
-.header-badge strong {
-  display: block;
-
-  color: #7c2d12;
-  font-size: 0.95rem;
-  font-weight: 900;
+.document-status.completa {
+  background: var(--green-soft);
+  color: var(--green-main);
 }
 
-/* STATUS */
+.document-status.pendiente {
+  background: var(--yellow-soft);
+  color: #92400e;
+}
 
-.form-status-card {
+.document-status.vencida {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+/* FORM STATUS */
+
+.documents-status-card {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -182,21 +169,21 @@
   background: var(--blue-soft);
 }
 
-.form-status-card > i {
+.documents-status-card > i {
   margin-top: 0.12rem;
 
   color: var(--blue-main);
   font-size: 1.05rem;
 }
 
-.form-status-card strong {
+.documents-status-card strong {
   display: block;
 
   color: #0f172a;
   font-size: 0.9rem;
 }
 
-.form-status-card span {
+.documents-status-card span {
   display: block;
   margin-top: 0.15rem;
 
@@ -204,40 +191,40 @@
   font-size: 0.82rem;
 }
 
-.form-status-card.status-ready {
+.documents-status-card.status-ready {
   background: var(--green-soft);
   border-color: #bbf7d0;
 }
 
-.form-status-card.status-ready > i {
+.documents-status-card.status-ready > i {
   color: var(--green-main);
 }
 
-.form-status-card.status-error {
-  background: var(--red-soft);
-  border-color: #fecaca;
-}
-
-.form-status-card.status-error > i {
-  color: var(--red-main);
-}
-
-.form-status-card.status-warning {
+.documents-status-card.status-warning {
   background: var(--yellow-soft);
   border-color: #fde68a;
 }
 
-.form-status-card.status-warning > i {
+.documents-status-card.status-warning > i {
   color: var(--yellow-main);
+}
+
+.documents-status-card.status-error {
+  background: var(--red-soft);
+  border-color: #fecaca;
+}
+
+.documents-status-card.status-error > i {
+  color: var(--red-main);
 }
 
 /* LAYOUT */
 
-.enroll-form-body {
+.documents-form {
   width: 100%;
 }
 
-.enroll-layout-grid {
+.documents-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 370px;
   gap: 26px;
@@ -245,13 +232,13 @@
   padding: 30px;
 }
 
-.enroll-column-main,
-.enroll-column-side {
+.documents-main,
+.documents-side {
   min-width: 0;
 }
 
-.form-section,
-.requirements-box {
+.documents-section,
+.requirements-card {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
 
@@ -259,14 +246,24 @@
   box-shadow: var(--shadow-soft);
 }
 
-.form-section {
-  padding: 1.4rem;
+.documents-section {
   margin-bottom: 22px;
+  padding: 1.4rem;
 }
 
-.form-section:last-child {
+.documents-section:last-child {
   margin-bottom: 0;
 }
+
+.requirements-card {
+  position: sticky;
+  top: 96px;
+
+  padding: 1.4rem;
+  background: var(--bg-soft);
+}
+
+/* SECTION TITLE */
 
 .section-title-row {
   display: flex;
@@ -310,11 +307,12 @@
 
 /* STUDENT */
 
-.student-info-banner {
+.student-summary {
   display: flex;
   align-items: center;
   gap: 16px;
 
+  margin-bottom: 18px;
   padding: 18px;
   border: 1px solid var(--border-color);
   border-radius: 16px;
@@ -322,15 +320,10 @@
   background: linear-gradient(135deg, #ffffff, #f8fafc);
 }
 
-.student-info-banner.student-missing {
-  border-color: #fecaca;
-  background: var(--red-soft);
-}
-
 .student-avatar {
   width: 54px;
   height: 54px;
-  flex-shrink: 0;
+  min-width: 54px;
 
   display: grid;
   place-items: center;
@@ -341,6 +334,8 @@
   color: var(--primary-color);
 
   font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .student-data {
@@ -364,228 +359,66 @@
   font-weight: 700;
 }
 
-/* INPUTS */
+/* SUMMARY */
 
-.input-row {
+.summary-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  gap: 14px;
 }
 
-.form-group {
-  min-width: 0;
-}
+.summary-item {
+  display: grid;
+  gap: 6px;
 
-.form-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  margin-bottom: 8px;
-
-  color: var(--text-main);
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
-.form-group label i {
-  color: var(--primary-color);
-}
-
-.enroll-input,
-.enroll-textarea {
-  width: 100%;
-
+  padding: 14px;
   border: 1px solid var(--border-color);
   border-radius: 14px;
 
-  background: var(--white);
-  color: var(--text-main);
-
-  font-size: 0.95rem;
-  font-family: "Inter", sans-serif;
-
-  transition: var(--transition);
-}
-
-.enroll-input {
-  min-height: 50px;
-  padding: 12px 14px;
-}
-
-.enroll-textarea {
-  min-height: 120px;
-  padding: 13px 14px;
-  resize: vertical;
-}
-
-.enroll-input:focus,
-.enroll-textarea:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
-  outline: none;
-}
-
-.enroll-input::placeholder,
-.enroll-textarea::placeholder {
-  color: var(--text-light);
-}
-
-.input-readonly,
-.enroll-input[readonly],
-.enroll-input:disabled {
-  background: var(--gray-soft);
-  color: var(--text-muted);
-  cursor: not-allowed;
-}
-
-.input-help {
-  display: block;
-
-  margin-top: 7px;
-
-  color: var(--text-light);
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-
-.rude-manual-input {
-  margin-top: 10px;
-}
-
-.rude-hidden {
-  display: none;
-}
-
-/* SELECT ARROW */
-
-.select-wrapper {
-  position: relative;
-}
-
-.select-wrapper select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  padding-right: 3.5rem;
-  background-image: none !important;
-}
-
-.select-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 1.25rem;
-  top: 43px;
-
-  width: 0.6rem;
-  height: 0.6rem;
-
-  border-right: 2px solid #475569;
-  border-bottom: 2px solid #475569;
-
-  transform: rotate(45deg);
-  pointer-events: none;
-}
-
-.select-wrapper:has(.enroll-input.input-valid)::after {
-  border-color: var(--green-dark);
-}
-
-.select-wrapper:has(.enroll-input.input-invalid)::after {
-  border-color: var(--red-dark);
-}
-
-/* VALIDATION */
-
-.input-valid {
-  border-color: var(--green-main) !important;
-  background-color: #f0fdf4 !important;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1) !important;
-}
-
-.input-invalid {
-  border-color: var(--red-main) !important;
-  background-color: var(--red-soft) !important;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
-}
-
-.field-feedback {
-  display: none;
-  align-items: center;
-  gap: 0.35rem;
-
-  min-height: 1rem;
-  margin-top: 0.55rem;
-
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.field-feedback.show {
-  display: flex;
-}
-
-.feedback-valid {
-  color: #15803d;
-}
-
-.feedback-invalid {
-  color: #b91c1c;
-}
-
-/* APPROVAL */
-
-.approval-box {
-  margin-top: 14px;
-  padding: 14px;
-
-  border: 1px solid #fde68a;
-  border-left: 4px solid var(--yellow-main);
-  border-radius: 14px;
-
-  background: var(--yellow-soft);
-}
-
-.approval-check {
-  display: flex !important;
-  align-items: flex-start;
-  gap: 10px;
-
-  margin-bottom: 8px !important;
-
-  color: #92400e;
-  font-size: 0.88rem;
-  font-weight: 900;
-}
-
-.approval-check input {
-  margin-top: 3px;
-}
-
-.approval-box p {
-  color: #92400e;
-  font-size: 0.82rem;
-  line-height: 1.45;
-}
-
-.suggestion-info {
-  margin-top: 12px;
-}
-
-/* REQUIREMENTS */
-
-.requirements-box {
-  position: sticky;
-  top: 96px;
-
-  padding: 1.4rem;
   background: var(--bg-soft);
 }
 
-.requirements-title-row {
-  margin-bottom: 0.9rem;
+.summary-item span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
+
+.summary-item strong {
+  color: var(--text-main);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.summary-item.deadline {
+  border-left: 4px solid var(--orange-main);
+  background: var(--orange-soft);
+}
+
+.summary-item.deadline strong {
+  color: #9a3412;
+}
+
+/* POLICY */
+
+.policy-box {
+  padding: 1rem;
+  border-left: 4px solid var(--blue-main);
+  border-radius: 14px;
+
+  background: var(--blue-soft);
+  color: #1e40af;
+
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.policy-box strong {
+  color: var(--green-main);
+}
+
+/* CHECKLIST */
 
 .requirements-hint {
   margin-bottom: 16px;
@@ -738,7 +571,8 @@
   color: var(--blue-main);
 }
 
-.requirements-info {
+.requirements-info,
+.empty-documents {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -754,14 +588,15 @@
   line-height: 1.5;
 }
 
-.requirements-info i {
+.requirements-info i,
+.empty-documents i {
   margin-top: 2px;
   color: var(--blue-main);
 }
 
 /* FOOTER */
 
-.enroll-form-footer {
+.documents-footer {
   display: flex;
   justify-content: flex-end;
   gap: 14px;
@@ -772,8 +607,8 @@
   background: var(--bg-soft);
 }
 
-.btn-confirm-enroll,
-.btn-cancel-enroll {
+.btn-save-documents,
+.btn-cancel-documents {
   min-height: 48px;
 
   display: inline-flex;
@@ -793,30 +628,30 @@
   transition: var(--transition);
 }
 
-.btn-cancel-enroll {
+.btn-cancel-documents {
   background: var(--white);
   color: var(--text-main);
   border: 1px solid var(--border-color);
 }
 
-.btn-cancel-enroll:hover {
+.btn-cancel-documents:hover {
   background: #e2e8f0;
 }
 
-.btn-confirm-enroll {
+.btn-save-documents {
   background: var(--primary-color);
   color: var(--white);
   border: 1px solid var(--primary-color);
   box-shadow: 0 10px 22px rgba(198, 40, 40, 0.18);
 }
 
-.btn-confirm-enroll:hover {
+.btn-save-documents:hover {
   background: var(--primary-hover);
   border-color: var(--primary-hover);
   transform: translateY(-1px);
 }
 
-.btn-confirm-enroll:disabled {
+.btn-save-documents:disabled {
   background: #cbd5e1;
   color: #64748b;
   border-color: #cbd5e1;
@@ -835,98 +670,76 @@
   display: none;
 }
 
-.btn-confirm-enroll.loading .btn-text {
+.btn-save-documents.loading .btn-text {
   display: none;
 }
 
-.btn-confirm-enroll.loading .btn-loading {
+.btn-save-documents.loading .btn-loading {
   display: inline-flex;
 }
 
-/* SWEETALERT */
+/* ANIMATION */
 
-.inscription-type-content {
-  text-align: left;
+.document-fade-in {
+  animation: documentFadeIn 0.34s ease both;
 }
 
-.inscription-type-content p {
-  margin-bottom: 1rem;
-  color: #64748b;
-  font-size: 0.92rem;
-}
+@keyframes documentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 
-.inscription-type-grid {
-  display: grid;
-  gap: 0.7rem;
-}
-
-.inscription-type-grid div {
-  padding: 0.8rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  background: #f8fafc;
-}
-
-.inscription-type-grid strong {
-  display: block;
-  color: #0f172a;
-  font-size: 0.9rem;
-}
-
-.inscription-type-grid span {
-  display: block;
-  margin-top: 0.2rem;
-  color: #64748b;
-  font-size: 0.8rem;
-}
-
-.swal-inscripcion-actions {
-  gap: 0.6rem;
-  flex-wrap: wrap;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* RESPONSIVE */
 
 @media (max-width: 1200px) {
-  .enroll-layout-grid {
+  .documents-layout {
     grid-template-columns: minmax(0, 1fr) 330px;
     gap: 22px;
     padding: 26px;
   }
 
-  .enroll-card-header,
-  .enroll-form-footer {
+  .documents-header,
+  .documents-footer {
     padding-left: 26px;
     padding-right: 26px;
   }
 }
 
 @media (max-width: 992px) {
-  .enroll-card-header {
+  .documents-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .header-badge {
+  .header-status,
+  .document-status {
     width: 100%;
   }
 
-  .enroll-layout-grid {
+  .documents-layout {
     grid-template-columns: 1fr;
   }
 
-  .requirements-box {
+  .requirements-card {
     position: static;
   }
 
-  .form-status-card {
+  .documents-status-card {
     margin-left: 1.6rem;
     margin-right: 1.6rem;
   }
 }
 
 @media (max-width: 768px) {
-  .enroll-card-header {
+  .documents-header,
+  .documents-footer {
     padding: 24px 22px;
   }
 
@@ -934,46 +747,46 @@
     font-size: 1.18rem;
   }
 
-  .enroll-layout-grid {
+  .documents-layout {
     padding: 22px;
   }
 
-  .input-row {
-    grid-template-columns: 1fr;
-  }
-
-  .form-section,
-  .requirements-box {
+  .documents-section,
+  .requirements-card {
     padding: 20px;
   }
 
-  .student-info-banner {
-    flex-direction: column;
+  .student-summary {
     align-items: flex-start;
+    flex-direction: column;
   }
 
-  .enroll-form-footer {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-footer {
     flex-direction: column-reverse;
-    padding: 22px;
   }
 
-  .btn-confirm-enroll,
-  .btn-cancel-enroll {
+  .btn-save-documents,
+  .btn-cancel-documents {
     width: 100%;
   }
 
-  .form-status-card {
+  .documents-status-card {
     margin-left: 1.25rem;
     margin-right: 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
-  .enroll-card {
+  .documents-card {
     border-radius: 18px;
   }
 
-  .enroll-card-header {
+  .documents-header,
+  .documents-footer {
     padding: 22px 18px;
   }
 
@@ -985,12 +798,12 @@
     font-size: 0.86rem;
   }
 
-  .enroll-layout-grid {
+  .documents-layout {
     padding: 20px 18px;
   }
 
-  .form-section,
-  .requirements-box {
+  .documents-section,
+  .requirements-card {
     border-radius: 14px;
     padding: 18px;
   }
@@ -1006,31 +819,20 @@
     font-size: 1.2rem;
   }
 
-  .student-data strong {
-    font-size: 0.92rem;
+  .student-data strong,
+  .summary-item strong {
+    font-size: 0.88rem;
   }
 
   .student-data span,
   .requirements-hint,
-  .input-help,
-  .requirements-info {
-    font-size: 0.78rem;
+  .requirements-info,
+  .empty-documents,
+  .policy-box {
+    font-size: 0.8rem;
   }
 
-  .enroll-input,
-  .enroll-textarea {
-    font-size: 0.9rem;
-  }
-
-  .check-text {
-    font-size: 0.82rem;
-  }
-
-  .enroll-form-footer {
-    padding: 20px 18px;
-  }
-
-  .form-status-card {
+  .documents-status-card {
     margin-left: 1rem;
     margin-right: 1rem;
   }

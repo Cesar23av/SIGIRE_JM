@@ -1,321 +1,348 @@
-{% extends 'registration/base_admin.html' %}
+{% extends "registration/base_admin.html" %}
 {% load static %}
-
-{% block page_title %}Gestión de Estudiantes{% endblock %}
-
+{% block page_title %}
+  Gestión de Estudiantes
+{% endblock page_title %}
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'students/css/list_estudiantes.css' %}?v=10" />
-
-<section class="student-list-page">
-
-  <div class="student-list-card">
-
-    <div class="student-list-header">
-      <div class="header-info">
-        <h3>
-          <i class="fa-solid fa-children"></i>
-          Directorio de Estudiantes
-        </h3>
-
-        <p>Consulta, registra y administra estudiantes activos e inactivos.</p>
-      </div>
-
-      <div class="header-actions">
-        {% if not ver_inactivos and not modo_seleccion_inscripcion %}
-          <a href="{% url 'crear_estudiante' %}" class="btn-add-student">
-            <i class="fa-solid fa-user-plus"></i>
-            Nuevo Estudiante
-          </a>
-        {% endif %}
-
-        {% if not modo_seleccion_inscripcion %}
-          <div class="toggle-container">
-            <span class="toggle-label">Ver Inactivos</span>
-
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="toggleInactivos"
-                {% if ver_inactivos %}checked{% endif %}
-              >
-              <span class="slider round"></span>
-            </label>
-          </div>
-        {% endif %}
-
-        <span class="module-badge">Módulo Académico</span>
-      </div>
-    </div>
-
-    {% if modo_seleccion_inscripcion %}
-      <div class="selection-banner">
-        <i class="fa-solid fa-circle-info"></i>
-        <div>
-          <strong>Modo Selección de Estudiante:</strong>
-          seleccione al estudiante que será inscrito en la gestión correspondiente.
-        </div>
-      </div>
-    {% endif %}
-
-    <div class="filter-bar">
-      <form
-        method="GET"
-        action="{% url 'list_estudiantes' %}"
-        id="searchForm"
-        class="combined-search-form student-filter-form"
-      >
-        {% if modo_seleccion_inscripcion %}
-          <input type="hidden" name="modo_seleccion_inscripcion" value="true">
-          <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}">
-        {% endif %}
-
-        {% if ver_inactivos %}
-          <input type="hidden" name="inactivos" id="hiddenInactivos" value="on">
-        {% else %}
-          <input type="hidden" name="inactivos" id="hiddenInactivos" value="">
-        {% endif %}
-
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-
-          <input
-            type="text"
-            name="search"
-            id="searchInput"
-            placeholder="Buscar por CI, nombres o apellidos..."
-            value="{{ search_query|default:'' }}"
-          >
-        </div>
-
-        <div class="select-box">
-          <select name="genero" id="generoFilter">
-            <option value="">Todos los géneros</option>
-            <option value="M" {% if genero_filter == 'M' %}selected{% endif %}>
-              Masculino
-            </option>
-            <option value="F" {% if genero_filter == 'F' %}selected{% endif %}>
-              Femenino
-            </option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn-filter-student">
-          <i class="fa-solid fa-filter"></i>
-          Filtrar
-        </button>
-
-        {% if search_query or genero_filter %}
-          <a
-            href="{% url 'list_estudiantes' %}{% if modo_seleccion_inscripcion %}?modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
-            class="btn-clear-student"
-            title="Limpiar búsqueda"
-          >
-            <i class="fa-solid fa-rotate-left"></i>
-          </a>
-        {% endif %}
-      </form>
-    </div>
-
-    <div class="list-body">
-      <div class="table-responsive">
-        <table class="student-table">
-          <thead>
-            <tr>
-              <th class="number-column">#</th>
-              <th>Nombre Completo</th>
-              <th>Cédula de Identidad</th>
-              <th>Género / F. Nac.</th>
-              <th>Contacto</th>
-              <th class="status-column">Estado</th>
-              <th class="actions-column">Acciones</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {% for estudiante in estudiantes %}
-              <tr>
-                <td data-label="#">
-                  <span class="row-number">
-                    {% if estudiantes.start_index %}
-                      {{ estudiantes.start_index|add:forloop.counter0 }}
-                    {% else %}
-                      {{ forloop.counter }}
-                    {% endif %}
-                  </span>
-                </td>
-
-                <td data-label="Nombre Completo">
-                  <div class="student-info">
-                    <span class="student-name">
-                      {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}, {{ estudiante.nombres }}
-                    </span>
-                  </div>
-                </td>
-
-                <td data-label="Cédula de Identidad">
-                  <span class="ci-badge">
-                    {{ estudiante.cedula_identidad }}
-                  </span>
-                </td>
-
-                <td data-label="Género / F. Nac.">
-                  <div class="demographics-info">
-                    <span>
-                      {% if estudiante.genero == 'M' %}
-                        <i class="fa-solid fa-mars gender-male"></i>
-                        Masculino
-                      {% else %}
-                        <i class="fa-solid fa-venus gender-female"></i>
-                        Femenino
-                      {% endif %}
-                    </span>
-
-                    <small class="sub-text">
-                      {{ estudiante.fecha_nacimiento|date:"d/m/Y" }}
-                    </small>
-                  </div>
-                </td>
-
-                <td data-label="Contacto" class="contact-cell">
-                  <div class="contact-actions">
-                    {% if estudiante.correo_electronico %}
-                      <a
-                        href="mailto:{{ estudiante.correo_electronico }}"
-                        class="contact-badge email-badge"
-                        title="Enviar correo a: {{ estudiante.correo_electronico }}"
-                      >
-                        <i class="fa-solid fa-envelope"></i>
-                        Email
-                      </a>
-                    {% else %}
-                      <span class="contact-badge no-contact" title="Sin correo registrado">
-                        <i class="fa-solid fa-envelope-circle-xmark"></i>
-                      </span>
-                    {% endif %}
-
-                    {% if estudiante.direccion %}
-                      <button
-                        type="button"
-                        class="contact-badge address-badge"
-                        onclick="verDireccion('{{ estudiante.nombres|escapejs }}', '{{ estudiante.direccion|escapejs }}')"
-                        title="Ver Dirección de Domicilio"
-                      >
-                        <i class="fa-solid fa-map-location-dot"></i>
-                      </button>
-                    {% endif %}
-                  </div>
-                </td>
-
-                <td data-label="Estado" class="status-cell">
-                  {% if estudiante.estado %}
-                    <span class="badge status-active">
-                      <i class="fa-solid fa-check"></i>
-                      Activo
-                    </span>
-                  {% else %}
-                    <span class="badge status-inactive">
-                      <i class="fa-solid fa-xmark"></i>
-                      Inactivo
-                    </span>
-                  {% endif %}
-                </td>
-
-                <td data-label="Acciones" class="actions-cell">
-                  {% if modo_seleccion_inscripcion %}
-                    <a
-                      href="{% url 'registrar_inscripcion_view' %}?estudiante_id={{ estudiante.pk }}&tipo_inscripcion={{ tipo_inscripcion }}"
-                      class="btn-action select"
-                      title="Seleccionar para inscripción"
-                    >
-                      <i class="fa-solid fa-check"></i>
-                      Seleccionar
-                    </a>
-                  {% else %}
-                    <a
-                      href="{% url 'editar_estudiante' estudiante.pk %}"
-                      class="btn-action edit"
-                      title="Editar estudiante"
-                    >
-                      <i class="fa-solid fa-pen"></i>
-                    </a>
-
-                    {% if estudiante.estado %}
-                      <a
-                        href="{% url 'desactivar_estudiante' estudiante.pk %}"
-                        class="btn-action delete alerta-eliminar"
-                        data-nombre="{{ estudiante.nombres }} {{ estudiante.apellido_paterno }}"
-                        title="Desactivar estudiante"
-                      >
-                        <i class="fa-solid fa-user-slash"></i>
-                      </a>
-                    {% else %}
-                      <a
-                        href="{% url 'reactivar_estudiante' estudiante.pk %}"
-                        class="btn-action reactivate"
-                        title="Reactivar estudiante"
-                      >
-                        <i class="fa-solid fa-user-check"></i>
-                      </a>
-
-                      <a
-                        href="{% url 'eliminar_estudiante_fisico' estudiante.pk %}"
-                        class="btn-action delete-db alerta-eliminar"
-                        data-nombre="{{ estudiante.nombres }} {{ estudiante.apellido_paterno }}"
-                        title="Eliminar definitivamente"
-                      >
-                        <i class="fa-solid fa-trash-can"></i>
-                      </a>
-                    {% endif %}
-                  {% endif %}
-                </td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="7" class="empty-state">
-                  <i class="fa-solid fa-user-graduate"></i>
-                  <p>No se encontraron estudiantes con esos criterios.</p>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      {% if estudiantes.has_other_pages %}
-        <div class="pagination">
-          {% if estudiantes.has_previous %}
-            <a
-              href="?page={{ estudiantes.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
-              class="pagination-link"
-            >
-              <i class="fa-solid fa-chevron-left"></i>
-              Anterior
-            </a>
-          {% endif %}
-
-          <span class="pagination-current">
-            Página {{ estudiantes.number }} de {{ estudiantes.paginator.num_pages }}
+  {% static "students/css/list_estudiantes.css" as list_estudiantes_css %}
+  <link rel="stylesheet" href="{{ list_estudiantes_css }}?v=11" />
+  <section class="student-list-page">
+    <div class="student-list-card">
+      <div class="student-list-header">
+        <div class="header-info">
+          <span class="section-label">
+            <i class="fa-solid fa-user-graduate"></i>
+            Administración académica
           </span>
-
-          {% if estudiantes.has_next %}
-            <a
-              href="?page={{ estudiantes.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
-              class="pagination-link"
-            >
-              Siguiente
-              <i class="fa-solid fa-chevron-right"></i>
+          <h3>
+            <i class="fa-solid fa-children"></i>
+            Directorio de Estudiantes
+          </h3>
+          <p>Consulta, filtra y administra estudiantes activos e inactivos del sistema.</p>
+        </div>
+        <div class="header-actions">
+          {% if not ver_inactivos and not modo_seleccion_inscripcion %}
+            <a href="{% url 'crear_estudiante' %}" class="btn-add-student">
+              <i class="fa-solid fa-user-plus"></i>
+              Nuevo Estudiante
             </a>
           {% endif %}
+          {% if not modo_seleccion_inscripcion %}
+            <div class="toggle-container {% if ver_inactivos %}showing-inactive{% endif %}">
+              <div class="toggle-text">
+                <strong>Vista actual</strong>
+                <span>
+                  {% if ver_inactivos %}
+                    Estudiantes inactivos
+                  {% else %}
+                    Estudiantes activos
+                  {% endif %}
+                </span>
+              </div>
+              <label class="switch" title="Cambiar vista activos/inactivos">
+                <input type="checkbox"
+                       id="toggleInactivos"
+                       {% if ver_inactivos %}checked{% endif %} />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          {% endif %}
+          <span class="module-badge">
+            <i class="fa-solid fa-school"></i>
+            Módulo Académico
+          </span>
+        </div>
+      </div>
+      {% if modo_seleccion_inscripcion %}
+        <div class="selection-banner">
+          <div class="selection-icon">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <div>
+            <strong>Modo selección de estudiante</strong>
+            <span>Seleccione al estudiante que será inscrito en la gestión correspondiente.</span>
+          </div>
+        </div>
+      {% else %}
+        <div class="list-status-panel {% if ver_inactivos %}inactive-panel{% else %}active-panel{% endif %}">
+          <div class="status-panel-icon">
+            <i class="fa-solid {% if ver_inactivos %}fa-user-slash{% else %}fa-users{% endif %}"></i>
+          </div>
+          <div>
+            <strong>
+              {% if ver_inactivos %}
+                Estás revisando estudiantes inactivos
+              {% else %}
+                Estás revisando estudiantes activos
+              {% endif %}
+            </strong>
+            <span>Usa los filtros para ubicar estudiantes por cédula, nombre, apellido o género.</span>
+          </div>
         </div>
       {% endif %}
+      <div class="filter-bar">
+        <form method="get"
+              action="{% url 'list_estudiantes' %}"
+              id="searchForm"
+              class="student-filter-form">
+          {% if modo_seleccion_inscripcion %}
+            <input type="hidden" name="modo_seleccion_inscripcion" value="true" />
+            <input type="hidden" name="tipo_inscripcion" value="{{ tipo_inscripcion }}" />
+          {% endif %}
+          {% if ver_inactivos %}
+            <input type="hidden" name="inactivos" id="hiddenInactivos" value="on" />
+          {% else %}
+            <input type="hidden" name="inactivos" id="hiddenInactivos" value="" />
+          {% endif %}
+          <div class="filter-field search-box">
+            <label for="searchInput">Buscar estudiante</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text"
+                     name="search"
+                     id="searchInput"
+                     placeholder="CI, nombres o apellidos"
+                     value="{{ search_query|default:'' }}"
+                     autocomplete="off" />
+              {% if search_query %}
+                <button type="button"
+                        class="btn-clear-input"
+                        id="btnClearInput"
+                        title="Limpiar búsqueda">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              {% endif %}
+            </div>
+          </div>
+          <div class="filter-field select-box">
+            <label for="generoFilter">Género</label>
+            <select name="genero" id="generoFilter">
+              <option value="">Todos los géneros</option>
+              <option value="M" {% if genero_filter == "M" %}selected{% endif %}>Masculino</option>
+              <option value="F" {% if genero_filter == "F" %}selected{% endif %}>Femenino</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button type="submit" class="btn-filter-student">
+              <i class="fa-solid fa-filter"></i>
+              Filtrar
+            </button>
+            {% if search_query or genero_filter %}
+              <a href="{% url 'list_estudiantes' %}{% if modo_seleccion_inscripcion %}?modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
+                 class="btn-clear-student"
+                 title="Limpiar búsqueda">
+                <i class="fa-solid fa-rotate-left"></i>
+                Limpiar
+              </a>
+            {% endif %}
+          </div>
+        </form>
+        {% if search_query or genero_filter %}
+          <div class="active-filters">
+            <span>
+              <i class="fa-solid fa-sliders"></i>
+              Filtros activos:
+            </span>
+            {% if search_query %}<strong>Búsqueda: {{ search_query }}</strong>{% endif %}
+            {% if genero_filter %}
+              <strong>
+                Género:
+                {% if genero_filter == "M" %}
+                  Masculino
+                {% elif genero_filter == "F" %}
+                  Femenino
+                {% endif %}
+              </strong>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="list-body">
+        <div class="table-toolbar">
+          <div>
+            <strong>Resultado del listado</strong>
+            <span>
+              {% if ver_inactivos %}
+                Estudiantes deshabilitados del sistema.
+              {% else %}
+                Estudiantes habilitados para procesos académicos.
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="student-table">
+            <thead>
+              <tr>
+                <th class="number-column">#</th>
+                <th>Nombre completo</th>
+                <th>Cédula de identidad</th>
+                <th>Género / F. Nac.</th>
+                <th>Contacto</th>
+                <th class="status-column">Estado</th>
+                <th class="actions-column">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for estudiante in estudiantes %}
+                <tr class="student-row">
+                  <td data-label="#">
+                    <span class="row-number">
+                      {% if estudiantes.start_index %}
+                        {{ estudiantes.start_index|add:forloop.counter0 }}
+                      {% else %}
+                        {{ forloop.counter }}
+                      {% endif %}
+                    </span>
+                  </td>
+                  <td data-label="Nombre completo">
+                    <div class="student-info">
+                      <div class="student-avatar">{{ estudiante.nombres|slice:":1" }}</div>
+                      <div>
+                        <span class="student-name">
+                          {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}, {{ estudiante.nombres }}
+                        </span>
+                        <small class="sub-text">Registro estudiantil</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td data-label="Cédula de identidad">
+                    <span class="ci-badge">
+                      <i class="fa-solid fa-id-card"></i>
+                      {{ estudiante.cedula_identidad }}
+                    </span>
+                  </td>
+                  <td data-label="Género / F. Nac.">
+                    <div class="demographics-info">
+                      <span>
+                        {% if estudiante.genero == "M" %}
+                          <i class="fa-solid fa-mars gender-male"></i>
+                          Masculino
+                        {% else %}
+                          <i class="fa-solid fa-venus gender-female"></i>
+                          Femenino
+                        {% endif %}
+                      </span>
+                      <small class="sub-text">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        {{ estudiante.fecha_nacimiento|date:"d/m/Y" }}
+                      </small>
+                    </div>
+                  </td>
+                  <td data-label="Contacto" class="contact-cell">
+                    <div class="contact-actions">
+                      {% if estudiante.correo_electronico %}
+                        <a href="mailto:{{ estudiante.correo_electronico }}"
+                           class="contact-badge email-badge"
+                           title="Enviar correo a: {{ estudiante.correo_electronico }}">
+                          <i class="fa-solid fa-envelope"></i>
+                          Email
+                        </a>
+                      {% else %}
+                        <span class="contact-badge no-contact" title="Sin correo registrado">
+                          <i class="fa-solid fa-envelope-circle-xmark"></i>
+                        </span>
+                      {% endif %}
+                      {% if estudiante.direccion %}
+                        <button type="button"
+                                class="contact-badge address-badge"
+                                onclick="verDireccion('{{ estudiante.nombres|escapejs }}', '{{ estudiante.direccion|escapejs }}')"
+                                title="Ver dirección de domicilio">
+                          <i class="fa-solid fa-map-location-dot"></i>
+                        </button>
+                      {% endif %}
+                    </div>
+                  </td>
+                  <td data-label="Estado" class="status-cell">
+                    {% if estudiante.estado %}
+                      <span class="badge status-active">
+                        <i class="fa-solid fa-check"></i>
+                        Activo
+                      </span>
+                    {% else %}
+                      <span class="badge status-inactive">
+                        <i class="fa-solid fa-xmark"></i>
+                        Inactivo
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td data-label="Acciones" class="actions-cell">
+                    <div class="action-buttons">
+                      {% if modo_seleccion_inscripcion %}
+                        <a href="{% url 'registrar_inscripcion_view' %}?estudiante_id={{ estudiante.pk }}&tipo_inscripcion={{ tipo_inscripcion }}"
+                           class="btn-action select"
+                           title="Seleccionar para inscripción">
+                          <i class="fa-solid fa-check"></i>
+                          Seleccionar
+                        </a>
+                      {% else %}
+                        <a href="{% url 'editar_estudiante' estudiante.pk %}"
+                           class="btn-action edit"
+                           title="Editar estudiante">
+                          <i class="fa-solid fa-pen"></i>
+                        </a>
+                        {% if estudiante.estado %}
+                          <a href="{% url 'desactivar_estudiante' estudiante.pk %}"
+                             class="btn-action delete sweet-deactivate"
+                             data-nombre="{{ estudiante.nombres }} {{ estudiante.apellido_paterno }}"
+                             title="Desactivar estudiante">
+                            <i class="fa-solid fa-user-slash"></i>
+                          </a>
+                        {% else %}
+                          <a href="{% url 'reactivar_estudiante' estudiante.pk %}"
+                             class="btn-action reactivate sweet-reactivate"
+                             data-nombre="{{ estudiante.nombres }} {{ estudiante.apellido_paterno }}"
+                             title="Reactivar estudiante">
+                            <i class="fa-solid fa-user-check"></i>
+                          </a>
+                          <a href="{% url 'eliminar_estudiante_fisico' estudiante.pk %}"
+                             class="btn-action delete-db sweet-delete-db"
+                             data-nombre="{{ estudiante.nombres }} {{ estudiante.apellido_paterno }}"
+                             title="Eliminar definitivamente">
+                            <i class="fa-solid fa-trash-can"></i>
+                          </a>
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="7" class="empty-state">
+                    <div class="empty-box">
+                      <i class="fa-solid fa-user-graduate"></i>
+                      <strong>No se encontraron estudiantes</strong>
+                      <span>Prueba cambiando los filtros o revisando la vista de activos/inactivos.</span>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if estudiantes.has_other_pages %}
+          <div class="pagination">
+            {% if estudiantes.has_previous %}
+              <a href="?page={{ estudiantes.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
+                 class="pagination-link">
+                <i class="fa-solid fa-chevron-left"></i>
+                Anterior
+              </a>
+            {% endif %}
+            <span class="pagination-current">Página {{ estudiantes.number }} de {{ estudiantes.paginator.num_pages }}</span>
+            {% if estudiantes.has_next %}
+              <a href="?page={{ estudiantes.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if genero_filter %}&genero={{ genero_filter }}{% endif %}{% if ver_inactivos %}&inactivos=on{% endif %}{% if modo_seleccion_inscripcion %}&modo_seleccion_inscripcion=true&tipo_inscripcion={{ tipo_inscripcion }}{% endif %}"
+                 class="pagination-link">
+                Siguiente
+                <i class="fa-solid fa-chevron-right"></i>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
     </div>
-
-  </div>
-
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{% static 'students/js/list_estudiantes.js' %}?v=9"></script>
-
-{% endblock %}
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% static "students/js/list_estudiantes.js" as list_estudiantes_js %}
+  <script src="{{ list_estudiantes_js }}?v=11"></script>
+{% endblock content %}

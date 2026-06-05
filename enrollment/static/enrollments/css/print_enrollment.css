@@ -564,3 +564,91 @@ body {
     margin-top: 20px;
   }
 }
+
+/* =========================================================
+   MEJORAS VISUALES Y JS - PRINT ENROLLMENT
+   ========================================================= */
+
+.print-page {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.print-page.print-page-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.print-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.print-section h2 i {
+  color: var(--primary-color);
+  font-size: 0.95rem;
+}
+
+.table-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3px 8px;
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.table-status.delivered {
+  background: var(--green-soft);
+  color: var(--green-main);
+}
+
+.table-status.pending {
+  background: var(--red-soft);
+  color: var(--red-main);
+}
+
+.btn-print {
+  position: relative;
+}
+
+.btn-print-loading {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-print.loading .btn-print-text {
+  display: none;
+}
+
+.btn-print.loading .btn-print-loading {
+  display: inline-flex;
+}
+
+.btn-print:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+@media print {
+  .print-page {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .print-section h2 i {
+    display: none;
+  }
+
+  .table-status {
+    background: transparent !important;
+    color: #111827 !important;
+    padding: 0;
+  }
+}

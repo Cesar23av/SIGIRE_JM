@@ -2,29 +2,41 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Formulario de Inscripción</title>
 
-    <link rel="stylesheet" href="{% static 'enrollments/css/print_enrollment.css' %}?v=2">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    {% static "enrollments/css/print_enrollment.css" as print_enrollment_css %}
+    <link rel="stylesheet" href="{{ print_enrollment_css }}?v=3" />
   </head>
 
   <body>
-
     <div class="print-actions">
       <a href="{% url 'detalle_inscripcion' inscripcion.id %}" class="btn-back">
         <i class="fa-solid fa-arrow-left"></i>
         Volver
       </a>
 
-      <button type="button" onclick="window.print()" class="btn-print">
-        <i class="fa-solid fa-print"></i>
-        Imprimir
+      <button type="button" class="btn-print" id="btnPrintEnrollment">
+        <span class="btn-print-text">
+          <i class="fa-solid fa-print"></i>
+          Imprimir
+        </span>
+
+        <span class="btn-print-loading">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+          Preparando...
+        </span>
       </button>
     </div>
 
-    <main class="print-page">
-
+    <main class="print-page" id="printPage">
       <header class="print-header">
         <div class="school-mark">
           <div class="school-logo">
@@ -45,7 +57,10 @@
       </header>
 
       <section class="print-section">
-        <h2>Datos del Estudiante</h2>
+        <h2>
+          <i class="fa-solid fa-user-graduate"></i>
+          Datos del Estudiante
+        </h2>
 
         <div class="info-grid">
           <div class="info-field large">
@@ -80,7 +95,10 @@
       </section>
 
       <section class="print-section">
-        <h2>Datos del Tutor / Apoderado</h2>
+        <h2>
+          <i class="fa-solid fa-user-shield"></i>
+          Datos del Tutor / Apoderado
+        </h2>
 
         {% with parentesco=inscripcion.estudiante.parentesco_set.first %}
           {% if parentesco %}
@@ -122,7 +140,10 @@
       </section>
 
       <section class="print-section">
-        <h2>Datos Académicos</h2>
+        <h2>
+          <i class="fa-solid fa-school"></i>
+          Datos Académicos
+        </h2>
 
         <div class="info-grid">
           <div class="info-field">
@@ -157,7 +178,10 @@
       </section>
 
       <section class="print-section">
-        <h2>Documentos Presentados</h2>
+        <h2>
+          <i class="fa-solid fa-folder-open"></i>
+          Documentos Presentados
+        </h2>
 
         <div class="table-wrapper">
           <table class="documents-table">
@@ -185,9 +209,9 @@
 
                   <td>
                     {% if entrega.estado %}
-                      Entregado
+                      <span class="table-status delivered">Entregado</span>
                     {% else %}
-                      Pendiente
+                      <span class="table-status pending">Pendiente</span>
                     {% endif %}
                   </td>
 
@@ -213,7 +237,10 @@
 
       {% if inscripcion.observacion %}
         <section class="print-section">
-          <h2>Observaciones</h2>
+          <h2>
+            <i class="fa-solid fa-comment-dots"></i>
+            Observaciones
+          </h2>
 
           <div class="observation-box">
             {{ inscripcion.observacion }}
@@ -241,10 +268,13 @@
       </section>
 
       <footer class="print-footer">
-        <p>Documento generado por el Sistema de Inscripciones y Registro Estudiantil.</p>
+        <p>
+          Documento generado por el Sistema de Inscripciones y Registro Estudiantil.
+        </p>
       </footer>
-
     </main>
 
+    {% static "enrollments/js/print_enrollment.js" as print_enrollment_js %}
+    <script src="{{ print_enrollment_js }}?v=1"></script>
   </body>
 </html>
